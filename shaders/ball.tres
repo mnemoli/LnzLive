@@ -1,0 +1,104 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+
+render_mode unshaded;
+
+uniform int fuzz_amount = 0;
+uniform float ball_size = 1.0;
+uniform int outline = -1;
+
+varying flat vec2 center_fragcoord;
+
+float random (float x) {
+    return fract(sin(dot(vec2(x),
+                         vec2(12.9898,78.233)))*
+        43758.5453123);
+}
+
+void fragment() {
+  vec2 c = center_fragcoord;
+  vec2 st = FRAGCOORD.xy;
+  float inverse_camera_scale = (1.0 / ORTHO_SIZE);
+
+  // Artificially scale up the screen depending on camera scale
+  // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
+  // pixel perfect scaling
+  c = floor(c / inverse_camera_scale) * inverse_camera_scale;
+  st = floor(st / inverse_camera_scale) * inverse_camera_scale;
+  
+  // FUZZING
+  // Find random number based on y-pixel, offset to center of ball
+  float r = random(st.y - c.y);
+  // Stretch random number between -1.0 and 1.0
+  r = (r * 2.0) - 1.0;
+  // Increase distortion by fuzz amount
+  r *= float(fuzz_amount);
+  // Scale with camera to allow zooming
+  r *= inverse_camera_scale;
+  // Offset x line by the final random amount
+  st.x += floor(r);
+  
+  //OUTLINING
+  float pct2;
+  vec2 st2 = st;
+  int modified_outline = outline;
+  if(outline == -1) {
+    // no outline
+    modified_outline = 0;
+  }
+  else if(outline == 0) {
+    // one sided outline
+    st2.x -= 1.0 * inverse_camera_scale;
+    vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), ball_size * inverse_camera_scale);
+	modified_outline = 0
+  } else if (outline == -2) {
+    // one sided outline
+    st2.x += 1.0 * inverse_camera_scale;
+    vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), ball_size * inverse_camera_scale);
+	modified_outline = 0
+  } else if (outline == -1) {
+    pct2 = 0.0;
+    modified_outline = 0;
+  } else if (outline > 0) {
+    vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), ball_size * inverse_camera_scale);
+  } else {
+    // treat like it's a 1 pixel outline
+    vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), ball_size * inverse_camera_scale);
+    modified_outline = 1;
+  }
+  
+  //DRAWING
+  vec2 vector_from_center = st - c;
+  // Draw a circle.
+  // Base ball size gives exact pixel size at camera scale 1.
+  float pct = step(floor(length(vector_from_center)), (ball_size - float(modified_outline)) * inverse_camera_scale);
+
+  ALBEDO = vec3(pct * vec3(1.0) + pct2 * vec3(1.0, 0.0, 0.0));
+  ALPHA = pct + pct2;
+  
+  ALPHA_SCISSOR = 1.0;
+}
+
+void vertex() {
+	// Billboard and retain scaling
+	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
+
+	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
+	vec4 center_view = PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(vec3(0.0), 1.0);
+	vec2 center_ndc = (center_view.xy + 1.0) / 2.0;
+	// Must be an exact pixel coordinate or you get strange pixel effects
+	center_fragcoord = floor(center_ndc * VIEWPORT_SIZE);
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/fuzz_amount = 1
+shader_param/ball_size = 50.0
+shader_param/outline = -2

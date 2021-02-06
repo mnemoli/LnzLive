@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://shaders/ball.tres" type="Material" id=1]
+[ext_resource path="res://scripts/test_mover.gd" type="Script" id=2]
+
+[sub_resource type="QuadMesh" id=1]
+
+[node name="Ball" type="Spatial"]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00872803, 7.62939e-06, 0 )
+material_override = ExtResource( 1 )
+mesh = SubResource( 1 )
+material/0 = null
+script = ExtResource( 2 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0299988, -0.00379944, 1.42015 )
+projection = 1
