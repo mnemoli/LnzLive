@@ -100,5 +100,5 @@ void vertex() {
 [resource]
 shader = SubResource( 1 )
 shader_param/fuzz_amount = 1
-shader_param/ball_size = 50.0
+shader_param/ball_size = 100.0
 shader_param/outline = -2
