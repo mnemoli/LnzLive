@@ -67,14 +67,16 @@ void fragment() {
   } else if (outline == -1) {
     pct2 = 0.0;
     modified_outline = 0;
-  } else if (outline > 0) {
+  } else if (outline > 1) {
     vec2 vec = st2 - c;
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
-  } else {
-    // treat like it's a 1 pixel outline
+  } else if (outline == 1) {
+    // dotted outline
+	float side = sign(st2.x - c.x);
+	st2.x -= 1.0 * inverse_camera_scale * side;
     vec2 vec = st2 - c;
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
-    modified_outline = 1;
+    modified_outline = 0;
   }
   
   //DRAWING

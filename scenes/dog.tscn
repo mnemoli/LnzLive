@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/dog_generator.gd" type="Script" id=2]
 [ext_resource path="res://scripts/rotator.gd" type="Script" id=3]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=4]
 [ext_resource path="res://default_env.tres" type="Environment" id=5]
+[ext_resource path="res://Line.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scripts/Line.gd" type="Script" id=7]
 
 [node name="Spatial" type="Spatial"]
 
@@ -18,384 +20,688 @@ enabled = true
 [node name="Ball" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 script = ExtResource( 4 )
 ball_size = 18
-outline = 0
 
 [node name="Ball2" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0166016, -0.00390625, 0 )
 script = ExtResource( 4 )
 ball_size = 19
-outline = 0
 
 [node name="Ball3" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0322266, -0.000976563, 0 )
 script = ExtResource( 4 )
 ball_size = 17
-outline = 0
 
 [node name="Ball4" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00390625, -0.00292969, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 12
-outline = 0
 
 [node name="Ball5" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00390625, -0.00292969, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 12
-outline = 0
 
 [node name="Ball6" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00292969, -0.015625, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 9
-outline = 0
 
 [node name="Ball7" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00292969, -0.015625, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 9
-outline = 0
 
 [node name="Ball8" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00585938, -0.0263672, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 5
-outline = 0
 
 [node name="Ball9" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00585938, -0.0263672, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 5
-outline = 0
 
 [node name="Ball10" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00390625, -0.0332031, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 7
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball11" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00390625, -0.0332031, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 7
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball12" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0341797, 0.00683594 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0361328, 0.00683594 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball13" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0361328, 0.0107422 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
 [node name="Ball14" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0341797, 0.0166016 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0361328, 0.0166016 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball15" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0341797, -0.00683594 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0361328, -0.00683594 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball16" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0361328, -0.0107422 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
 [node name="Ball17" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0341797, -0.0166016 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000976563, -0.0361328, -0.0166016 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball18" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341797, -0.000976563, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 11
-outline = 0
 
 [node name="Ball19" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341797, -0.000976563, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 11
-outline = 0
 
 [node name="Ball20" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0283203, -0.0126953, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 8
-outline = 0
 
 [node name="Ball21" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0283203, -0.0126953, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 8
-outline = 0
 
 [node name="Ball22" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0302734, -0.0244141, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 5
-outline = 0
 
 [node name="Ball23" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0302734, -0.0244141, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 5
-outline = 0
 
 [node name="Ball24" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341797, -0.0322266, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 7
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball25" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0341797, -0.0322266, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 7
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball26" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0322266, 0.00683594 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0361328, 0.00683594 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball27" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, -0.0341797, 0.0117188 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, -0.0361328, 0.0117188 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball28" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0322266, 0.0166016 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0361328, 0.0166016 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
 [node name="Ball29" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0322266, -0.00683594 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0361328, -0.00683594 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball30" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, -0.0341797, -0.0117188 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, -0.0361328, -0.0117188 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
 [node name="Ball31" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0322266, -0.0166016 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0351563, -0.0361328, -0.0166016 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
 [node name="Ball32" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, 0.00683594, 0 )
+script = ExtResource( 4 )
+ball_size = 16
+
+[node name="Ball33" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0488281, 0.0117188, 0 )
 script = ExtResource( 4 )
 ball_size = 16
-outline = 0
 
-[node name="Ball33" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball34" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.046875, 0.00195313, 0.00976563 )
 script = ExtResource( 4 )
 ball_size = 8
-outline = 0
 
-[node name="Ball34" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball35" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.046875, 0.00195313, -0.00976563 )
 script = ExtResource( 4 )
 ball_size = 8
-outline = 0
 
-[node name="Ball35" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball36" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0605469, -0.000976563, 0.00488281 )
 script = ExtResource( 4 )
 ball_size = 6
-outline = 0
+outline = 1
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
-[node name="Ball36" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball37" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0605469, -0.000976563, -0.00488281 )
 script = ExtResource( 4 )
 ball_size = 6
-outline = 0
+outline = 1
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
-[node name="Ball37" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball38" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0634766, 0.0126953, -0.00683594 )
 script = ExtResource( 4 )
 ball_size = 7
 outline = 1
 
-[node name="Ball38" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball39" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0634766, 0.0126953, 0.00683594 )
 script = ExtResource( 4 )
 ball_size = 7
 outline = 1
 
-[node name="Ball39" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0654297, 0.0126953, -0.0078125 )
-script = ExtResource( 4 )
-ball_size = 3
-outline = 2
-color = Color( 0, 0, 0, 1 )
-outline_color = Color( 0.196078, 0.196078, 0.67451, 1 )
-
 [node name="Ball40" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0654297, 0.0126953, 0.0078125 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0654297, 0.0126953, -0.00683594 )
 script = ExtResource( 4 )
-ball_size = 3
+ball_size = 4
 outline = 2
 color = Color( 0, 0, 0, 1 )
-outline_color = Color( 0.196078, 0.196078, 0.67451, 1 )
+outline_color = Color( 0.537255, 0.494118, 0.4, 1 )
 
 [node name="Ball41" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0615234, 0.00488281, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0654297, 0.0126953, 0.00683594 )
 script = ExtResource( 4 )
-outline = 0
+ball_size = 4
+outline = 2
+color = Color( 0, 0, 0, 1 )
+outline_color = Color( 0.537255, 0.494118, 0.4, 1 )
 
 [node name="Ball42" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0615234, 0.00488281, 0 )
+script = ExtResource( 4 )
+
+[node name="Ball43" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0556641, -0.00683594, 0 )
 script = ExtResource( 4 )
 ball_size = 5
-outline = 0
+outline = 1
+outline_color = Color( 0.545098, 0.419608, 0.207843, 1 )
 
-[node name="Ball43" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball44" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0126953, 0.00683594, 0 )
 script = ExtResource( 4 )
 ball_size = 4
-outline = 0
 
-[node name="Ball44" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball45" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0195313, 0.00976563, 0 )
 script = ExtResource( 4 )
 ball_size = 4
-outline = 0
 
-[node name="Ball45" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball46" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0253906, 0.015625, 0 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
 
-[node name="Ball46" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball47" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0263672, 0.0224609, 0 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
 
-[node name="Ball47" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball48" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0224609, 0.0283203, 0 )
 script = ExtResource( 4 )
 ball_size = 2
-outline = 0
 
-[node name="Ball48" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball49" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015625, 0.03125, 0 )
 script = ExtResource( 4 )
 ball_size = 2
-outline = 0
-
-[node name="Ball49" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0712891, 0.00488281, 0.00292969 )
-script = ExtResource( 4 )
-ball_size = 5
-outline = 0
-color = Color( 0, 0, 0, 1 )
 
 [node name="Ball50" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0712891, 0.00488281, -0.00292969 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0712891, 0.00488281, 0.00195313 )
 script = ExtResource( 4 )
-ball_size = 5
-outline = 0
+ball_size = 4
 color = Color( 0, 0, 0, 1 )
 
 [node name="Ball51" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0693359, 0.000976563, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0712891, 0.00488281, -0.00195313 )
 script = ExtResource( 4 )
-ball_size = 5
-outline = 0
+ball_size = 4
 color = Color( 0, 0, 0, 1 )
 
 [node name="Ball52" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0693359, 0.000976563, 0 )
+script = ExtResource( 4 )
+ball_size = 3
+color = Color( 0, 0, 0, 1 )
+
+[node name="Ball53" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0517578, 0.0146484, 0.0126953 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
-[node name="Ball53" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball54" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0537109, 0.0185547, 0.0107422 )
 script = ExtResource( 4 )
 ball_size = 4
-outline = 0
 
-[node name="Ball54" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball55" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0517578, 0.0205078, 0.00683594 )
 script = ExtResource( 4 )
 ball_size = 2
 outline = 0
 
-[node name="Ball55" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball56" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0517578, 0.0146484, -0.0126953 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
+outline = -2
 
-[node name="Ball56" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball57" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0537109, 0.0185547, -0.0107422 )
 script = ExtResource( 4 )
 ball_size = 4
-outline = 0
 
-[node name="Ball57" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball58" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0517578, 0.0205078, -0.00683594 )
 script = ExtResource( 4 )
 ball_size = 2
 outline = 0
 
-[node name="Ball58" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball59" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458984, 0.0205078, 0.0126953 )
 script = ExtResource( 4 )
 ball_size = 5
 outline = 0
 
-[node name="Ball59" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0419922, 0.0166016, 0.0166016 )
+[node name="Ball60" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458984, 0.0205078, 0.0146484 )
+script = ExtResource( 4 )
+ball_size = 5
+
+[node name="Ball61" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0419922, 0.0166016, 0.0185547 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
 
-[node name="Ball60" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball62" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458984, 0.0205078, -0.0126953 )
 script = ExtResource( 4 )
 ball_size = 5
 outline = 0
 
-[node name="Ball61" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0419922, 0.0166016, -0.0166016 )
+[node name="Ball63" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458984, 0.0205078, -0.0146484 )
+script = ExtResource( 4 )
+ball_size = 5
+
+[node name="Ball64" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0419922, 0.0166016, -0.0185547 )
 script = ExtResource( 4 )
 ball_size = 3
-outline = 0
 
-[node name="HSlider" type="HSlider" parent="."]
-margin_right = 242.0
-margin_bottom = 16.0
-min_value = 1.0
-max_value = 5.0
-value = 1.0
-rounded = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="lines" type="Spatial" parent="petholder"]
+
+[node name="Line" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.00976564, 0.447224, 0, 0.00488297, -0.894422, -1, -4.2687e-10, -1.95488e-08, 0.0439456, 0.00927734, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 27.9, 29.45 )
+
+[node name="Line2" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.00683622, 0.752555, 0, -0.00781231, -0.658529, 1, -2.98821e-10, 3.28952e-08, 0.0356447, 0.00292969, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 28.05, 29.45 )
+
+[node name="Line3" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.0156252, 0.184289, 0, 0.00292972, -0.982872, -1, -6.82997e-10, -8.05551e-09, 0.0244142, -0.00244141, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 31.35, 35.15 )
+
+[node name="Line4" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.0166017, -0.229035, 0, 0.00390621, -0.973418, 1, -7.25685e-10, -1.00114e-08, 0.00830078, -0.00195313, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 33.25, 35.15 )
+
+[node name="Line5" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.948683, 0.00390629, 0.0729742, 0, 0.00292966, -0.97301, -0.316228, -0.0117189, -0.218923, -0.00195313, -0.00146484, 0.00585938 )
+script = ExtResource( 7 )
+line_widths = Vector2( 33.25, 21.85 )
+
+[node name="Line6" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.948683, 0.00390629, 0.0729742, 0, 0.00292966, -0.97301, -0.316228, 0.0117189, 0.218923, -0.00195313, -0.00146484, -0.00585938 )
+script = ExtResource( 7 )
+line_widths = Vector2( 33.25, 21.85 )
+
+[node name="Line7" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.98639, -0.00195346, 7.18726e-09, 0, -5.19314e-10, -1, 0.164425, -0.0117188, 4.31165e-08, 0.0332033, -0.000976563, 0.00585938 )
+script = ExtResource( 7 )
+line_widths = Vector2( 31.35, 19.95 )
+
+[node name="Line8" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.98639, -0.00195345, 7.18725e-09, 0, -5.19314e-10, -1, 0.164425, 0.0117188, -4.31165e-08, 0.0332033, -0.000976563, -0.00585938 )
+script = ExtResource( 7 )
+line_widths = Vector2( 31.35, 19.95 )
+
+[node name="Line9" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.894383, -0.00195355, -0.182597, 0, 0.001953, -0.912884, 0.447301, -0.00390615, -0.365104, 0.0527346, 0.0195313, 0.0087891 )
+script = ExtResource( 7 )
+line_widths = Vector2( 3, 7 )
+
+[node name="Line10" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.706991, -0.0019536, 0.577422, 0, -0.00390611, -0.577396, 0.707223, 0.00195296, -0.577233, 0.0527346, 0.0166016, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 7 )
+
+[node name="Line11" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.894383, -0.00195355, -0.182597, 0, 0.001953, -0.912884, 0.447301, 0.00390615, 0.365104, 0.0527346, 0.0195313, -0.0087891 )
+script = ExtResource( 7 )
+line_widths = Vector2( 3, 7 )
+
+[node name="Line12" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.706991, -0.0019536, 0.577422, 0, -0.00390611, -0.577396, 0.707223, -0.00195296, 0.577233, 0.0527346, 0.0166016, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 7 )
+
+[node name="Line13" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.780907, 0.00390599, -2.73042e-08, 0, -2.73332e-10, -1, -0.624648, -0.0048831, 3.41345e-08, 0.0371096, -0.0361328, 0.0141602 )
+script = ExtResource( 7 )
+line_widths = Vector2( 4.75, 4.75 )
+
+[node name="Line14" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.980595, 0.00097622, -0.121, 0, -0.00390623, -0.786802, -0.196045, -0.00488295, 0.605229, 0.0346681, -0.0341797, 0.00927738 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line15" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -2.40048e-05, 0.00488273, -0.624718, 0, -0.00390642, -0.78085, -1, -1.17209e-07, 1.49962e-05, 0.0366213, -0.0341797, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 4.5, 11.7 )
+
+[node name="Line16" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.980593, 0.000976249, -0.121009, 0, -0.00390634, -0.786788, -0.196054, 0.00488285, -0.605245, 0.0346681, -0.0341797, 0.0141602 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line17" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.980595, 0.000976222, -0.121, 0, -0.00390623, -0.786802, -0.196045, 0.00488295, -0.605229, 0.0346681, -0.0341797, -0.00927738 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line18" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 2.40366e-05, 0.00488273, -0.624718, 0, -0.00390642, -0.78085, -1, 1.17364e-07, -1.50161e-05, 0.0366213, -0.0341797, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 4.5, 11.7 )
+
+[node name="Line19" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.980593, 0.000976249, -0.121009, 0, -0.00390634, -0.786788, -0.196054, -0.00488285, 0.605245, 0.0346681, -0.0341797, -0.0141602 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line20" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.707112, 0.00488283, -0.276164, 0, -0.00292965, -0.920578, -0.707101, 0.00488291, -0.276168, -0.00146484, -0.034668, -0.00927738 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line21" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.242561, 0.00390629, -0.570768, 0, -0.00292966, -0.808615, -0.970136, 0.000976679, -0.142708, -0.00195313, -0.034668, -0.0112305 )
+script = ExtResource( 7 )
+line_widths = Vector2( 4.5, 11.7 )
+
+[node name="Line22" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.707096, 0.00488293, -0.276176, 0, -0.00292971, -0.920575, -0.707118, -0.00488278, 0.276168, -0.00146484, -0.034668, -0.0141602 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line23" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.707112, 0.00488284, -0.276164, 0, -0.00292965, -0.920578, -0.707101, -0.00488291, 0.276168, -0.00146484, -0.034668, 0.00927738 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line24" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.242561, 0.00390629, -0.570768, 0, -0.00292966, -0.808615, -0.970136, -0.000976679, 0.142708, -0.00195313, -0.034668, 0.0112305 )
+script = ExtResource( 7 )
+line_widths = Vector2( 4.5, 11.7 )
+
+[node name="Line25" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.707095, 0.00488293, -0.276176, 0, -0.00292971, -0.920575, -0.707118, 0.00488278, -0.276168, -0.00146484, -0.034668, 0.0141602 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 13 )
+
+[node name="Line26" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.0126953, -0.47411, 0, -0.00683614, -0.880465, -1, -5.5493e-10, 2.0724e-08, 0.0551761, 0.00830078, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 31 )
+
+[node name="Line27" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.196104, -0.00976575, 4.28626e-08, 0, -4.35327e-10, -1, 0.980583, -0.00195303, 8.57198e-09, 0.0664066, 0.00488281, 0.000976563 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 7 )
+
+[node name="Line28" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.196104, -0.00976575, 4.28626e-08, 0, -4.35327e-10, -1, 0.980583, 0.00195302, -8.57198e-09, 0.0664066, 0.00488281, -0.000976563 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 7 )
+
+[node name="Line29" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -1, -6.04512e-07, 2.7058e-12, 0, -4.26873e-10, -1, 6.19014e-05, -0.00976572, 4.37114e-08, 0.0605472, -0.000976563, -2.468e-08 )
+script = ExtResource( 7 )
+line_widths = Vector2( 10.45, 10.45 )
+
+[node name="Line30" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.980605, 0.000975965, 0.149349, 0, 0.00585941, -0.647574, -0.195996, -0.00488294, -0.747223, 0.0610355, 0.00195313, 0.00244141 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 11 )
+
+[node name="Line31" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.980605, 0.000975965, 0.149349, 0, 0.00585941, -0.647574, -0.195996, 0.00488294, 0.747223, 0.0610355, 0.00195313, -0.00244141 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 11 )
+
+[node name="Line32" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.554716, 0.0146484, 0.136583, 0, 0.00292974, -0.986435, -0.832039, -0.009766, -0.091059, 0.0541995, 0.00341797, 0.00488281 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 15 )
+
+[node name="Line33" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.554717, 0.0146484, 0.136583, 0, 0.00292974, -0.986435, -0.832039, 0.009766, 0.091059, 0.0541995, 0.00341797, -0.00488281 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19, 15 )
+
+[node name="Line34" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.00585992, 0.894407, 0, -0.0117185, -0.447254, 1, -2.56145e-10, 3.90958e-08, 0.058594, -0.000976563, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 0, 19 )
+
+[node name="Line35" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.336352, 0.0136719, -0.186292, 0, -0.00292977, -0.980239, -0.941736, -0.00488309, 0.0665364, 0.0537112, 0.000488281, 0.00732424 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7.7, 10.5 )
+
+[node name="Line36" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.336353, 0.0136719, -0.186292, 0, -0.00292977, -0.980239, -0.941736, 0.00488309, -0.0665364, 0.0537112, 0.000488281, -0.00732424 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7.7, 10.5 )
+
+[node name="Line37" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 1, -4.69384e-07, 1.05048e-12, 0, -8.53747e-10, -1, 2.40322e-05, 0.0195314, -4.37114e-08, 0.0468752, 0.00195313, 4.93601e-08 )
+script = ExtResource( 7 )
+line_widths = Vector2( 14.25, 14.25 )
+
+[node name="Line38" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.743315, 0.0087888, -0.371948, 0, -0.00878917, -0.831166, -0.668942, -0.00976594, 0.413302, 0.0512698, -0.00244141, 0.00488281 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 15 )
+
+[node name="Line39" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.743315, 0.00878879, -0.371948, 0, -0.00878917, -0.831166, -0.668941, 0.00976595, -0.413302, 0.0512698, -0.00244141, -0.00488281 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 15 )
+
+[node name="Line40" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -1, -4.54319e-07, 1.01677e-11, 0, -8.53747e-11, -1, 0.000232609, -0.00195315, 4.37114e-08, 0.0458987, 0.0205078, 0.0136719 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 9 )
+
+[node name="Line41" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.707162, 0.00390595, 0.408222, 0, 0.00390633, -0.816491, -0.707052, -0.00390655, -0.408285, 0.0439455, 0.0185547, 0.0166016 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 5 )
+
+[node name="Line42" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 1, -4.54451e-07, 1.01706e-11, 0, -8.53747e-11, -1, 0.000232677, 0.00195315, -4.37114e-08, 0.0458987, 0.0205078, -0.0136719 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 9 )
+
+[node name="Line43" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.707161, 0.00390595, 0.408222, 0, 0.00390633, -0.816491, -0.707052, 0.00390655, 0.408285, 0.0439455, 0.0185547, -0.0166016 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 5 )
+
+[node name="Line44" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.974399, 0.00292926, -0.125728, 0, -0.00878905, -0.829014, -0.224825, -0.0126956, 0.544912, 0.0473635, 0.0161133, 0.00634766 )
+script = ExtResource( 7 )
+line_widths = Vector2( 31, 9 )
+
+[node name="Line45" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.974399, 0.00292926, -0.125728, 0, -0.00878905, -0.829014, -0.224824, 0.0126956, -0.544912, 0.0473635, 0.0161133, -0.00634766 )
+script = ExtResource( 7 )
+line_widths = Vector2( 31, 9 )
+
+[node name="Line46" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.0126954, -0.474096, 0, 0.00683594, -0.880473, 1, -5.54935e-10, -2.07234e-08, -0.00634772, 0.00341797, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7, 19.25 )
+
+[node name="Line47" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.00683604, -0.393906, 0, -0.00292962, -0.919151, -1, -2.98813e-10, 1.72182e-08, -0.0161133, 0.00830078, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7, 7 )
+
+[node name="Line48" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.00585956, -0.707088, 0, -0.00585925, -0.707125, -1, -2.56129e-10, 3.09078e-08, -0.022461, 0.0126953, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7, 5 )
+
+[node name="Line49" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0.000976832, -0.989944, 0, -0.0068359, -0.14146, -1, -4.26987e-11, 4.32718e-08, -0.025879, 0.019043, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 5 )
+
+[node name="Line50" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.00390613, 0.832062, 0, -0.00585948, -0.554682, 1, -1.70743e-10, 3.63706e-08, -0.0244142, 0.0253906, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 5, 3 )
+
+[node name="Line51" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, -0.00683598, 0.393924, 0, -0.00292975, -0.919143, 1, -2.9881e-10, 1.72189e-08, -0.0190431, 0.0297852, 0 )
+script = ExtResource( 7 )
+line_widths = Vector2( 3, 3 )
+
+[node name="Line52" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -2.00709e-05, -0.00585971, 0.894415, 0, -0.0117186, -0.447238, 1, -1.17609e-07, 1.79517e-05, 0.0312501, -0.00683594, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 14.25, 19.95 )
+
+[node name="Line53" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -6.0006e-05, 0.00195287, -0.986398, 0, -0.0117188, -0.164377, -1, -1.17184e-07, 5.91898e-05, 0.029297, -0.0185547, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 12 )
+
+[node name="Line54" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -3.00845e-05, -0.00390656, -0.89441, 0, 0.00781236, -0.447248, 1, -1.17527e-07, -2.69078e-05, 0.0322267, -0.0283203, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7.2, 11.05 )
+
+[node name="Line55" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 1.99834e-05, 0.00585921, 0.894434, 0, 0.0117189, -0.4472, -1, 1.17087e-07, 1.78739e-05, 0.0312502, -0.00683594, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 19.95, 14.25 )
+
+[node name="Line56" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 5.99186e-05, 0.00195287, -0.986398, 0, -0.0117188, -0.164377, -1, 1.17013e-07, -5.91035e-05, 0.029297, -0.0185547, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 9, 12 )
+
+[node name="Line57" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 2.9997e-05, -0.00390656, -0.89441, 0, 0.00781236, -0.447248, 1, 1.17185e-07, 2.68296e-05, 0.0322267, -0.0283203, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 7.2, 11.05 )
+
+[node name="Line58" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -0.000120207, -0.000976549, -0.997055, 0, 0.0126953, -0.0766954, 1, -1.17388e-07, -0.000119853, -0.00341799, -0.00927734, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 21.85, 16.15 )
+
+[node name="Line59" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -4.0098e-05, 0.00292977, 0.964762, 0, 0.0107422, -0.263125, -1, -1.17478e-07, -3.8685e-05, -0.00439455, -0.0209961, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 16.15, 8.55 )
+
+[node name="Line60" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( -6.0006e-05, -0.00195311, -0.961525, 0, 0.00683595, -0.274718, 1, -1.17198e-07, -5.76972e-05, -0.00488284, -0.0297852, 0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 8.55, 11.05 )
+
+[node name="Line61" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 0.000120119, -0.000976549, -0.997055, 0, 0.0126953, -0.0766954, 1, 1.17302e-07, 0.000119765, -0.00341799, -0.00927734, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 21.85, 16.15 )
+
+[node name="Line62" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 4.00106e-05, 0.00292977, 0.964762, 0, 0.0107422, -0.263125, -1, 1.17222e-07, 3.86007e-05, -0.00439455, -0.0209961, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 16.15, 8.55 )
+
+[node name="Line63" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+transform = Transform( 5.99186e-05, -0.00195311, -0.961525, 0, 0.00683595, -0.274718, 1, 1.17027e-07, 5.76132e-05, -0.00488284, -0.0297852, -0.0117188 )
+script = ExtResource( 7 )
+line_widths = Vector2( 8.55, 11.05 )
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -420,4 +726,63 @@ environment = ExtResource( 5 )
 projection = 1
 current = true
 
-[connection signal="value_changed" from="HSlider" to="petholder" method="_on_HSlider_value_changed"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 228.0
+margin_bottom = 72.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer"]
+margin_right = 228.0
+margin_bottom = 16.0
+min_value = 1.0
+max_value = 5.0
+value = 1.0
+rounded = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer"]
+margin_top = 20.0
+margin_right = 228.0
+margin_bottom = 44.0
+pressed = true
+
+[node name="Label" type="Label" parent="VBoxContainer/CheckBox"]
+margin_left = 30.0
+margin_top = 7.0
+margin_right = 70.0
+margin_bottom = 21.0
+text = "Show balls"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckBox2" type="CheckBox" parent="VBoxContainer"]
+margin_top = 48.0
+margin_right = 228.0
+margin_bottom = 72.0
+pressed = true
+
+[node name="Label" type="Label" parent="VBoxContainer/CheckBox2"]
+margin_left = 30.0
+margin_top = 6.0
+margin_right = 98.0
+margin_bottom = 20.0
+text = "Show lines"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSlider2" type="HSlider" parent="VBoxContainer"]
+margin_top = 76.0
+margin_right = 228.0
+margin_bottom = 92.0
+max_value = 360.0
+
+[connection signal="value_changed" from="VBoxContainer/HSlider" to="petholder" method="_on_HSlider_value_changed"]
+[connection signal="toggled" from="VBoxContainer/CheckBox" to="Node" method="_on_showballs_toggled"]
+[connection signal="toggled" from="VBoxContainer/CheckBox2" to="Node" method="_on_showlines_toggled"]
+[connection signal="value_changed" from="VBoxContainer/HSlider2" to="petholder" method="_on_HSlider2_value_changed"]

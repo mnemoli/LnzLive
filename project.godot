@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "BallData",
 "language": "GDScript",
 "path": "res://data_classes/ball_data.gd"
+}, {
+"base": "Node",
+"class": "LineData",
+"language": "GDScript",
+"path": "res://data_classes/line_data.gd"
 } ]
 _global_script_class_icons={
-"BallData": ""
+"BallData": "",
+"LineData": ""
 }
 
 [application]

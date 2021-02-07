@@ -11,4 +11,8 @@ func _process(delta):
 
 
 func _on_HSlider_value_changed(value):
-	get_parent().get_node("Camera").size = 1.0 / value
+	get_tree().root.get_node("Spatial/ViewportContainer/Viewport/Camera").size = 1.0 / value
+
+
+func _on_HSlider2_value_changed(value):
+	rotation_degrees.y = value;
