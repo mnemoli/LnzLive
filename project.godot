@@ -8,11 +8,25 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "BallData",
+"language": "GDScript",
+"path": "res://data_classes/ball_data.gd"
+} ]
+_global_script_class_icons={
+"BallData": ""
+}
+
 [application]
 
 config/name="PetzRendering"
-run/main_scene="res://Ball.tscn"
+run/main_scene="res://scenes/dog.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/height=768
 
 [rendering]
 

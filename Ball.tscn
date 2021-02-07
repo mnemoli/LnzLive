@@ -9,7 +9,6 @@
 script = ExtResource( 2 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00872803, 7.62939e-06, 0 )
 material_override = ExtResource( 1 )
 mesh = SubResource( 1 )
 material/0 = null

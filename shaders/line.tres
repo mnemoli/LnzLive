@@ -5,8 +5,9 @@ code = "shader_type spatial;
 
 render_mode unshaded, skip_vertex_transform;
 
-uniform int line_width_in_pixels = 20;
+uniform int line_width_in_pixels_start = 20;
 uniform int fuzz_amount = 0;
+uniform int line_width_in_pixels_end = 20;
 varying flat vec2 center_of_line;
 varying float right_boundary;
 varying float left_boundary;
@@ -24,10 +25,10 @@ void fragment() {
 	// Artificially scale up the screen depending on camera scale
     // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
     // pixel perfect scaling
-	vec2 absolute_center = floor(center_of_line / inverse_camera_scale) * inverse_camera_scale;
-    st = floor(st / inverse_camera_scale) * inverse_camera_scale;
-	float right_boundary_scaled = floor(right_boundary / inverse_camera_scale) * inverse_camera_scale;
-	float left_boundary_scaled = floor(left_boundary / inverse_camera_scale) * inverse_camera_scale;
+	vec2 absolute_center = floor(floor(center_of_line / inverse_camera_scale) * inverse_camera_scale);
+    st = floor(floor(st / inverse_camera_scale) * inverse_camera_scale);
+	float right_boundary_scaled = floor(right_boundary);
+	float left_boundary_scaled = floor(left_boundary);
 	
 	// FUZZING
     // Find random number based on y-pixel, offset to center of line
@@ -51,7 +52,7 @@ void fragment() {
 	if(st.x > left_boundary_scaled - inverse_camera_scale && st.x < right_boundary_scaled) 
 		pct2 = 1.0;
 		
-	if(st.x > left_boundary && st.x < right_boundary_scaled + inverse_camera_scale)
+	if(st.x > left_boundary_scaled && st.x < right_boundary_scaled + inverse_camera_scale)
 		pct3 = 1.0;
 		
 	pct2 -= pct;
@@ -87,7 +88,6 @@ void vertex() {
 	vec2 line_direction_onscreen = normalize(next_point_ndc_space - vert_in_ndc_space);
 	vec2 normal = vec2(-line_direction_onscreen.y, line_direction_onscreen.x);
 	
-	
 	// Depending on which side of the mesh this vertex is on,
 	// We want to shove the vertex either left or right
 	float orientation = 1.0;
@@ -95,8 +95,14 @@ void vertex() {
 		orientation = -1.0;
 	}
 	
+	// Depending on line end, set line width
+	float line_width_in_pixels = float(line_width_in_pixels_start);
+	if(VERTEX.y < 0.0) {
+		line_width_in_pixels = float(line_width_in_pixels_end);
+	}
+	
 	// Note - this requires that camera is set to 'keep width'
-	vec2 n = floor(normal * float(line_width_in_pixels) * inverse_camera_scale) * orientation;
+	vec2 n = floor(normal * line_width_in_pixels * inverse_camera_scale) * orientation;
 	vec3 offset = vec3(n / VIEWPORT_SIZE, 0.0);
 	
 	// Remove the mesh's default x-width from the final output
@@ -112,7 +118,7 @@ void vertex() {
 	// Pad the offset for later
 	offset *= 2.0;
 	
-	VERTEX = vec3(vert_in_ndc_space, vert_in_clip_space.z / vert_in_clip_space.w + 0.5) + offset;
+	VERTEX = vec3(vert_in_ndc_space, vert_in_clip_space.z / vert_in_clip_space.w + 0.0015) + offset;
 	
 	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
 	vec4 center_view = projection * vec4(vec3(0.0), 1.0);
@@ -133,11 +139,17 @@ void vertex() {
 	float acceptable_x1 = ((vert_moved.y - right_bound_intersect.y) / gradient) + right_bound_intersect.x;
 	float acceptable_x2 = ((vert_moved.y - left_bound_intersect.y) / gradient) + left_bound_intersect.x;
 
-	right_boundary = floor(acceptable_x1 * VIEWPORT_SIZE.x);
-	left_boundary = floor(acceptable_x2 * VIEWPORT_SIZE.x);
+	float x_scaled = acceptable_x1 * VIEWPORT_SIZE.x;
+	x_scaled = floor(floor(x_scaled * inverse_camera_scale) / inverse_camera_scale);
+	right_boundary = x_scaled;
+	x_scaled = acceptable_x2 * VIEWPORT_SIZE.x;
+	x_scaled = floor(floor(x_scaled * inverse_camera_scale) / inverse_camera_scale);
+	left_boundary = x_scaled;
 }"
 
 [resource]
+resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/line_width_in_pixels = 20
-shader_param/fuzz_amount = 0
+shader_param/line_width_in_pixels_start = 20
+shader_param/fuzz_amount = 1
+shader_param/line_width_in_pixels_end = 20
