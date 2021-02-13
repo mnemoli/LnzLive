@@ -2,70 +2,71 @@ tool
 extends Node
 
 var balls = [
-	BallData.new(37, Vector3(0, 0, 0), 49), # butt
-	BallData.new(39, Vector3(17, -4, 0), 48), # belly
-	BallData.new(35, Vector3(33, -1, 0), 50), # chest
-	BallData.new(25, Vector3(-4, -3, 12), 19), # Rhip
-	BallData.new(25, Vector3(-4, -3, -12), 43), # Lhip
-	BallData.new(19, Vector3(-3, -16, 12), 16), # Rknee
-	BallData.new(19, Vector3(-3, -16, -12), 40), # Lknee
-	BallData.new(11, Vector3(-6, -27, 12), 0), # Rankle
-	BallData.new(11, Vector3(-6, -27, -12), 24), # Lankle
-	BallData.new(15, Vector3(-4, -34, 12), 12, Color.white, Color("8b6b35"), -2), # Rfoot
-	BallData.new(15, Vector3(-4, -34, -12), 36, Color.white, Color("8b6b35"), -2), # Lfoot
-	BallData.new(7, Vector3(1, -37, 7), 20, Color.white, Color("8b6b35"), -2), # Rtoe1
-	BallData.new(7, Vector3(0, -37, 11), 21, Color.white, Color.black, -2), # Rtoe2
-	BallData.new(7, Vector3(1, -37, 17), 22, Color.white, Color("8b6b35"), -2), # Rtoe3
-	BallData.new(7, Vector3(1, -37, -7), 44, Color.white, Color("8b6b35"), -2), # Ltoe1
-	BallData.new(7, Vector3(0, -37, -11), 45, Color.white, Color.black, -2), # Ltoe2
-	BallData.new(7, Vector3(1, -37, -17), 46, Color.white, Color("8b6b35"), -2), # Ltoe3
-	BallData.new(23, Vector3(35, -1, 12), 18), # Rshoulder
-	BallData.new(23, Vector3(35, -1, -12), 42), # Lshoulder
-	BallData.new(17, Vector3(29, -13, 12), 7), # Relbow
-	BallData.new(17, Vector3(29, -13, -12), 31), # Lelbow
-	BallData.new(11, Vector3(31, -25, 12), 23), # Rwrist
-	BallData.new(11, Vector3(31, -25, -12), 47), # Lwrist
-	BallData.new(15, Vector3(35, -33, 12), 13, Color.white, Color("8b6b35"), -2), # Rhand
-	BallData.new(15, Vector3(35, -33, -12), 37, Color.white, Color("8b6b35"), -2), # Lhand
-	BallData.new(7, Vector3(36, -37, 7), 9, Color.white, Color("8b6b35"), -2), # Rfinger1
-	BallData.new(7, Vector3(40, -37, 12), 10, Color.white, Color("8b6b35"), -2), # Rfinger2
-	BallData.new(7, Vector3(36, -37, 17), 11, Color.white, Color.black, -2), # Rfinger3
-	BallData.new(7, Vector3(36, -37, -7), 33, Color.white, Color("8b6b35"), -2), # Lfinger1
-	BallData.new(7, Vector3(40, -37, -12), 34, Color.white, Color.black, -2), # Lfinger2
-	BallData.new(7, Vector3(36, -37, -17), 35, Color.white, Color("8b6b35"), -2), # Lfinger3
-	BallData.new(27, Vector3(43, 11, 0), 54), # Neck
-	BallData.new(32, Vector3(50, 15, 0), 52), # Head
-	BallData.new(17, Vector3(48, 2, 10), 78), # Rcheek
-	BallData.new(17, Vector3(48, 2, -10), 79), # Lcheek
-	BallData.new(13, Vector3(62, -1, 5), 15, Color.white, Color("8b6b35"), 1), # Rjowl
-	BallData.new(13, Vector3(62, -1, -5), 39, Color.white, Color("8b6b35"), 1), # Ljowl
-	BallData.new(15, Vector3(65, 13, -7), 8, Color.white, Color.black, 1), # Eye1
-	BallData.new(15, Vector3(65, 13, 7), 32, Color.white, Color.black, 1), # Eye2
-	BallData.new(9, Vector3(67, 13, -7), -1, Color.black, Color("897e66"), 2, 0, 0.0001), # Iris1
-	BallData.new(9, Vector3(67, 13, 7), -1, Color.black, Color("897e66"), 2, 0, 0.0001), # Iris2
-	BallData.new(21, Vector3(63, 5, 0), 56), # Snout
-	BallData.new(10, Vector3(57, -5, 0), 51, Color.white, Color("8b6b35"), 1), # Chin
-	BallData.new(9, Vector3(-13, 7, 0), 57, Color.white, Color.black, -1, 2), # Tail1
-	BallData.new(9, Vector3(-20, 10, 0), 58, Color.white, Color.black, -1, 2), # Tail2
-	BallData.new(7, Vector3(-26, 16, 0), 59, Color.white, Color.black, -1, 2), # Tail3
-	BallData.new(7, Vector3(-27, 23, 0), 60, Color.white, Color.black, -1, 2), # Tail4
-	BallData.new(5, Vector3(-23, 29, 0), 61, Color.white, Color.black, -1, 2), # Tail5
-	BallData.new(5, Vector3(-16, 32, 0), 62, Color.white, Color.black, -1, 2), # Tail6
-	BallData.new(9, Vector3(73, 5, 2), 17, Color.black), # Rnose
-	BallData.new(9, Vector3(73, 5, -2), 41, Color.black), # Lnose
-	BallData.new(7, Vector3(71, 1, 0), 55, Color.black), # NoseBottom
-	BallData.new(7, Vector3(53, 15, 13), 3, Color.white, Color.black, -2), # reyebrow1
-	BallData.new(9, Vector3(55, 19, 11), 2), # reyebrow2
-	BallData.new(5, Vector3(53, 21, 7), 1, Color.white, Color.black, 0), # reyebrow3
-	BallData.new(7, Vector3(53, 15, -13), 27, Color.white, Color.black, -2), # leyebrow1
-	BallData.new(9, Vector3(55, 19, -11), 26), # leyebrow2
-	BallData.new(5, Vector3(53, 21, -7), 25, Color.white, Color.black, 0), # leyebrow3
-	BallData.new(11, Vector3(47, 21, 13), 6, Color.white, Color.black, 0), # rear1
-	BallData.new(11, Vector3(47, 21, 15), 5), # rear2
-	BallData.new(7, Vector3(43, 17, 19), 4), # rear3
-	BallData.new(11, Vector3(47, 21, -13), 30, Color.white, Color.black, 0), # lear1
-	BallData.new(11, Vector3(47, 21, -15), 29), # lear2
-	BallData.new(7, Vector3(43, 17, -19), 28), # lear3
+BallData.new(29, Vector3(35, -44, 88), 0), #Right ankle      
+BallData.new(14, Vector3(11, -190, -129), 1), #Left eyebrow 1   
+BallData.new(21, Vector3(25, -187, -135), 2), #Left eyebrow 2   
+BallData.new(21, Vector3(36, -172, -123), 3), #Left eyebrow 3   
+BallData.new(16, Vector3(50, -189, -84), 4), #Left ear 1       
+BallData.new(27, Vector3(34, -196, -98), 5), #Left ear 2       
+BallData.new(30, Vector3(24, -188, -103), 6), #Left ear 3       
+BallData.new(45, Vector3(43, -87, -40), 7), #Left elbow       
+BallData.new(38, Vector3(18, -168, -142), 8), #Eye 1            
+BallData.new(22, Vector3(45, -15, -57), 9), #Left finger 1    
+BallData.new(24, Vector3(59, -11, -56), 10), #Left finger 2    
+BallData.new(22, Vector3(65, -13, -43), 11), #Left finger 3    
+BallData.new(39, Vector3(40, -19, 80), 12), #Left foot        
+BallData.new(40, Vector3(47, -20, -39), 13), #Left hand        
+BallData.new(20, Vector3(18, -163, -154), 14, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 1           
+BallData.new(35, Vector3(12, -117, -155), 15), #Left jowl        
+BallData.new(48, Vector3(40, -76, 61), 16), #Left knee        
+BallData.new(25, Vector3(5, -127, -177), 17), #Left nostril     
+BallData.new(61, Vector3(34, -125, -60), 18), #Left shoulder    
+BallData.new(65, Vector3(24, -115, 70), 19), #Left hip         
+BallData.new(22, Vector3(34, -12, 61), 20), #Left toe 1       
+BallData.new(26, Vector3(48, -13, 60), 21), #Left toe 2       
+BallData.new(22, Vector3(57, -13, 69), 22), #Left toe 3       
+BallData.new(30, Vector3(41, -48, -34), 23), #Left wrist       
+BallData.new(29, Vector3(-43, -42, 78), 24), #Left ankle       
+BallData.new(14, Vector3(-14, -189, -128), 25), #Right eyebrow 1  
+BallData.new(21, Vector3(-28, -185, -134), 26), #Right eyebrow 2  
+BallData.new(21, Vector3(-39, -172, -123), 27), #Right eyebrow 3  
+BallData.new(17, Vector3(-54, -184, -85), 28), #Right ear 1      
+BallData.new(27, Vector3(-38, -196, -98), 29), #Right ear 2      
+BallData.new(30, Vector3(-27, -189, -101), 30), #Right ear 3      
+BallData.new(45, Vector3(-41, -83, -43), 31), #Right elbow      
+BallData.new(38, Vector3(-20, -165, -143), 32), #Eye 2            
+BallData.new(22, Vector3(-43, -13, -78), 33), #Right finger 1   
+BallData.new(24, Vector3(-59, -11, -76), 34), #Right finger 2   
+BallData.new(22, Vector3(-64, -12, -64), 35), #Right finger 3   
+BallData.new(39, Vector3(-47, -19, 64), 36), #Right foot       
+BallData.new(40, Vector3(-46, -18, -60), 37), #Right hand       
+BallData.new(20, Vector3(-20, -160, -155), 38, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 2           
+BallData.new(35, Vector3(-12, -118, -155), 39), #Right jowl       
+BallData.new(49, Vector3(-43, -80, 61), 40), #Right knee       
+BallData.new(25, Vector3(-6, -127, -177), 41), #Right nostril    
+BallData.new(61, Vector3(-34, -122, -60), 42), #Right shoulder   
+BallData.new(65, Vector3(-29, -119, 64), 43), #Right hip        
+BallData.new(22, Vector3(-41, -11, 45), 44), #Right toe 1      
+BallData.new(26, Vector3(-55, -12, 44), 45), #Right toe 2      
+BallData.new(22, Vector3(-64, -12, 53), 46), #Right toe 3      
+BallData.new(30, Vector3(-36, -43, -46), 47), #Right wrist      
+BallData.new(102, Vector3(-3, -110, -2), 48), #Belly            
+BallData.new(96, Vector3(0, -123, 58), 49), #Butt             
+BallData.new(90, Vector3(0, -117, -53), 50), #Chest            
+BallData.new(32, Vector3(-1, -105, -138), 51), #Jaw              
+BallData.new(85, Vector3(-2, -155, -108), 52), #Head             
+BallData.new(24, Vector3(1, -137, -105), 53), #Chin             
+BallData.new(68, Vector3(-2, -140, -80), 54), #Neck             
+BallData.new(24, Vector3(0, -120, -173), 55), #Nose bottom      
+BallData.new(52, Vector3(-1, -132, -147), 56), #Snout            
+BallData.new(25, Vector3(0, -147, 96), 57), #Tail 1           
+BallData.new(21, Vector3(-1, -158, 121), 58), #Tail 2           
+BallData.new(16, Vector3(-2, -174, 138), 59), #Tail 3           
+BallData.new(15, Vector3(-1, -194, 142), 60), #Tail 4           
+BallData.new(14, Vector3(-1, -210, 130), 61), #Tail 5           
+BallData.new(14, Vector3(-1, -220, 110), 62), #Tail 6           
+BallData.new(0, Vector3(7, -140, -121), 63), #Tongue 1         
+BallData.new(0, Vector3(6, -122, -134), 64) #Tongue 2         
 ]
 
 var lines = [
@@ -173,10 +174,17 @@ func generate_balls():
 		c.queue_free()
 	for ball in balls:
 		var visual_ball = ball_scene.instance()
-		visual_ball.ball_size = ball.size / 2
-		visual_ball.transform.origin = ball.position / 1024
+		visual_ball.ball_size = floor(ball.size / 2)
+		var rotated_pos = ball.position
+		rotated_pos.y *= -1.0
+		visual_ball.transform.origin = rotated_pos / 1024
+		if(ball.ball_no == 14 or ball.ball_no == 38):
+			print(ball.position)
+			print(visual_ball.transform.origin)
 		visual_ball.color = ball.color
-		visual_ball.outline = ball.outline
+		visual_ball.outline = 1
+		if ball.outline > -1:
+			visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
 		visual_ball.z_add = ball.z_add
 		visual_ball.fuzz_amount = ball.fuzz
