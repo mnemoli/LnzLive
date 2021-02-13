@@ -6,6 +6,7 @@ export var fuzz_amount = 0 setget set_fuzz_amount
 export var outline = -1 setget set_outline
 export var color = Color.white setget set_color
 export var outline_color = Color.black setget set_outline_color
+export var z_add = 0.0 setget set_z_add
 
 func set_ball_size(new_value):
 	ball_size = new_value
@@ -26,3 +27,7 @@ func set_color(new_value):
 func set_outline_color(new_value):
 	outline_color = new_value
 	$MeshInstance.material_override.set_shader_param("outline_color", new_value)
+	
+func set_z_add(new_value):
+	z_add = new_value
+	$MeshInstance.material_override.set_shader_param("z_add", new_value)

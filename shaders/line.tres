@@ -8,7 +8,7 @@ render_mode unshaded, skip_vertex_transform;
 uniform int line_width_in_pixels_start = 20;
 uniform int fuzz_amount = 0;
 uniform int line_width_in_pixels_end = 20;
-uniform vec4 color : hint_color = vec4(vec3(0.0), 1.0);
+uniform vec4 color : hint_color = vec4(vec3(1.0), 1.0);
 varying flat vec2 center_of_line;
 varying float right_boundary;
 varying float left_boundary;

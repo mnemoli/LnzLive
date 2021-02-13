@@ -33,24 +33,24 @@ var balls = [
 	BallData.new(7, Vector3(36, -37, -7), 33, Color.white, Color("8b6b35"), -2), # Lfinger1
 	BallData.new(7, Vector3(40, -37, -12), 34, Color.white, Color.black, -2), # Lfinger2
 	BallData.new(7, Vector3(36, -37, -17), 35, Color.white, Color("8b6b35"), -2), # Lfinger3
-	BallData.new(32, Vector3(40, 7, 0), 54), # Neck
-	BallData.new(32, Vector3(50, 12, 0), 52), # Head
+	BallData.new(27, Vector3(43, 11, 0), 54), # Neck
+	BallData.new(32, Vector3(50, 15, 0), 52), # Head
 	BallData.new(17, Vector3(48, 2, 10), 78), # Rcheek
 	BallData.new(17, Vector3(48, 2, -10), 79), # Lcheek
 	BallData.new(13, Vector3(62, -1, 5), 15, Color.white, Color("8b6b35"), 1), # Rjowl
 	BallData.new(13, Vector3(62, -1, -5), 39, Color.white, Color("8b6b35"), 1), # Ljowl
 	BallData.new(15, Vector3(65, 13, -7), 8, Color.white, Color.black, 1), # Eye1
 	BallData.new(15, Vector3(65, 13, 7), 32, Color.white, Color.black, 1), # Eye2
-	BallData.new(9, Vector3(67, 13, -7), -1, Color.black, Color("897e66"), 2), # Iris1
-	BallData.new(9, Vector3(67, 13, 7), -1, Color.black, Color("897e66"), 2), # Iris2
+	BallData.new(9, Vector3(67, 13, -7), -1, Color.black, Color("897e66"), 2, 0, 0.0001), # Iris1
+	BallData.new(9, Vector3(67, 13, 7), -1, Color.black, Color("897e66"), 2, 0, 0.0001), # Iris2
 	BallData.new(21, Vector3(63, 5, 0), 56), # Snout
-	BallData.new(10, Vector3(57, -7, 0), 51, Color.white, Color("8b6b35"), 1), # Chin
-	BallData.new(9, Vector3(-13, 7, 0), 57), # Tail1
-	BallData.new(9, Vector3(-20, 10, 0), 58), # Tail2
-	BallData.new(7, Vector3(-26, 16, 0), 59), # Tail3
-	BallData.new(7, Vector3(-27, 23, 0), 60), # Tail4
-	BallData.new(5, Vector3(-23, 29, 0), 61), # Tail5
-	BallData.new(5, Vector3(-16, 32, 0), 62), # Tail6
+	BallData.new(10, Vector3(57, -5, 0), 51, Color.white, Color("8b6b35"), 1), # Chin
+	BallData.new(9, Vector3(-13, 7, 0), 57, Color.white, Color.black, -1, 2), # Tail1
+	BallData.new(9, Vector3(-20, 10, 0), 58, Color.white, Color.black, -1, 2), # Tail2
+	BallData.new(7, Vector3(-26, 16, 0), 59, Color.white, Color.black, -1, 2), # Tail3
+	BallData.new(7, Vector3(-27, 23, 0), 60, Color.white, Color.black, -1, 2), # Tail4
+	BallData.new(5, Vector3(-23, 29, 0), 61, Color.white, Color.black, -1, 2), # Tail5
+	BallData.new(5, Vector3(-16, 32, 0), 62, Color.white, Color.black, -1, 2), # Tail6
 	BallData.new(9, Vector3(73, 5, 2), 17, Color.black), # Rnose
 	BallData.new(9, Vector3(73, 5, -2), 41, Color.black), # Lnose
 	BallData.new(7, Vector3(71, 1, 0), 55, Color.black), # NoseBottom
@@ -133,12 +133,12 @@ var lines = [
 	LineData.new(52, 6, 100, 100), #
 	LineData.new(52, 30, 100, 100), 
 	#body
-	LineData.new(57, 49, 100, 55), #tail/butt
-	LineData.new(57, 58, 100, 100), #tail/butt
-	LineData.new(58, 59, 100, 100), #tail/butt
-	LineData.new(59, 60, 100, 100), #tail/butt
-	LineData.new(60, 61, 100, 100), #tail/butt
-	LineData.new(61, 62, 100, 100), #tail/butt
+	LineData.new(57, 49, 100, 55, 2), #tail/butt
+	LineData.new(57, 58, 100, 100, 2), #tail/butt
+	LineData.new(58, 59, 100, 100, 2), #tail/butt
+	LineData.new(59, 60, 100, 100, 2), #tail/butt
+	LineData.new(60, 61, 100, 100, 2), #tail/butt
+	LineData.new(61, 62, 100, 100, 2), #tail/butt
 	LineData.new(7, 18, 95, 95), #LShoulder/Lelbow
 	LineData.new(23, 7, 100, 80), #Lelbow/Lwrist
 	LineData.new(23, 13, 80, 85), #Lwrist /Lhand
@@ -178,6 +178,8 @@ func generate_balls():
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
+		visual_ball.z_add = ball.z_add
+		visual_ball.fuzz_amount = ball.fuzz
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
@@ -208,7 +210,8 @@ func generate_lines():
 		visual_line.rotation_degrees.x += 90
 		visual_line.scale.y = distance
 		visual_line.color = Color.white
-		var final_line_width = Vector2(start.ball_size * 2 - 1, end.ball_size * 2 - 1)
+		visual_line.fuzz_amount = line.fuzz
+		var final_line_width = Vector2(start.ball_size * 2 + 1, end.ball_size * 2 + 1)
 		final_line_width = final_line_width * (Vector2(line.s_thick, line.e_thick) / 100)
 		visual_line.line_widths = final_line_width
 		
