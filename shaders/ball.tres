@@ -78,6 +78,15 @@ void fragment() {
     vec2 vec = st2 - c;
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
     modified_outline = 0;
+  } else if (outline < -1) {
+	// use as debug for now
+	float side = sign(st2.x - c.x);
+	float side2 = sign(st2.y - c.y);
+	st2.x -= 1.0 * inverse_camera_scale * side;
+	st2.y -= 1.0 * inverse_camera_scale * side2;
+    vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    modified_outline = 0;
   }
   
   //DRAWING

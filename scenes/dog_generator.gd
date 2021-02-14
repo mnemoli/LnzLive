@@ -182,7 +182,7 @@ func generate_balls():
 			print(ball.position)
 			print(visual_ball.transform.origin)
 		visual_ball.color = ball.color
-		visual_ball.outline = 1
+		visual_ball.outline = -5
 		if ball.outline > -1:
 			visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color

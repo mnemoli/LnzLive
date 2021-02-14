@@ -1,0 +1,11 @@
+[gd_resource type="Animation" format=2]
+
+[resource]
+resource_name = "dog0"
+tracks/0/type = "transform"
+tracks/0/path = NodePath("balls/Ball")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 1, 1, 0.0341797, 0.0429688, 0.0859375, 0, 0, 0, 1, 1, 1, 1, 2, 1, 0.0341797, 0.0429688, 0.0859375, 0, 0, 0, 1, 1, 1, 1 )
