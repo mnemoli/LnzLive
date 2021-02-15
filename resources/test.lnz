@@ -1,0 +1,353 @@
+;Stripped down Dogz LNZ for breed bases by Kalium https://lilaclynx.net/
+;Copy-paste into your breed's LNZ and get to work!
+;Remember you can add in any section mentioned in the helpfile that doesn't appear here!
+;Anything left blank (scales etc) you can fill in
+;If you don't understand what anything does, READ THE LNZ PRO HELPFILES! They will tell you everything!
+;if the columns look messy and difficult to read, select Tools>Reformat Lines to make them look more organised
+
+;Don't change this!
+[Default Linez File]
+\ptzfiles\dog\dogmaster.lnz
+
+;change 'gd' to your breed's two letter code
+[Sounds]
+\ptzfiles\dog\gd\gdsnd.txt
+
+;same here
+[Little one]
+dhpup.lnz
+
+;this can be anything you want, I set it to 10 to match the body colour
+[256 Eyelid Color]
+10
+
+;scales - tweak as you need, you can leave them blank if not using them
+[Default Scales]
+255
+255
+[Leg Extension]
+
+[Body Extension]
+
+[Face Extension]
+
+[Ear Extension]
+
+[Head Enlargement]
+
+[Feet Enlargement]
+
+;these are for setting the shape of your breed, again you can leave blank if not using.
+[Move]
+
+[Project Ball]
+
+;addballz - I've left the cheek, mouth corners and tongue ballz as all breeds have them
+;add your own below as needed
+[Add Ball]
+; first ball is 67
+; GROUP ONE, containing ballz 67-76, ARE UTILITY ADDBALLZ FOR ANDREW
+;base	x	y	z	color otlnCol spckCol  fuzz   group outline ballsize bodyarea  addGroup     texture
+; mount align ball 67
+48,	3,	-12,	-258,	55,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; steal captured toy align ball 68
+33,	20,	-20,	-125,	65,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; steal toy standing align ball 69
+48,	0,	0,	-230,	75,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; dig align ball 70
+33,	50,	40,	-60,	85,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; fill in hole align ball 71
+36,	50,	40,	250,	95,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; rest on pillow align ball 72
+48,	0,	80,	0,	105,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; drop object at point align ball 73
+33,	50,	150,	-80,	115,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; utility ball 74
+48,	0,	0,	0,	15,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; utility ball 75
+48,	0,	0,	0,	15,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; utility ball 76
+48,	0,	0,	0,	15,	0,	0,	0,	-1,	-1,	50,	0,	1,	-1
+; ### From here down are animator's addballz 77.
+;tongue77
+63,	0,	-20,	0,	70,	0,	0,	-1,	-1,	-1,	-1,	0,	0,	0,	63
+;cheeks 78
+51,	15,	-25,	33,	10,	109,	0,	0,	3,	-1,	45,	0,	0,	0
+51,	-15,	-25,	33,	10,	109,	0,	0,	3,	-1,	45,	0,	0,	0
+;mouth corners 80
+51,	8,	-13,	15,	10,	21,	0,	0,	3,	-1,	22,	0,	0,	2
+51,	-8,	-13,	15,	10,	21,	0,	0,	3,	-1,	22,	0,	0,	2
+
+;utility/positioning ballz are omitted as standard
+;omit anything else you don't want below
+[Omissions]
+65		zorient
+66		ztrans
+67		utility addball for andrew
+68      utility addball for andrew
+69      utility addball for andrew
+70      utility addball for andrew
+71      utility addball for andrew
+72      utility addball for andrew
+73      utility addball for andrew
+74      utility addball for andrew
+75      utility addball for andrew
+76      utility addball for andrew
+
+;lines - these join ballz to one another
+;as always you can add or remove as needed
+; -1 mean use the associated ball color
+; Only the first three fields need to be specefied
+;srt	end	fuzz	col	lfCol	rtCol	sThck	eThick
+[Linez]
+; tongue
+63,	77,	0,	-1,	244,	244,	100,	100
+77,	64,	0,	-1,	244,	244,	100,	100
+63,	53,	0,	-1,	244,	244,	100,	100
+;
+52,	54,	1,	-1,	244,	244,	90,	95 ;head/neck
+50,	54,	1,	-1,	244,	244,	85,	95 ;chest/neck
+50,	48,	1,	-1,	244,	244,	95,	95 ;chest/belly
+49,	48,	1,	-1,	244,	244,	95,	95 ;belly/butt
+49,	19,	1,	-1,	-1,	-1,	95,	95 ;butt/hip
+49,	43,	1,	-1,	-1,	-1,	95,	95 ;butt/hip
+50,	18,	1,	-1,	-1,	-1,	95,	95 ;chest/shoulder
+50,	42,	1,	-1,	-1,	-1,	95,	95 ;chest/shoulder
+1,	2,	2,	-1,	25,	25,	100,	100 ;brow
+3,	2,	2,	-1,	25,	25,	100,	100 ;brow
+25,	26,	2,	-1,	25,	25,	100,	100 ;brow
+27,	26,	2,	-1,	25,	25,	100,	100 ;brow
+10,	11,	0,	-1,	244,	244,	95,	95 ;BULLshit
+;toes & fingers
+9,	13,	1,	-1,	-1,	-1,	100,	100
+10,	13,	1,	-1,	-1,	-1,	90,	90
+11,	13,	1,	-1,	-1,	-1,	100,	100
+33,	37,	1,	-1,	-1,	-1,	100,	100
+34,	37,	1,	-1,	-1,	-1,	90,	90
+35,	37,	1,	-1,	-1,	-1,	100,	100
+44,	36,	1,	-1,	-1,	-1,	100,	100
+45,	36,	1,	-1,	-1,	-1,	90,	90
+46,	36,	1,	-1,	-1,	-1,	100,	100
+20,	12,	1,	-1,	-1,	-1,	100,	100
+21,	12,	1,	-1,	-1,	-1,	90,	90
+22,	12,	1,	-1,	-1,	-1,	100,	100
+;face
+56,	52,	1,	-1,	25,	25,	100,	100 ;snout, head
+51,	53,	1,	-1,	25,	25,	85,	90 ;jaw/chin
+56,	17,	1,	-1,	25,	25,	100,	100
+56,	41,	1,	-1,	25,	25,	100,	100
+39,	15,	1,	-1,	25,	25,	95,	95
+56,	15,	1,	-1,	-1,	-1,	100,	100
+56,	39,	1,	-1,	-1,	-1,	100,	100
+56,	78,	1,	-1,	-1,	-1,	100,	100
+56,	79,	1,	-1,	-1,	-1,	100,	100
+53,	80,	0,	-1,	-1,	-1,	90,	100
+53,	81,	0,	-1,	-1,	-1,	90,	100
+80,	51,	0,	-1,	-1,	-1,	100,	100
+81,	51,	0,	-1,	-1,	-1,	100,	100
+51,	56,	0,	244,	25,	25,	0,	100
+15,	78,	0,	-1,	-1,	-1,	70,	70
+39,	79,	0,	-1,	-1,	-1,	70,	70
+;
+78,	80,	0,	-1,	-1,	-1,	95,	95
+79,	81,	0,	-1,	-1,	-1,	95,	95
+78,	79,	0,	-1,	-1,	-1,	95,	95
+;jowlz
+51,	78,	0,	-1,	-1,	-1,	100,	100
+51,	79,	0,	-1,	-1,	-1,	100,	100
+;ears
+6,	5,	0,	-1,	-1,	-1,	100,	100
+5,	4,	0,	-1,	-1,	-1,	100,	100
+30,	29,	0,	-1,	-1,	-1,	100,	100
+29,	28,	0,	-1,	-1,	-1,	100,	100
+4,	84,	0,	-1,	-1,	-1,	100,	100
+28,	83,	0,	-1,	-1,	-1,	100,	100
+52,	6,	0,	-1,	-1,	-1,	100,	100
+52,	30,	0,	-1,	-1,	-1,	100,	100
+;body
+57,	49,	1,	-1,	109,	244,	100,	55 ;tail/butt
+57,	58,	1,	-1,	109,	244,	100,	100 ;tail/butt
+58,	59,	1,	-1,	109,	244,	100,	100 ;tail/butt
+59,	60,	1,	-1,	109,	244,	100,	100 ;tail/butt
+60,	61,	1,	-1,	109,	244,	100,	100 ;tail/butt
+61,	62,	1,	-1,	109,	244,	100,	100 ;tail/butt
+7,	18,	1,	-1,	109,	244,	95,	95 ;LShoulder/Lelbow
+23,	7,	2,	-1,	109,	244,	100,	80 ;Lelbow/Lwrist
+23,	13,	1,	-1,	109,	244,	80,	85 ;Lwrist /Lhand
+42,	31,	1,	-1,	109,	244,	95,	95 ;RShoulder/Relbow
+47,	31,	2,	-1,	109,	244,	100,	80 ;Relbow/Rwrist
+47,	37,	1,	-1,	109,	244,	80,	85 ;Rwrist/Rhand
+19,	16,	1,	-1,	109,	244,	95,	95 ;Lthigh/Lknee
+16,	0,	3,	-1,	109,	244,	95,	95 ;Lknee/Lankle
+0,	12,	1,	-1,	109,	244,	95,	85 ;Lankle/Lfoot
+43,	40,	1,	-1,	109,	244,	95,	95 ;Rthigh/Rknee
+40,	24,	3,	-1,	109,	244,	95,	95 ;RKnee/Rankle
+24,	36,	1,	-1,	109,	244,	95,	85 ;Rankle/Rfoot
+
+;all dogz have pawpads, but you can remove these if your breed won't need them.
+[Paint Ballz]
+;base ball	diameter(% of baseball)	direction	     color outlinecolor fuzz  outline group   texture
+;paws
+9,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+10,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+11,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+13,	62,	0,	1,	0,	39,	-1,	0,	-1,	-1,	-1
+33,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+34,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+35,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+37,	62,	0,	1,	0,	39,	-1,	0,	-1,	-1,	-1
+44,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+45,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+46,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+36,	62,	0,	1,	0,	39,	-1,	0,	-1,	-1,	-1
+20,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+21,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+22,	60,	0,	1,	.3,	39,	-1,	0,	-1,	-1,	-1
+12,	62,	0,	1,	0,	39,	-1,	0,	-1,	-1,	-1
+
+;if you need colour variations, put them here
+[Color Info Override]
+
+[Outline Color Override]
+
+;left as-is, but tweak if needed
+[Thin/Fat]
+50,	-2,	12
+54,	-8,	10
+48,	-4,	20
+49,	0,	20
+57,	-2,	4
+58,	-2,	4
+59,	-2,	4
+60,	0,	4
+61,	0,	4
+62,	-1,	2
+19,	-4,	8
+43,	-4,	8
+18,	-4,	8
+42,	-4,	8
+7,	-1,	8
+31,	-1,	8
+16,	-3,	8
+40,	-3,	8
+23,	-1,	5
+47,	-1,	5
+0,	-1,	8
+24,	-1,	8
+78,	0,	25
+79,	0,	25
+
+;also left as-is, you probably won't need to change this
+[Head Shot]
+0			frame number
+49				rotation
+0				roll
+3				tilt
+-49				head rotation
+7				head tilt
+13				head cock
+40, 40			R / L eyelid height
+20, 20			R / L eyelid tilt
+0, 0			(X, Y) eye target
+
+;you can add textures if needed here and refer to them in the ballz or addballz
+; First argument is name of texture.
+; Second argument is whether texture is single color (1) or multi-color (0)
+; This texture list is used both here and in add ballz
+[Texture List]
+\art\textures\hair11.bmp        1
+\art\textures\hair10.bmp        1
+\art\textures\hair11.bmp        1
+
+;ballz into - size diffs are all set to 0 so all ballz are at their default size
+;FUZZ --> -1 = no outline, 0 = half outline, > 0 = outline thickness
+;OUTLINE --> -1 = no outline, 0 = half outline, > 0 = outline thickness
+;col  outCol  spklCl   fuzz  otlntTyp sizeDif  group  texture ball#
+[Ballz Info]
+10,	244,	-1,	0,	-1,	0,	4,	0,	0 ;L ankle
+10,	244,	-1,	0,	0,	0,	-1,	-1,	1 ;L eyebrow1
+10,	244,	-1,	0,	-1,	0,	-1,	-1,	2 ;L eyebrow2
+10,	244,	-1,	0,	-2,	0,	-1,	-1,	3 ;L eyebrow3
+10,	244,	-1,	0,	-1,	0,	3,	0,	4 ;L ear1
+10,	244,	-1,	0,	-1,	0,	3,	0,	5 ;L ear2
+10,	244,	-1,	0,	0,	0,	3,	0,	6 ;L ear3
+10,	25,	-1,	0,	-1,	0,	0,	0,	7 ;L elbow
+245,	244,	-1,	0,	1,	0,	-1,	-1,	8 ;L eye
+10,	25,	-1,	0,	0,	0,	1,	0,	9 ;L finger1
+10,	244,	-1,	0,	0,	0,	1,	0,	10 ;L finger2
+10,	25,	-1,	0,	0,	0,	1,	0,	11 ;L finger3
+10,	25,	-1,	0,	0,	0,	1,	0,	12 ;L foot
+10,	25,	-1,	0,	0,	0,	1,	0,	13 ;L hand
+244,	125,	-1,	0,	3,	0,	-1,	-1,	14 ;L iris
+10,	109,	-1,	0,	0,	0,	3,	0,	15 ;L jowl
+10,	25,	-1,	0,	-1,	0,	4,	0,	16 ;L knee
+244,	244,	-1,	0,	-3,	0,	-1,	0,	17 ;L nostril
+10,	244,	-1,	0,	-1,	0,	0,	0,	18 ;L shoulder
+10,	244,	-1,	0,	-1,	0,	4,	0,	19 ;L hip
+10,	25,	-1,	0,	0,	0,	1,	0,	20 ;L toe1
+10,	244,	-1,	0,	0,	0,	1,	0,	21 ;L toe2
+10,	25,	-1,	0,	0,	0,	1,	0,	22 ;L toe3
+10,	244,	-1,	0,	-1,	0,	0,	0,	23 ;L wrist
+10,	244,	-1,	0,	-1,	0,	4,	0,	24 ;R ankle
+10,	244,	-1,	0,	-2,	0,	-1,	-1,	25 ;R eyebrow1
+10,	244,	-1,	0,	-1,	0,	-1,	-1,	26 ;R eyebrow2
+10,	244,	-1,	0,	0,	0,	-1,	-1,	27 ;R eyebrow3
+10,	244,	-1,	0,	-1,	0,	3,	0,	28 ;R ear1
+10,	244,	-1,	0,	-1,	0,	3,	0,	29 ;R ear2
+10,	244,	-1,	0,	-2,	0,	3,	0,	30 ;R ear3
+10,	25,	-1,	0,	-1,	0,	0,	0,	31 ;R elbow
+245,	244,	-1,	0,	1,	0,	-1,	-1,	32 ;R eye
+10,	25,	-1,	0,	0,	0,	1,	0,	33 ;R finger1
+10,	244,	-1,	0,	0,	0,	1,	0,	34 ;R finger2
+10,	25,	-1,	0,	0,	0,	1,	0,	35 ;R finger3
+10,	25,	-1,	0,	0,	0,	1,	0,	36 ;R foot
+10,	25,	-1,	0,	0,	0,	1,	0,	37 ;R hand
+244,	125,	-1,	0,	3,	0,	-1,	-1,	38 ;R iris
+10,	109,	-1,	0,	-2,	0,	3,	0,	39 ;R jowl
+10,	25,	-1,	0,	-1,	0,	4,	0,	40 ;R knee
+244,	244,	-1,	0,	-3,	0,	-1,	0,	41 ;R nostril
+10,	244,	-1,	0,	-1,	0,	0,	0,	42 ;R shoulder
+10,	244,	-1,	0,	-1,	0,	4,	0,	43 ;R hip
+10,	25,	-1,	0,	0,	0,	1,	0,	44 ;R toe1
+10,	244,	-1,	0,	0,	0,	1,	0,	45 ;R toe2
+10,	25,	-1,	0,	0,	0,	1,	0,	46 ;R toe3
+10,	244,	-1,	0,	-1,	0,	0,	0,	47 ;R wrist
+10,	244,	-1,	0,	-1,	0,	0,	0,	48 ;belly
+10,	244,	-1,	0,	-1,	0,	4,	0,	49 ;butt
+10,	244,	-1,	0,	-1,	0,	0,	0,	50 ;chest
+10,	107,	-1,	0,	1,	0,	3,	0,	51 ;chin
+10,	244,	-1,	0,	-1,	0,	3,	0,	52 ;head
+10,	244,	-1,	0,	-1,	0,	3,	0,	53 ;jaw
+10,	244,	-1,	0,	-1,	0,	0,	0,	54 ;neck
+244,	244,	-1,	0,	-1,	0,	-1,	0,	55 ;nose (bottom)
+10,	244,	-1,	0,	-1,	0,	3,	0,	56 ;snout
+10,	244,	-1,	0,	-1,	0,	5,	0,	57 ;tail1
+10,	244,	-1,	0,	-1,	0,	5,	0,	58 ;tail2
+10,	244,	-1,	0,	-1,	0,	5,	0,	59 ;tail3
+10,	244,	-1,	0,	-1,	0,	5,	0,	60 ;tail4
+10,	244,	-1,	0,	-1,	0,	5,	0,	61 ;tail5
+10,	244,	-1,	0,	-1,	0,	5,	0,	62 ;tail6
+70,	244,	-1,	0,	-1,	0,	-1,	0,	63 ;tongue1
+70,	244,	-1,	0,	-1,	0,	-1,	0,	64 ;tongue2
+4,	244,	-1,	0,	-1,	0,	-1,	-1,	65 ;Z-trans
+4,	244,	-1,	0,	-1,	0,	-1,	-1,	66 ;Z-orient
+
+;gender control - useful for making all-male or all-female breeds or variations
+;see helpfile for details or leave blank if you don't need it
+[Force To Female]
+
+[Force To Male]
+
+;these sections control what paintballz or ballz are considered markings
+;mostly important when breeding - try working with these if colour/markings don't breed true
+;read the helpfiles to understand what they do
+;or leave blank if you don't need them
+[Fur Markings]
+
+[Fur Color Areas]
+
+[Fur Pattern Balls]
+
+;don't change this
+[Lnz Version]
+2

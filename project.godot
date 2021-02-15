@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "AddBallData",
+"language": "GDScript",
+"path": "res://data_classes/addball_data.gd"
+}, {
+"base": "Node",
 "class": "BallData",
 "language": "GDScript",
 "path": "res://data_classes/ball_data.gd"
@@ -18,10 +23,17 @@ _global_script_classes=[ {
 "class": "LineData",
 "language": "GDScript",
 "path": "res://data_classes/line_data.gd"
+}, {
+"base": "Node",
+"class": "LnzParser",
+"language": "GDScript",
+"path": "res://data_classes/lnz_parser.gd"
 } ]
 _global_script_class_icons={
+"AddBallData": "",
 "BallData": "",
-"LineData": ""
+"LineData": "",
+"LnzParser": ""
 }
 
 [application]

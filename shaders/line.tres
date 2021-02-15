@@ -9,6 +9,8 @@ uniform int line_width_in_pixels_start = 20;
 uniform int fuzz_amount = 0;
 uniform int line_width_in_pixels_end = 20;
 uniform vec4 color : hint_color = vec4(vec3(1.0), 1.0);
+uniform vec4 r_color : hint_color = vec4(vec3(0.0), 1.0);
+uniform vec4 l_color : hint_color = vec4(vec3(0.0), 1.0);
 varying flat vec2 center_of_line;
 varying float right_boundary;
 varying float left_boundary;
@@ -59,7 +61,7 @@ void fragment() {
 	pct2 -= pct;
 	pct3 -= pct;
 	
-	ALBEDO = vec3(pct * color.rgb + pct2 * vec3(0.0, 0.0, 0.0) + pct3 * vec3(0.0, 0.0, 0.0));
+	ALBEDO = vec3(pct * color.rgb + pct2 * l_color.rgb + pct3 * r_color.rgb);
 	ALPHA = pct + pct2 + pct3;
 }
 
@@ -155,3 +157,5 @@ shader_param/line_width_in_pixels_start = 20
 shader_param/fuzz_amount = 1
 shader_param/line_width_in_pixels_end = 20
 shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/r_color = Color( 0, 0, 0, 1 )
+shader_param/l_color = Color( 0, 0, 0, 1 )
