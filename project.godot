@@ -28,12 +28,18 @@ _global_script_classes=[ {
 "class": "LnzParser",
 "language": "GDScript",
 "path": "res://data_classes/lnz_parser.gd"
+}, {
+"base": "Node",
+"class": "PaintBallData",
+"language": "GDScript",
+"path": "res://data_classes/paintball_data.gd"
 } ]
 _global_script_class_icons={
 "AddBallData": "",
 "BallData": "",
 "LineData": "",
-"LnzParser": ""
+"LnzParser": "",
+"PaintBallData": ""
 }
 
 [application]

@@ -91,12 +91,13 @@ export var do_something = false setget generate_pet
 export var draw_balls = true
 
 var ball_scene = preload("res://Ball.tscn")
+var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
 
 func generate_pet(_new_value):
 	var collated_data = collate_base_ball_data()
-	var lnz_info = LnzParser.new("Dachsund.lnz")
-	collated_data = {balls = collated_data, addballs = lnz_info.addballs}
+	var lnz_info = LnzParser.new("sheepdog.lnz")
+	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
 	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = munge_balls(collated_data, lnz_info)
 	generate_balls(collated_data)
@@ -178,12 +179,11 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 			ball.size = floor(ball.size * (lnz.foot_enlargement.x / 100.0))
 			ball.size += lnz.foot_enlargement.y
 	
-	return {balls = base_ball_dict, addballs = addball_dict}
+	return {balls = base_ball_dict, addballs = addball_dict, paintballs = all_ball_dict.paintballs}
 	
 func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 	var base_ball_dict = all_ball_dict.balls
 	var lnz_balls = lnz.balls
-	var head_pos = base_ball_dict[52].position
 	for k in base_ball_dict:
 		var v: BallData = lnz_balls.get(k)
 		var b: BallData = base_ball_dict.get(k)
@@ -197,33 +197,56 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		b.fuzz = v.fuzz
 		base_ball_dict[k] = b
 		
-	return {balls = base_ball_dict, addballs = all_ball_dict.addballs}
+	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
 
 func generate_balls(all_ball_data: Dictionary):
 	var ball_data = all_ball_data.balls
 	var addball_data = all_ball_data.addballs
+	var paintball_data = all_ball_data.paintballs
 	var root = get_tree().get_edited_scene_root()
 	var parent = root.get_node("petholder/balls")
+	var pb_parent = root.get_node("petholder/paintballs")
 	for c in parent.get_children():
 		parent.remove_child(c)
 		c.queue_free()
+	for c in pb_parent.get_children():
+		pb_parent.remove_child(c)
+		c.queue_free()
 	for key in ball_data:
 		var ball = ball_data[key]
-		var visual_ball = ball_scene.instance()
+		var visual_ball
+		if(key == 14 or key == 38): # treat irises like paintballs
+			visual_ball = paintball_scene.instance()
+			var base_ball
+			if key == 14:
+				base_ball = ball_data[8]
+			else:
+				base_ball = ball_data[32]
+			visual_ball.base_ball_size = floor(base_ball.size / 2)
+			var bbp = base_ball.position
+			bbp.y *= -1
+			bbp /= 1024.0
+			visual_ball.base_ball_position = bbp
+			var rotated_pos = ball.position
+			rotated_pos.y *= -1.0
+			visual_ball.transform.origin = rotated_pos / 1024
+			visual_ball.z_add = ball.z_add
+		else:
+			visual_ball = ball_scene.instance()
+			var rotated_pos = ball.position
+			rotated_pos.y *= -1.0
+			visual_ball.transform.origin = rotated_pos / 1024
 		visual_ball.ball_size = floor(ball.size / 2)
-		var rotated_pos = ball.position
-		rotated_pos.y *= -1.0
-		visual_ball.transform.origin = rotated_pos / 1024
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
-		visual_ball.z_add = ball.z_add
 		visual_ball.fuzz_amount = ball.fuzz
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
 		if !draw_balls:
 			visual_ball.visible = false
+			
 	for key in addball_data:
 		var ball = addball_data[key]
 		var visual_ball = ball_scene.instance()
@@ -242,7 +265,36 @@ func generate_balls(all_ball_data: Dictionary):
 		ball_map[ball.ball_no] = visual_ball
 		if !draw_balls:
 			visual_ball.visible = false
-		
+			
+	for key in paintball_data:
+		var base_ball = ball_data[key]
+		var paintballs_for_base_ball: Array = paintball_data[key]
+		paintballs_for_base_ball.invert()
+		var count = 0
+		for paintball in paintballs_for_base_ball:
+			var final_position = base_ball.position + (paintball.normalised_position * base_ball.size / 2)
+			final_position.y *= -1.0
+			final_position /= 1024
+			var base_position = base_ball.position
+			base_position.y *= -1.0
+			base_position /= 1024
+			var final_size = floor((base_ball.size / 2) * (paintball.size / 100.0))
+			var visual_ball = paintball_scene.instance()
+			visual_ball.base_ball_position = base_position
+			visual_ball.transform.origin = final_position
+			visual_ball.ball_size = final_size
+			visual_ball.base_ball_size = base_ball.size / 2
+			visual_ball.color = paintball.color
+			visual_ball.outline_color = paintball.outline_color
+			visual_ball.outline = paintball.outline
+			visual_ball.fuzz_amount = paintball.fuzz
+			visual_ball.z_add = count * 0.0000001
+			count += 1
+			pb_parent.add_child(visual_ball)
+			visual_ball.set_owner(root)
+			if !draw_balls:
+				visual_ball.visible = false
+				
 func generate_lines(line_data: Array):
 	var root = get_tree().get_edited_scene_root()
 	var parent = root.get_node("petholder/lines")

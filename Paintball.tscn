@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://shaders/paintball.tres" type="Material" id=1]
+[ext_resource path="res://scripts/Paintball.gd" type="Script" id=2]
+
+[sub_resource type="QuadMesh" id=3]
+
+[node name="Paintball" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+material_override = ExtResource( 1 )
+mesh = SubResource( 3 )
+material/0 = null
