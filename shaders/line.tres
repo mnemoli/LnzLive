@@ -121,7 +121,7 @@ void vertex() {
 	// Pad the offset for later
 	offset *= 2.0;
 	
-	VERTEX = vec3(vert_in_ndc_space, vert_in_clip_space.z / vert_in_clip_space.w + 0.0015) + offset;
+	VERTEX = vec3(vert_in_ndc_space, vert_in_clip_space.z / vert_in_clip_space.w + 0.00010) + offset;
 	
 	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
 	vec4 center_view = projection * vec4(vec3(0.0), 1.0);

@@ -96,7 +96,7 @@ var line_scene = preload("res://Line.tscn")
 
 func generate_pet(_new_value):
 	var collated_data = collate_base_ball_data()
-	var lnz_info = LnzParser.new("sheepdog.lnz")
+	var lnz_info = LnzParser.new("dali.lnz")
 	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
 	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = munge_balls(collated_data, lnz_info)
@@ -188,14 +188,21 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		var v: BallData = lnz_balls.get(k)
 		var b: BallData = base_ball_dict.get(k)
 		if b == null or v == null:
-#			print("couldn't munge ball " + str(k))
 			continue
 		b.size += v.size
+		b.size *= (lnz.scales.y / 255)
 		b.color = v.color
 		b.outline_color = v.outline_color
 		b.outline = v.outline
 		b.fuzz = v.fuzz
+		b.position += v.position
+		b.position *= (lnz.scales.x / 255)
 		base_ball_dict[k] = b
+		
+	for k in all_ball_dict.addballs:
+		var v: AddBallData = all_ball_dict.addballs[k]
+		v.size *= (lnz.scales.y / 255)
+		v.position *= (lnz.scales.x / 255)
 		
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
 
@@ -340,9 +347,10 @@ func generate_lines(line_data: Array):
 
 
 func _on_showballs_toggled(button_pressed):
-	for ball in get_tree().root.get_node("Spatial/petholder/balls").get_children():
-		ball.visible = button_pressed
+	get_tree().root.get_node("Spatial/petholder/balls").visible = button_pressed
 
 func _on_showlines_toggled(button_pressed):
-	for line in get_tree().root.get_node("Spatial/petholder/lines").get_children():
-		line.visible = button_pressed
+	get_tree().root.get_node("Spatial/petholder/lines").visible = button_pressed
+
+func _on_CheckBox3_toggled(button_pressed):
+	get_tree().root.get_node("Spatial/petholder/paintballs").visible = button_pressed
