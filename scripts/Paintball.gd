@@ -25,6 +25,8 @@ func set_base_ball_size(new_value):
 func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
+	var a = ball_size * 0.025
+	scale = Vector3(a,a,a)
 	
 func set_fuzz_amount(new_value):
 	fuzz_amount = new_value

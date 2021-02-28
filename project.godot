@@ -50,7 +50,8 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/height=768
+window/size/width=1000
+window/size/height=1000
 
 [rendering]
 

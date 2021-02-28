@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Ball.tscn" type="PackedScene" id=1]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Ball" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1 )
+
+[node name="Camera" type="Camera" parent="."]
+keep_aspect = 0
+projection = 1
+size = 0.996282
+
+[node name="Ball2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, -0.1 )

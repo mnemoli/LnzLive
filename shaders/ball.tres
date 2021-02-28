@@ -74,10 +74,10 @@ void fragment() {
   } else if (outline == 1) {
     // dotted outline
 	float side = sign(st2.x - c.x);
-	st2.x -= 1.0 * inverse_camera_scale * side;
     vec2 vec = st2 - c;
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
     modified_outline = 0;
+	st.x += 1.0 * inverse_camera_scale * side;
   } else if (outline < -1) {
 	// use as debug for now
 	float side = sign(st2.x - c.x);
@@ -107,7 +107,7 @@ void fragment() {
 void vertex() {
 	// Billboard and retain scaling
 	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
-	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
+//	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
 	
 	// Find the original position of the vertex
 	vec3 vert_in_clip_space = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;

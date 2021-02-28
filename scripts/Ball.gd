@@ -11,6 +11,8 @@ export var z_add = 0.0 setget set_z_add
 func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
+	var a = ball_size * 0.025
+	scale = Vector3(a,a,a)
 	
 func set_fuzz_amount(new_value):
 	fuzz_amount = new_value

@@ -1,6 +1,8 @@
 tool
 extends Node
 
+export var pixel_world_size = 0.001;
+
 var balls = [
 	BallData.new(29, Vector3(35, -44, 88), 0), #Right ankle      
 	BallData.new(14, Vector3(11, -190, -129), 1), #Left eyebrow 1   
@@ -96,10 +98,11 @@ var line_scene = preload("res://Line.tscn")
 
 func generate_pet(_new_value):
 	var collated_data = collate_base_ball_data()
-	var lnz_info = LnzParser.new("dali.lnz")
+	var lnz_info = LnzParser.new("jack.lnz")
 	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
 	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = munge_balls(collated_data, lnz_info)
+	collated_data = apply_sizes(collated_data, lnz_info)
 	generate_balls(collated_data)
 	generate_lines(lnz_info.lines)
 
@@ -190,21 +193,35 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		if b == null or v == null:
 			continue
 		b.size += v.size
-		b.size *= (lnz.scales.y / 255)
 		b.color = v.color
 		b.outline_color = v.outline_color
 		b.outline = v.outline
 		b.fuzz = v.fuzz
 		b.position += v.position
-		b.position *= (lnz.scales.x / 255)
 		base_ball_dict[k] = b
 		
-	for k in all_ball_dict.addballs:
-		var v: AddBallData = all_ball_dict.addballs[k]
-		v.size *= (lnz.scales.y / 255)
-		v.position *= (lnz.scales.x / 255)
-		
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
+
+func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
+	for k in all_ball_dict.balls:
+		var ball = all_ball_dict.balls[k]
+		if ball.ball_no == 8:
+			print("doing ball 8. Size before: " + str(ball.size))
+		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
+		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
+		if ball.ball_no == 8:
+			print("doing ball 8. Size after: " + str(ball.size))
+		ball.position = (ball.position * (lnz.scales[0] / 255.0))
+		all_ball_dict.balls[k] = ball
+		
+	for k in all_ball_dict.addballs:
+		var ball = all_ball_dict.addballs[k]
+		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
+		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
+		ball.position = (ball.position * (lnz.scales[0] / 255.0))
+		all_ball_dict.addballs[k] = ball
+		
+	return {balls = all_ball_dict.balls, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
 
 func generate_balls(all_ball_data: Dictionary):
 	var ball_data = all_ball_data.balls
@@ -229,21 +246,21 @@ func generate_balls(all_ball_data: Dictionary):
 				base_ball = ball_data[8]
 			else:
 				base_ball = ball_data[32]
-			visual_ball.base_ball_size = floor(base_ball.size / 2)
+			visual_ball.base_ball_size = get_real_ball_size(base_ball.size)
 			var bbp = base_ball.position
 			bbp.y *= -1
-			bbp /= 1024.0
+			bbp *= pixel_world_size
 			visual_ball.base_ball_position = bbp
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
-			visual_ball.transform.origin = rotated_pos / 1024
+			visual_ball.transform.origin = rotated_pos * pixel_world_size
 			visual_ball.z_add = ball.z_add
 		else:
 			visual_ball = ball_scene.instance()
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
-			visual_ball.transform.origin = rotated_pos / 1024
-		visual_ball.ball_size = floor(ball.size / 2)
+			visual_ball.transform.origin = rotated_pos * pixel_world_size
+		visual_ball.ball_size = get_real_ball_size(ball.size)
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
@@ -257,11 +274,11 @@ func generate_balls(all_ball_data: Dictionary):
 	for key in addball_data:
 		var ball = addball_data[key]
 		var visual_ball = ball_scene.instance()
-		visual_ball.ball_size = floor(ball.size / 2)
+		visual_ball.ball_size = get_real_ball_size(ball.size)
 		var base_pos = ball_data[ball.base].position
 		var rotated_pos = ball.position + base_pos
 		rotated_pos.y *= -1.0
-		visual_ball.transform.origin = rotated_pos / 1024
+		visual_ball.transform.origin = rotated_pos * pixel_world_size
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
@@ -281,11 +298,11 @@ func generate_balls(all_ball_data: Dictionary):
 		for paintball in paintballs_for_base_ball:
 			var final_position = base_ball.position + (paintball.normalised_position * base_ball.size / 2)
 			final_position.y *= -1.0
-			final_position /= 1024
+			final_position *= pixel_world_size
 			var base_position = base_ball.position
 			base_position.y *= -1.0
-			base_position /= 1024
-			var final_size = floor((base_ball.size / 2) * (paintball.size / 100.0))
+			base_position *= pixel_world_size
+			var final_size = get_real_ball_size(base_ball.size * (paintball.size / 100.0))
 			var visual_ball = paintball_scene.instance()
 			visual_ball.base_ball_position = base_position
 			visual_ball.transform.origin = final_position
@@ -301,6 +318,10 @@ func generate_balls(all_ball_data: Dictionary):
 			visual_ball.set_owner(root)
 			if !draw_balls:
 				visual_ball.visible = false
+				
+func get_real_ball_size(ball_size):
+	var half_size = floor(ball_size / 2.0)
+	return max(half_size - 2, 2)
 				
 func generate_lines(line_data: Array):
 	var root = get_tree().get_edited_scene_root()
