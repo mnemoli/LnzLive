@@ -1581,6 +1581,7 @@ outline_color = Color( 1, 1, 1, 1 )
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 2 )
+current_file_name = "jack.lnz"
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_right = 1024.0
@@ -1680,9 +1681,25 @@ margin_right = 228.0
 margin_bottom = 140.0
 max_value = 360.0
 
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 144.0
+margin_right = 228.0
+margin_bottom = 164.0
+text = "Regenerate"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+margin_top = 168.0
+margin_right = 228.0
+margin_bottom = 188.0
+text = "JackRussel"
+items = [ "Default", null, false, 0, null, "Dachsund", null, false, 1, null, "Dalmation", null, false, 2, null, "Sheepdog", null, false, 3, null, "JackRussel", null, false, 4, null ]
+selected = 4
+
 [connection signal="value_changed" from="VBoxContainer/HSlider" to="petholder" method="_on_HSlider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/CheckBox" to="Node" method="_on_showballs_toggled"]
 [connection signal="toggled" from="VBoxContainer/CheckBox2" to="Node" method="_on_showlines_toggled"]
 [connection signal="toggled" from="VBoxContainer/CheckBox3" to="Node" method="_on_CheckBox3_toggled"]
 [connection signal="value_changed" from="VBoxContainer/HSlider2" to="petholder" method="_on_HSlider2_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HSlider3" to="petholder" method="_on_HSlider3_value_changed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="Node" method="_on_Button_pressed"]
+[connection signal="item_selected" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_item_selected"]

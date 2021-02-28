@@ -48,6 +48,10 @@ config/name="PetzRendering"
 run/main_scene="res://scenes/dog.tscn"
 config/icon="res://icon.png"
 
+[debug]
+
+gdscript/warnings/shadowed_variable=false
+
 [display]
 
 window/size/width=1000
