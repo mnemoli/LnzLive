@@ -3,9 +3,6 @@ extends Node
 
 export var pixel_world_size = 0.001;
 
-export var lnz = ["test.lnz", "Dachsund.lnz", "dali.lnz", "sheepdog.lnz", "jack.lnz"]
-export var current_index = 0
-
 var balls = []
 
 var lines = []
@@ -102,8 +99,7 @@ func init_ball_data():
 	BallData.new(0, Vector3(6, -122, -134), 64) #Tongue 2         
 ]
 
-func generate_pet(file_index):
-	var file_name = lnz[file_index]
+func generate_pet(file_name):
 	init_ball_data()
 	var collated_data = collate_base_ball_data()
 	var lnz_info = LnzParser.new(file_name)
@@ -112,7 +108,6 @@ func generate_pet(file_index):
 	collated_data = munge_balls(collated_data, lnz_info)
 	collated_data = apply_sizes(collated_data, lnz_info)
 	collated_data.omissions = lnz_info.omissions
-	print(str(lnz_info.omissions))
 	generate_balls(collated_data)
 	generate_lines(lnz_info.lines)
 
@@ -196,7 +191,6 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 	for ball_no in ear_ext:
 		var ball = base_ball_dict[ball_no]
 		ball.position *= (lnz.ear_extension / 100.0)
-		print("position after " + str(ball.position))
 		for addball in addballs_by_base.get(ball_no, []):
 			addball.position *= (lnz.ear_extension / 100.0)
 	
@@ -239,10 +233,8 @@ func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 
 func get_root():
 	if Engine.is_editor_hint():
-		print("I think I'm in the editor")
 		return get_tree().get_edited_scene_root()
 	else:
-		print("I think I'm in the running game")
 		return get_tree().root.get_node("Spatial")
 
 func generate_balls(all_ball_data: Dictionary):
@@ -293,11 +285,10 @@ func generate_balls(all_ball_data: Dictionary):
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
 		visual_ball.visible = true
-#		if !draw_balls:
-#			visual_ball.visible = false
-#		if omissions.get(key, false):
-#			print("hiding ball woo")
-#			visual_ball.hide()
+		if !draw_balls:
+			visual_ball.visible = false
+		if omissions.get(key, false):
+			visual_ball.hide()
 			
 	for key in addball_data:
 		var ball = addball_data[key]
@@ -319,7 +310,6 @@ func generate_balls(all_ball_data: Dictionary):
 		if !draw_balls:
 			visual_ball.visible = false
 		if omissions.get(key, false):
-			print("skipping addball " + str(key))
 			visual_ball.hide()
 			
 	for key in paintball_data:
@@ -408,10 +398,8 @@ func _on_showlines_toggled(button_pressed):
 func _on_CheckBox3_toggled(button_pressed):
 	get_tree().root.get_node("Spatial/petholder/paintballs").visible = button_pressed
 
-
-func _on_Button_pressed():
-	generate_pet(current_index)
-
-func _on_OptionButton_item_selected(index):
-	current_index = index
-	generate_pet(index)
+func _on_OptionButton_file_selected(file_name):
+	generate_pet(file_name)
+	
+func _on_OptionButton_file_saved(file_name):
+	generate_pet(file_name)

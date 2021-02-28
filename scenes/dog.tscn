@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/dog_generator.gd" type="Script" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://anims/dog0.tres" type="Animation" id=8]
 [ext_resource path="res://scripts/Line.gd" type="Script" id=9]
 [ext_resource path="res://Paintball.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scripts/TextEdit.gd" type="Script" id=11]
+[ext_resource path="res://scenes/OptionButton.gd" type="Script" id=12]
 
 [node name="Spatial" type="Spatial"]
 
@@ -1459,11 +1461,12 @@ outline_color = Color( 1, 1, 1, 1 )
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource( 2 )
-current_index = 2
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 1000.0
+margin_left = -300.152
+margin_top = 1.88776
+margin_right = 723.848
+margin_bottom = 1001.89
 rect_pivot_offset = Vector2( 99, 514 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1475,7 +1478,7 @@ handle_input_locally = false
 render_target_update_mode = 3
 
 [node name="Camera" type="Camera" parent="ViewportContainer/Viewport"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.94701 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.947 )
 keep_aspect = 0
 environment = ExtResource( 5 )
 projection = 1
@@ -1572,6 +1575,17 @@ margin_bottom = 188.0
 text = "JackRussel"
 items = [ "Default", null, false, 0, null, "Dachsund", null, false, 1, null, "Dalmation", null, false, 2, null, "Sheepdog", null, false, 3, null, "JackRussel", null, false, 4, null ]
 selected = 4
+script = ExtResource( 12 )
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_left = 431.0
+margin_top = 7.0
+margin_right = 993.0
+margin_bottom = 905.0
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="value_changed" from="VBoxContainer/HSlider" to="petholder" method="_on_HSlider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/CheckBox" to="Node" method="_on_showballs_toggled"]
@@ -1579,5 +1593,9 @@ selected = 4
 [connection signal="toggled" from="VBoxContainer/CheckBox3" to="Node" method="_on_CheckBox3_toggled"]
 [connection signal="value_changed" from="VBoxContainer/HSlider2" to="petholder" method="_on_HSlider2_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HSlider3" to="petholder" method="_on_HSlider3_value_changed"]
-[connection signal="pressed" from="VBoxContainer/Button" to="Node" method="_on_Button_pressed"]
-[connection signal="item_selected" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Button" to="VBoxContainer/OptionButton" method="_on_Button_pressed"]
+[connection signal="file_saved" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_file_saved"]
+[connection signal="file_selected" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_file_selected"]
+[connection signal="file_selected" from="VBoxContainer/OptionButton" to="TextEdit" method="_on_OptionButton_file_selected"]
+[connection signal="item_selected" from="VBoxContainer/OptionButton" to="VBoxContainer/OptionButton" method="_on_OptionButton_item_selected"]
+[connection signal="file_saved" from="TextEdit" to="VBoxContainer/OptionButton" method="_on_TextEdit_file_saved"]

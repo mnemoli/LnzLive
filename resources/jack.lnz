@@ -22,26 +22,26 @@ jrpup.lnz
 6
 
 [Body Extension]
-14
+10
 
 [Face Extension]
--6
+20
 
 [Ear Extension]
-100
+120
 
 [Head Enlargement];was 96
-95
+120
 0
 
 [Feet Enlargement]
-110
-0
+100
+30
 
 
 [Move]  
 ;tail
-57, 0,  3,  0
+57, 10,  3,  0
 58, 0,  3,  0
 ;butt
 49, 0,  3,  5
