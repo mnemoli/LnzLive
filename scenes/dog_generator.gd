@@ -4,7 +4,7 @@ extends Node
 export var pixel_world_size = 0.001;
 
 export var lnz = ["test.lnz", "Dachsund.lnz", "dali.lnz", "sheepdog.lnz", "jack.lnz"]
-export var current_file_name: String = lnz[0]
+export var current_index = 0
 
 var balls = [
 	BallData.new(29, Vector3(35, -44, 88), 0), #Right ankle      
@@ -167,7 +167,8 @@ func init_ball_data():
 	BallData.new(0, Vector3(6, -122, -134), 64) #Tongue 2         
 ]
 
-func generate_pet(file_name):
+func generate_pet(file_index):
+	var file_name = lnz[file_index]
 	init_ball_data()
 	var collated_data = collate_base_ball_data()
 	var lnz_info = LnzParser.new(file_name)
@@ -175,6 +176,8 @@ func generate_pet(file_name):
 	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = munge_balls(collated_data, lnz_info)
 	collated_data = apply_sizes(collated_data, lnz_info)
+	collated_data.omissions = lnz_info.omissions
+	print(str(lnz_info.omissions))
 	generate_balls(collated_data)
 	generate_lines(lnz_info.lines)
 
@@ -293,14 +296,17 @@ func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 
 func get_root():
 	if Engine.is_editor_hint():
+		print("I think I'm in the editor")
 		return get_tree().get_edited_scene_root()
 	else:
+		print("I think I'm in the running game")
 		return get_tree().root.get_node("Spatial")
 
 func generate_balls(all_ball_data: Dictionary):
 	var ball_data = all_ball_data.balls
 	var addball_data = all_ball_data.addballs
 	var paintball_data = all_ball_data.paintballs
+	var omissions = all_ball_data.omissions
 	var root = get_root()
 	var parent = root.get_node("petholder/balls")
 	var pb_parent = root.get_node("petholder/paintballs")
@@ -310,6 +316,7 @@ func generate_balls(all_ball_data: Dictionary):
 	for c in pb_parent.get_children():
 		pb_parent.remove_child(c)
 		c.queue_free()
+	
 	for key in ball_data:
 		var ball = ball_data[key]
 		var visual_ball
@@ -342,8 +349,12 @@ func generate_balls(all_ball_data: Dictionary):
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
-		if !draw_balls:
-			visual_ball.visible = false
+		visual_ball.visible = true
+#		if !draw_balls:
+#			visual_ball.visible = false
+#		if omissions.get(key, false):
+#			print("hiding ball woo")
+#			visual_ball.hide()
 			
 	for key in addball_data:
 		var ball = addball_data[key]
@@ -361,8 +372,12 @@ func generate_balls(all_ball_data: Dictionary):
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
+		visual_ball.visible = true
 		if !draw_balls:
 			visual_ball.visible = false
+		if omissions.get(key, false):
+			print("skipping addball " + str(key))
+			visual_ball.hide()
 			
 	for key in paintball_data:
 		var base_ball = ball_data[key]
@@ -452,8 +467,8 @@ func _on_CheckBox3_toggled(button_pressed):
 
 
 func _on_Button_pressed():
-	generate_pet(current_file_name)
+	generate_pet(current_index)
 
 func _on_OptionButton_item_selected(index):
-	current_file_name = lnz[index]
-	generate_pet(current_file_name)
+	current_index = index
+	generate_pet(index)
