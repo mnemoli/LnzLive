@@ -6,73 +6,7 @@ export var pixel_world_size = 0.001;
 export var lnz = ["test.lnz", "Dachsund.lnz", "dali.lnz", "sheepdog.lnz", "jack.lnz"]
 export var current_index = 0
 
-var balls = [
-	BallData.new(29, Vector3(35, -44, 88), 0), #Right ankle      
-	BallData.new(14, Vector3(11, -190, -129), 1), #Left eyebrow 1   
-	BallData.new(21, Vector3(25, -187, -135), 2), #Left eyebrow 2   
-	BallData.new(21, Vector3(36, -172, -123), 3), #Left eyebrow 3   
-	BallData.new(16, Vector3(50, -189, -84), 4), #Left ear 1       
-	BallData.new(27, Vector3(34, -196, -98), 5), #Left ear 2       
-	BallData.new(30, Vector3(24, -188, -103), 6), #Left ear 3       
-	BallData.new(45, Vector3(43, -87, -40), 7), #Left elbow       
-	BallData.new(38, Vector3(18, -168, -142), 8), #Eye 1            
-	BallData.new(22, Vector3(45, -15, -57), 9), #Left finger 1    
-	BallData.new(24, Vector3(59, -11, -56), 10), #Left finger 2    
-	BallData.new(22, Vector3(65, -13, -43), 11), #Left finger 3    
-	BallData.new(39, Vector3(40, -19, 80), 12), #Left foot        
-	BallData.new(40, Vector3(47, -20, -39), 13), #Left hand        
-	BallData.new(20, Vector3(18, -163, -154), 14, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 1           
-	BallData.new(35, Vector3(12, -117, -155), 15), #Left jowl        
-	BallData.new(48, Vector3(40, -76, 61), 16), #Left knee        
-	BallData.new(25, Vector3(5, -127, -177), 17), #Left nostril     
-	BallData.new(61, Vector3(34, -125, -60), 18), #Left shoulder    
-	BallData.new(65, Vector3(24, -115, 70), 19), #Left hip         
-	BallData.new(22, Vector3(34, -12, 61), 20), #Left toe 1       
-	BallData.new(26, Vector3(48, -13, 60), 21), #Left toe 2       
-	BallData.new(22, Vector3(57, -13, 69), 22), #Left toe 3       
-	BallData.new(30, Vector3(41, -48, -34), 23), #Left wrist       
-	BallData.new(29, Vector3(-43, -42, 78), 24), #Left ankle       
-	BallData.new(14, Vector3(-14, -189, -128), 25), #Right eyebrow 1  
-	BallData.new(21, Vector3(-28, -185, -134), 26), #Right eyebrow 2  
-	BallData.new(21, Vector3(-39, -172, -123), 27), #Right eyebrow 3  
-	BallData.new(17, Vector3(-54, -184, -85), 28), #Right ear 1      
-	BallData.new(27, Vector3(-38, -196, -98), 29), #Right ear 2      
-	BallData.new(30, Vector3(-27, -189, -101), 30), #Right ear 3      
-	BallData.new(45, Vector3(-41, -83, -43), 31), #Right elbow      
-	BallData.new(38, Vector3(-20, -165, -143), 32), #Eye 2            
-	BallData.new(22, Vector3(-43, -13, -78), 33), #Right finger 1   
-	BallData.new(24, Vector3(-59, -11, -76), 34), #Right finger 2   
-	BallData.new(22, Vector3(-64, -12, -64), 35), #Right finger 3   
-	BallData.new(39, Vector3(-47, -19, 64), 36), #Right foot       
-	BallData.new(40, Vector3(-46, -18, -60), 37), #Right hand       
-	BallData.new(20, Vector3(-20, -160, -155), 38, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 2           
-	BallData.new(35, Vector3(-12, -118, -155), 39), #Right jowl       
-	BallData.new(49, Vector3(-43, -80, 61), 40), #Right knee       
-	BallData.new(25, Vector3(-6, -127, -177), 41), #Right nostril    
-	BallData.new(61, Vector3(-34, -122, -60), 42), #Right shoulder   
-	BallData.new(65, Vector3(-29, -119, 64), 43), #Right hip        
-	BallData.new(22, Vector3(-41, -11, 45), 44), #Right toe 1      
-	BallData.new(26, Vector3(-55, -12, 44), 45), #Right toe 2      
-	BallData.new(22, Vector3(-64, -12, 53), 46), #Right toe 3      
-	BallData.new(30, Vector3(-36, -43, -46), 47), #Right wrist      
-	BallData.new(102, Vector3(-3, -110, -2), 48), #Belly            
-	BallData.new(96, Vector3(0, -123, 58), 49), #Butt             
-	BallData.new(90, Vector3(0, -117, -53), 50), #Chest            
-	BallData.new(32, Vector3(-1, -105, -138), 51), #Jaw              
-	BallData.new(85, Vector3(-2, -155, -108), 52), #Head             
-	BallData.new(24, Vector3(1, -137, -105), 53), #Chin             
-	BallData.new(68, Vector3(-2, -140, -80), 54), #Neck             
-	BallData.new(24, Vector3(0, -120, -173), 55), #Nose bottom      
-	BallData.new(52, Vector3(-1, -132, -147), 56), #Snout            
-	BallData.new(25, Vector3(0, -147, 96), 57), #Tail 1           
-	BallData.new(21, Vector3(-1, -158, 121), 58), #Tail 2           
-	BallData.new(16, Vector3(-2, -174, 138), 59), #Tail 3           
-	BallData.new(15, Vector3(-1, -194, 142), 60), #Tail 4           
-	BallData.new(14, Vector3(-1, -210, 130), 61), #Tail 5           
-	BallData.new(14, Vector3(-1, -220, 110), 62), #Tail 6           
-	BallData.new(0, Vector3(7, -140, -121), 63), #Tongue 1         
-	BallData.new(0, Vector3(6, -122, -134), 64) #Tongue 2         
-]
+var balls = []
 
 var lines = []
 
@@ -91,6 +25,7 @@ var foot_ext = [
 	[ 36, 44, 45, 46 ],
 	[ 37, 33, 34, 35 ]
 ]
+var ear_ext = [ 5, 6, 29, 30 ]
 
 export var draw_balls = true
 
@@ -108,13 +43,13 @@ func init_ball_data():
 	BallData.new(27, Vector3(34, -196, -98), 5), #Left ear 2       
 	BallData.new(30, Vector3(24, -188, -103), 6), #Left ear 3       
 	BallData.new(45, Vector3(43, -87, -40), 7), #Left elbow       
-	BallData.new(38, Vector3(18, -168, -142), 8), #Eye 1            
+	BallData.new(38, Vector3(18, -168, -142), 8, Color.white, Color.black, 1, 0, 0.00005), #Eye 1            
 	BallData.new(22, Vector3(45, -15, -57), 9), #Left finger 1    
 	BallData.new(24, Vector3(59, -11, -56), 10), #Left finger 2    
 	BallData.new(22, Vector3(65, -13, -43), 11), #Left finger 3    
 	BallData.new(39, Vector3(40, -19, 80), 12), #Left foot        
 	BallData.new(40, Vector3(47, -20, -39), 13), #Left hand        
-	BallData.new(20, Vector3(18, -163, -154), 14, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 1           
+	BallData.new(20, Vector3(18, -163, -154), 14, Color.black, Color("897e66"), 3, 0, 0.0002), #Iris 1           
 	BallData.new(35, Vector3(12, -117, -155), 15), #Left jowl        
 	BallData.new(48, Vector3(40, -76, 61), 16), #Left knee        
 	BallData.new(25, Vector3(5, -127, -177), 17), #Left nostril     
@@ -132,13 +67,13 @@ func init_ball_data():
 	BallData.new(27, Vector3(-38, -196, -98), 29), #Right ear 2      
 	BallData.new(30, Vector3(-27, -189, -101), 30), #Right ear 3      
 	BallData.new(45, Vector3(-41, -83, -43), 31), #Right elbow      
-	BallData.new(38, Vector3(-20, -165, -143), 32), #Eye 2            
+	BallData.new(38, Vector3(-20, -165, -143), 32, Color.white, Color.black, 1, 0, 0.00005), #Eye 2            
 	BallData.new(22, Vector3(-43, -13, -78), 33), #Right finger 1   
 	BallData.new(24, Vector3(-59, -11, -76), 34), #Right finger 2   
 	BallData.new(22, Vector3(-64, -12, -64), 35), #Right finger 3   
 	BallData.new(39, Vector3(-47, -19, 64), 36), #Right foot       
 	BallData.new(40, Vector3(-46, -18, -60), 37), #Right hand       
-	BallData.new(20, Vector3(-20, -160, -155), 38, Color.black, Color("897e66"), 3, 0, 0.0001), #Iris 2           
+	BallData.new(20, Vector3(-20, -160, -155), 38, Color.black, Color("897e66"), 3, 0, 0.0002), #Iris 2           
 	BallData.new(35, Vector3(-12, -118, -155), 39), #Right jowl       
 	BallData.new(49, Vector3(-43, -80, 61), 40), #Right knee       
 	BallData.new(25, Vector3(-6, -127, -177), 41), #Right nostril    
@@ -256,6 +191,14 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 				ball.position = Vector3(floor(ball.position.x), floor(ball.position.y), floor(ball.position.z))
 			ball.size = floor(ball.size * (lnz.foot_enlargement.x / 100.0))
 			ball.size += lnz.foot_enlargement.y
+			
+	# ears
+	for ball_no in ear_ext:
+		var ball = base_ball_dict[ball_no]
+		ball.position *= (lnz.ear_extension / 100.0)
+		print("position after " + str(ball.position))
+		for addball in addballs_by_base.get(ball_no, []):
+			addball.position *= (lnz.ear_extension / 100.0)
 	
 	return {balls = base_ball_dict, addballs = addball_dict, paintballs = all_ball_dict.paintballs}
 	
@@ -335,13 +278,13 @@ func generate_balls(all_ball_data: Dictionary):
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
-			visual_ball.z_add = ball.z_add
 		else:
 			visual_ball = ball_scene.instance()
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
 		visual_ball.ball_size = get_real_ball_size(ball.size)
+		visual_ball.z_add = ball.z_add
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
