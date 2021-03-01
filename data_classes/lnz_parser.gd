@@ -273,11 +273,10 @@ var color_chart = {
 var addballs = {}
 var paintballs = {}
 var omissions = {}
-
-var variations = {"1": {}}
-var active_variation = "1"
+var project_ball = {}
 
 func get_next_section(file: File, section_name: String):
+	file.seek(0)
 	var this_line = ""
 	while !this_line.begins_with("[" + section_name + "]") and !file.eof_reached():
 		this_line = file.get_line()
@@ -326,6 +325,7 @@ func _init(file_name):
 	file.seek(0)
 	
 	get_addballs(file)
+	get_project_balls(file)
 		
 	## Get paintballz
 	while this_line != "[Paint Ballz]" and !file.eof_reached():
@@ -436,12 +436,14 @@ func get_lines(file: File):
 		
 func get_balls(file: File):
 	get_next_section(file, "Ballz Info")
-	var parsed_lines = get_parsed_lines(file, ["color", "outline_color", "speckle", "fuzz", "outline", "size", "group", "texture", "ball_no"])
+	var parsed_lines = get_parsed_lines(file, ["color", "outline_color", "speckle", "fuzz", "outline", "size", "group", "texture"])
+	var i = 0
 	for line in parsed_lines:
 		var color = color_chart.get(line.color)
 		var outline_color = color_chart.get(line.outline_color)
-		var bd = BallData.new(line.size, Vector3.ZERO, line.ball_no, color, outline_color, line.outline, line.fuzz, line.group)
-		self.balls[line.ball_no] = bd
+		var bd = BallData.new(line.size, Vector3.ZERO, i, color, outline_color, line.outline, line.fuzz, line.group)
+		self.balls[i] = bd
+		i += 1
 
 func get_addballs(file: File):
 	get_next_section(file, "Add Ball")
@@ -455,3 +457,10 @@ func get_addballs(file: File):
 		addballs[max_ball_num] = ball
 		max_ball_num += 1
 		
+func get_project_balls(file: File):
+	get_next_section(file, "Project Ball")
+	var parsed_lines = get_parsed_lines(file, ["base", "projected", "amount"])
+	for line in parsed_lines:
+		var ar = project_ball.get(line.projected, [])
+		ar.append({base = line.base, amount = line.amount})
+		project_ball[line.projected] = ar

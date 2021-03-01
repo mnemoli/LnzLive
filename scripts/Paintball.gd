@@ -9,6 +9,7 @@ export var outline = -1 setget set_outline
 export var color = Color.white setget set_color
 export var outline_color = Color.black setget set_outline_color
 export var z_add = 0.0 setget set_z_add
+export var base_ball_no = 0
 
 func set_z_add(new_value):
 	z_add = new_value

@@ -3,6 +3,8 @@ extends Node
 
 export var pixel_world_size = 0.001;
 
+export var do_stuff = true setget do_it
+
 var balls = []
 
 var lines = []
@@ -25,10 +27,14 @@ var foot_ext = [
 var ear_ext = [ 5, 6, 29, 30 ]
 
 export var draw_balls = true
+export var draw_addballs = true
 
 var ball_scene = preload("res://Ball.tscn")
 var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
+
+func do_it(new_value):
+	generate_pet("vanilla.lnz")
 
 func init_ball_data():
 	balls = [
@@ -106,6 +112,7 @@ func generate_pet(file_name):
 	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
 	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = munge_balls(collated_data, lnz_info)
+	collated_data = apply_projections(collated_data, lnz_info)
 	collated_data = apply_sizes(collated_data, lnz_info)
 	collated_data.omissions = lnz_info.omissions
 	generate_balls(collated_data)
@@ -211,8 +218,37 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		b.fuzz = v.fuzz
 		b.position += v.position
 		base_ball_dict[k] = b
-		
+	
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
+
+func apply_projections(all_ball_dict: Dictionary, lnz: LnzParser):
+	var base_ball_dict = all_ball_dict.balls
+	var addball_dict = all_ball_dict.addballs
+	for k in base_ball_dict:
+		var ball = base_ball_dict[k]
+		var project_list = lnz.project_ball.get(ball.ball_no, [])
+		for p in project_list:
+			var base_ball = base_ball_dict[p.base]
+			var current_vector = ball.position - base_ball.position
+			var scaled_vector = current_vector * (p.amount / 100.0)
+			ball.position = base_ball.position + scaled_vector
+			base_ball_dict[k] = ball
+	for k in addball_dict:
+		var ball = addball_dict[k]
+		var add_base_ball = base_ball_dict[ball.base]
+		var project_list = lnz.project_ball.get(ball.ball_no, [])
+		for p in project_list:
+			# all the addballs should be projected from a base ball
+			# otherwise it's kind of meaningless
+			var base_ball = base_ball_dict[p.base]
+			var actual_position = ball.position + add_base_ball.position
+			var current_vector = actual_position - base_ball.position
+			var scaled_vector = current_vector * (p.amount / 100.0)
+			actual_position = base_ball.position + scaled_vector
+			ball.position = actual_position - add_base_ball.position
+			addball_dict[k] = ball
+			
+	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs} 
 
 func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 	for k in all_ball_dict.balls:
@@ -245,11 +281,15 @@ func generate_balls(all_ball_data: Dictionary):
 	var root = get_root()
 	var parent = root.get_node("petholder/balls")
 	var pb_parent = root.get_node("petholder/paintballs")
+	var ab_parent = root.get_node("petholder/addballs")
 	for c in parent.get_children():
 		parent.remove_child(c)
 		c.queue_free()
 	for c in pb_parent.get_children():
 		pb_parent.remove_child(c)
+		c.queue_free()
+	for c in ab_parent.get_children():
+		ab_parent.remove_child(c)
 		c.queue_free()
 	
 	for key in ball_data:
@@ -275,6 +315,7 @@ func generate_balls(all_ball_data: Dictionary):
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
+			visual_ball.ball_no = ball.ball_no
 		visual_ball.ball_size = get_real_ball_size(ball.size)
 		visual_ball.z_add = ball.z_add
 		visual_ball.color = ball.color
@@ -303,25 +344,35 @@ func generate_balls(all_ball_data: Dictionary):
 		visual_ball.outline_color = ball.outline_color
 		visual_ball.z_add = ball.z_add
 		visual_ball.fuzz_amount = ball.fuzz
-		parent.add_child(visual_ball)
+		visual_ball.ball_no = ball.ball_no
+		visual_ball.base_ball_no = ball.base
+		ab_parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
 		visual_ball.visible = true
-		if !draw_balls:
+		if !draw_addballs:
 			visual_ball.visible = false
 		if omissions.get(key, false):
 			visual_ball.hide()
 			
 	for key in paintball_data:
-		var base_ball = ball_data[key]
+		var merged_dict = {}
+		for v in ball_data:
+			merged_dict[v] = ball_data[v]
+		for v in addball_data:
+			merged_dict[v] = addball_data[v]
+		var base_ball = merged_dict[key]
 		var paintballs_for_base_ball: Array = paintball_data[key]
 		paintballs_for_base_ball.invert()
 		var count = 0
 		for paintball in paintballs_for_base_ball:
+			var base_position = base_ball.position
+			if base_ball is AddBallData:
+				var real_base_ball = merged_dict[base_ball.base]
+				base_position += real_base_ball.position
 			var final_position = base_ball.position + (paintball.normalised_position * base_ball.size / 2)
 			final_position.y *= -1.0
 			final_position *= pixel_world_size
-			var base_position = base_ball.position
 			base_position.y *= -1.0
 			base_position *= pixel_world_size
 			var final_size = get_real_ball_size(base_ball.size * (paintball.size / 100.0))
@@ -335,6 +386,7 @@ func generate_balls(all_ball_data: Dictionary):
 			visual_ball.outline = paintball.outline
 			visual_ball.fuzz_amount = paintball.fuzz
 			visual_ball.z_add = count * 0.0000001
+			visual_ball.base_ball_no = paintball.base
 			count += 1
 			pb_parent.add_child(visual_ball)
 			visual_ball.set_owner(root)

@@ -78,6 +78,11 @@ void fragment() {
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
     modified_outline = 0;
 	st.x += 1.0 * inverse_camera_scale * side;
+  } else if (outline == -3) {
+	// nose, need to do special here
+	vec2 vec = st2 - c;
+    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+	modified_outline = 3;
   } else if (outline < -1) {
 	// use as debug for now
 	float side = sign(st2.x - c.x);
