@@ -99,7 +99,7 @@ void fragment() {
   vec2 vector_from_center = st - c;
   // Draw a circle.
   // Base ball size gives exact pixel size at camera scale 1.
-  float base_pct = step(floor(length(vector_from_base_center)), (float(base_ball_size)) * inverse_camera_scale);
+  float base_pct = step(floor(length(vector_from_base_center)), (float(base_ball_size - 2)) * inverse_camera_scale);
   float pct = step(floor(length(vector_from_center)), (float(ball_size) - float(modified_outline)) * inverse_camera_scale);
 
   pct *= base_pct;

@@ -254,14 +254,14 @@ func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 	for k in all_ball_dict.balls:
 		var ball = all_ball_dict.balls[k]
 		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
-		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
+#		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
 		ball.position = (ball.position * (lnz.scales[0] / 255.0))
 		all_ball_dict.balls[k] = ball
 		
 	for k in all_ball_dict.addballs:
 		var ball = all_ball_dict.addballs[k]
 		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
-		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
+#		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
 		ball.position = (ball.position * (lnz.scales[0] / 255.0))
 		all_ball_dict.addballs[k] = ball
 		
@@ -321,7 +321,7 @@ func generate_balls(all_ball_data: Dictionary):
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
-		visual_ball.fuzz_amount = ball.fuzz
+		visual_ball.fuzz_amount = ball.fuzz / 2 
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
@@ -343,7 +343,7 @@ func generate_balls(all_ball_data: Dictionary):
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
 		visual_ball.z_add = ball.z_add
-		visual_ball.fuzz_amount = ball.fuzz
+		visual_ball.fuzz_amount = ball.fuzz / 2
 		visual_ball.ball_no = ball.ball_no
 		visual_ball.base_ball_no = ball.base
 		ab_parent.add_child(visual_ball)
@@ -384,7 +384,7 @@ func generate_balls(all_ball_data: Dictionary):
 			visual_ball.color = paintball.color
 			visual_ball.outline_color = paintball.outline_color
 			visual_ball.outline = paintball.outline
-			visual_ball.fuzz_amount = paintball.fuzz
+			visual_ball.fuzz_amount = paintball.fuzz / 2
 			visual_ball.z_add = count * 0.0000001
 			visual_ball.base_ball_no = paintball.base
 			count += 1
