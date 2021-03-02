@@ -15,7 +15,7 @@ func _on_HSlider_value_changed(value):
 
 func _on_HSlider2_value_changed(value):
 	cam.transform.origin = Vector3(0,0,0)
-	cam.rotation_degrees.y = value
+	cam.rotation_degrees.y = value + 180
 	cam.translate_object_local(Vector3.BACK * cam_dist)
 
 func _on_HSlider3_value_changed(value):

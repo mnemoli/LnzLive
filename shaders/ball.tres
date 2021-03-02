@@ -125,7 +125,6 @@ void vertex() {
 	center_fragcoord = floor(center_ndc * VIEWPORT_SIZE);
 	
 	vert_in_clip_space.z += z_add * 100.0;
-	vert_in_clip_space.z += (float(ball_size)) * 0.001;
 	float b = float(ball_size + fuzz_amount + 3) / VIEWPORT_SIZE.x;
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);

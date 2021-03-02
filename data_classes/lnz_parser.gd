@@ -3,6 +3,7 @@ class_name LnzParser
 
 var r = RegEx.new()
 
+var species = 0
 var scales = Vector2(100, 100)
 var leg_extensions = Vector2(0, 0)
 var body_extension = 0
@@ -311,6 +312,7 @@ func _init(file_name):
 	
 	var this_line = ""
 	
+	get_species(file)
 	get_default_scales(file)
 	get_leg_extensions(file)
 	get_body_extension(file)
@@ -464,3 +466,11 @@ func get_project_balls(file: File):
 		var ar = project_ball.get(line.projected, [])
 		ar.append({base = line.base, amount = line.amount})
 		project_ball[line.projected] = ar
+
+func get_species(file: File):
+	get_next_section(file, "Species")
+	var parsed_lines = get_parsed_lines(file, ["species"])
+	if parsed_lines.size() == 0:
+		species = 2
+	else:
+		species = parsed_lines[0].species

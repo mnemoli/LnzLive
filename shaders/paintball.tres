@@ -118,7 +118,6 @@ void fragment() {
 void vertex() {
 	// Billboard and retain scaling
 	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
-//	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
 	
 	// Find the original position of the vertex
 	vec3 vert_in_clip_space = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -138,7 +137,7 @@ void vertex() {
 	base_center_fragcoord = floor(base_center_ndc * VIEWPORT_SIZE);
 	
 	vert_in_clip_space.z += z_add * 100.0;
-	vert_in_clip_space.z += float(base_ball_size) * 0.001;
+	vert_in_clip_space.z += 0.01;
 	float b = float(ball_size + fuzz_amount + 3) / VIEWPORT_SIZE.x;
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);

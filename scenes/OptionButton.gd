@@ -1,12 +1,26 @@
 extends OptionButton
 
-export var lnz = ["test.lnz", "Dachsund.lnz", "dali.lnz", "sheepdog.lnz", "jack.lnz"]
+export var lnz = []
 
 signal file_selected(file_name)
 signal file_saved(file_name)
 
+func _ready():
+	var dir = Directory.new()
+	dir.open("resources")
+	dir.list_dir_begin()
+	var filename = dir.get_next()
+	var i = 0
+	while(!filename.empty()):
+		if filename.ends_with(".lnz"):
+			lnz.append(filename)
+			add_item(filename, i)
+			i += 1
+		filename = dir.get_next()
+
 func _on_OptionButton_item_selected(index):
-	emit_signal("file_selected", lnz[index])
+	var real_index = get_item_id(index)
+	emit_signal("file_selected", lnz[real_index])
 
 func _on_Button_pressed():
 	emit_signal("file_selected", lnz[self.selected])
