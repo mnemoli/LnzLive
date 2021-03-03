@@ -50,7 +50,7 @@ var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
 
 func do_it(new_value):
-	generate_pet("dusty.lnz")
+	generate_pet("sheepdog.lnz")
 
 func init_ball_data(species: int):
 	if species == 2:
@@ -417,7 +417,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		if(key in eyes.keys()): # treat irises like paintballs
 			visual_ball = paintball_scene.instance()
 			var base_ball = ball_data[eyes[key]]
-			visual_ball.base_ball_size = get_real_ball_size(base_ball.size)
+			visual_ball.base_ball_size = base_ball.size / 2
 			var bbp = base_ball.position
 			bbp.y *= -1
 			bbp *= pixel_world_size

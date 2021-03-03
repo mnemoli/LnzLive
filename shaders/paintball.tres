@@ -76,6 +76,7 @@ void fragment() {
   } else if (outline > 1) {
     vec2 vec = st2 - c;
     pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+	modified_outline -= 1;
   } else if (outline == 1) {
     // dotted outline
 	float side = sign(st2.x - c.x);
