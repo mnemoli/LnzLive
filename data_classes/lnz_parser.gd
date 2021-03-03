@@ -2,6 +2,7 @@ extends Node
 class_name LnzParser
 
 var r = RegEx.new()
+var str_r = RegEx.new()
 
 var species = 0
 var scales = Vector2(100, 100)
@@ -275,6 +276,7 @@ var addballs = {}
 var paintballs = {}
 var omissions = {}
 var project_ball = {}
+var texture_list = []
 
 func get_next_section(file: File, section_name: String):
 	file.seek(0)
@@ -301,9 +303,27 @@ func get_parsed_lines(file: File, keys: Array):
 			i += 1
 		return_array.append(dict)
 	return return_array
+	
+func get_parsed_line_strings(file: File, keys: Array):
+	var return_array = []
+	while true:
+		var line = file.get_line().dedent()
+		if line.empty() or line.begins_with("[") or file.eof_reached() or line.begins_with("#2"):
+			break
+		if line.begins_with(";") or line.begins_with("#"):
+			continue
+		var parsed = str_r.search_all(line)
+		var dict = {}
+		var i = 0
+		for key in keys:
+			dict[key] = parsed[i].get_string()
+			i += 1
+		return_array.append(dict)
+	return return_array
 
 func _init(file_name):
 	r.compile("[-.\\d]+")
+	str_r.compile("[\\S]+")
 	var file = File.new()
 	if file.file_exists("resources/" + file_name):
 		file.open("resources/" + file_name, File.READ)
@@ -312,6 +332,7 @@ func _init(file_name):
 	
 	var this_line = ""
 	
+	get_texture_list(file)
 	get_species(file)
 	get_default_scales(file)
 	get_leg_extensions(file)
@@ -443,7 +464,7 @@ func get_balls(file: File):
 	for line in parsed_lines:
 		var color = color_chart.get(line.color)
 		var outline_color = color_chart.get(line.outline_color)
-		var bd = BallData.new(line.size, Vector3.ZERO, i, color, outline_color, line.outline, line.fuzz, line.group)
+		var bd = BallData.new(line.size, Vector3.ZERO, i, color, line.color, outline_color, line.outline, line.fuzz, 0.0, line.group, line.texture)
 		self.balls[i] = bd
 		i += 1
 
@@ -474,3 +495,10 @@ func get_species(file: File):
 		species = 2
 	else:
 		species = parsed_lines[0].species
+
+func get_texture_list(file: File):
+	get_next_section(file, "Texture List")
+	var parsed_lines = get_parsed_line_strings(file, ["filepath", "transparent_color"])
+	for line in parsed_lines:
+		var filename = line.filepath.get_file()
+		texture_list.append({filename = filename, transparent_color = line.transparent_color})

@@ -50,7 +50,7 @@ var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
 
 func do_it(new_value):
-	generate_pet("cinn.lnz")
+	generate_pet("dusty.lnz")
 
 func init_ball_data(species: int):
 	if species == 2:
@@ -202,7 +202,7 @@ func generate_pet(file_name):
 	collated_data = apply_projections(collated_data, lnz_info)
 	collated_data = apply_sizes(collated_data, lnz_info)
 	collated_data.omissions = lnz_info.omissions
-	generate_balls(collated_data, lnz_info.species)
+	generate_balls(collated_data, lnz_info.species, lnz_info.texture_list)
 	generate_lines(lnz_info.lines)
 
 func collate_base_ball_data():
@@ -329,6 +329,8 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		b.outline = v.outline
 		b.fuzz = v.fuzz
 		b.position += v.position
+		b.texture_id = v.texture_id
+		b.color_index = v.color_index
 		base_ball_dict[k] = b
 	
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
@@ -385,7 +387,7 @@ func get_root():
 	else:
 		return get_tree().root.get_node("Spatial")
 
-func generate_balls(all_ball_data: Dictionary, species: int):
+func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array):
 	var ball_data = all_ball_data.balls
 	var addball_data = all_ball_data.addballs
 	var paintball_data = all_ball_data.paintballs
@@ -429,12 +431,22 @@ func generate_balls(all_ball_data: Dictionary, species: int):
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
 			visual_ball.ball_no = ball.ball_no
+			if ball.texture_id > -1:
+				var tex_info = texture_list[ball.texture_id]
+				var texture_filename = tex_info.filename
+				var transparent_color = tex_info.transparent_color
+				var texture = load("res://resources/textures/"+texture_filename)
+				visual_ball.texture = texture
+				visual_ball.transparent_color = transparent_color
+			else:
+				visual_ball.transparent_color = ball.color
+			visual_ball.color_index = ball.color_index
 		visual_ball.ball_size = get_real_ball_size(ball.size)
 		visual_ball.z_add = ball.z_add
 		visual_ball.color = ball.color
 		visual_ball.outline = ball.outline
 		visual_ball.outline_color = ball.outline_color
-		visual_ball.fuzz_amount = ball.fuzz / 2 
+		visual_ball.fuzz_amount = ball.fuzz / 2
 		parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball

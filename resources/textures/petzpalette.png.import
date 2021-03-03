@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/stripe16.bmp-c12c25ed35161e760154cb132155baff.stex"
+path="res://.import/petzpalette.png-4db27f2142fced1940acb931eead20ee.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/textures/stripe16.bmp"
-dest_files=[ "res://.import/stripe16.bmp-c12c25ed35161e760154cb132155baff.stex" ]
+source_file="res://resources/textures/petzpalette.png"
+dest_files=[ "res://.import/petzpalette.png-4db27f2142fced1940acb931eead20ee.stex" ]
 
 [params]
 
