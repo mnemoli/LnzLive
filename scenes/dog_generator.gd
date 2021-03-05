@@ -3,8 +3,6 @@ extends Node
 
 export var pixel_world_size = 0.001;
 
-export var do_stuff = true setget do_it
-
 var balls = []
 
 var lines = []
@@ -48,9 +46,6 @@ export var draw_addballs = true
 var ball_scene = preload("res://Ball.tscn")
 var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
-
-func do_it(new_value):
-	generate_pet("sheepdog.lnz")
 
 func init_ball_data(species: int):
 	if species == 2:
@@ -192,8 +187,8 @@ func init_ball_data(species: int):
 			BallData.new(70, Vector3(0, -34, -263), 66)            #eBall_ztrans,
 		]
 
-func generate_pet(file_name):
-	var lnz_info = LnzParser.new(file_name)
+func generate_pet(file_path):
+	var lnz_info = LnzParser.new(file_path)
 	init_ball_data(lnz_info.species)
 	var collated_data = collate_base_ball_data()
 	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
@@ -383,9 +378,9 @@ func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 
 func get_root():
 	if Engine.is_editor_hint():
-		return get_tree().get_edited_scene_root()
+		return get_tree().get_edited_scene_root().get_node("PetRoot")
 	else:
-		return get_tree().root.get_node("Spatial")
+		return get_tree().root.get_node("Root/PetRoot")
 
 func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array):
 	var ball_data = all_ball_data.balls

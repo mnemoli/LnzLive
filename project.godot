@@ -45,7 +45,7 @@ _global_script_class_icons={
 [application]
 
 config/name="PetzRendering"
-run/main_scene="res://scenes/dog.tscn"
+run/main_scene="res://scenes/editor/editor.tscn"
 config/icon="res://icon.png"
 
 [debug]
@@ -54,8 +54,8 @@ gdscript/warnings/shadowed_variable=false
 
 [display]
 
-window/size/width=1000
-window/size/height=1000
+window/size/height=768
+window/stretch/aspect="expand"
 
 [rendering]
 

@@ -5,7 +5,7 @@ var r = RegEx.new()
 var str_r = RegEx.new()
 
 var species = 0
-var scales = Vector2(100, 100)
+var scales = Vector2(255, 255)
 var leg_extensions = Vector2(0, 0)
 var body_extension = 0
 var face_extension = 0
@@ -321,13 +321,15 @@ func get_parsed_line_strings(file: File, keys: Array):
 		return_array.append(dict)
 	return return_array
 
-func _init(file_name):
+func _init(file_path):
 	r.compile("[-.\\d]+")
 	str_r.compile("[\\S]+")
 	var file = File.new()
-	if file.file_exists("res://resources/" + file_name):
-		file.open("res://resources/" + file_name, File.READ)
+	if file.file_exists(file_path):
+		file.open(file_path, File.READ)
 	else:
+		print("file " + file_path + " not found")
+		file.close()
 		return
 	
 	var this_line = ""
@@ -402,7 +404,8 @@ func _init(file_name):
 func get_default_scales(file: File):
 	get_next_section(file, "Default Scales")
 	var parsed_lines = get_parsed_lines(file, ["scale"])
-	scales = Vector2(parsed_lines[0].scale, parsed_lines[1].scale)
+	if parsed_lines.size() > 0:
+		scales = Vector2(parsed_lines[0].scale, parsed_lines[1].scale)
 	
 func get_leg_extensions(file: File):
 	get_next_section(file, "Leg Extension")
