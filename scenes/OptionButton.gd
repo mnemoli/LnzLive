@@ -7,7 +7,7 @@ signal file_saved(file_name)
 
 func _ready():
 	var dir = Directory.new()
-	dir.open("resources")
+	dir.open("res://resources")
 	dir.list_dir_begin()
 	var filename = dir.get_next()
 	var i = 0

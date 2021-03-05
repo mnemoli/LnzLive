@@ -325,8 +325,8 @@ func _init(file_name):
 	r.compile("[-.\\d]+")
 	str_r.compile("[\\S]+")
 	var file = File.new()
-	if file.file_exists("resources/" + file_name):
-		file.open("resources/" + file_name, File.READ)
+	if file.file_exists("res://resources/" + file_name):
+		file.open("res://resources/" + file_name, File.READ)
 	else:
 		return
 	

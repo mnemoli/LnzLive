@@ -1,14 +1,11 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/dog_generator.gd" type="Script" id=2]
 [ext_resource path="res://scripts/rotator.gd" type="Script" id=3]
-[ext_resource path="res://scripts/Paintball.gd" type="Script" id=4]
 [ext_resource path="res://default_env.tres" type="Environment" id=5]
 [ext_resource path="res://Line.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scripts/Ball.gd" type="Script" id=7]
 [ext_resource path="res://anims/dog0.tres" type="Animation" id=8]
-[ext_resource path="res://scripts/Line.gd" type="Script" id=9]
 [ext_resource path="res://Paintball.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/TextEdit.gd" type="Script" id=11]
 [ext_resource path="res://scenes/OptionButton.gd" type="Script" id=12]
@@ -25,18 +22,16 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Ball" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.0210294, 0.0298824, 0.0376176 )
-script = ExtResource( 7 )
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
 color_index = 25
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball2" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball2" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.00448235, 0.108794, -0.0773941 )
-script = ExtResource( 7 )
 ball_size = 4.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -44,9 +39,8 @@ color_index = 15
 ball_no = 1
 transparent_color = "1"
 
-[node name="Ball3" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball3" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.0139412, 0.109353, -0.0796177 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -54,9 +48,8 @@ color_index = 15
 ball_no = 2
 transparent_color = "1"
 
-[node name="Ball4" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball4" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0.0195882, 0.100765, -0.0734706 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 outline = -2
@@ -65,9 +58,8 @@ color_index = 15
 ball_no = 3
 transparent_color = "1"
 
-[node name="Ball5" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball5" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0.0247059, 0.0947059, -0.0535294 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -75,9 +67,8 @@ color_index = 19
 ball_no = 4
 transparent_color = "1"
 
-[node name="Ball6" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball6" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.225, 0, 0, 0, 0.225, 0, 0, 0, 0.225, 0.02, 0.102353, -0.0617647 )
-script = ExtResource( 7 )
 ball_size = 9.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -85,9 +76,8 @@ color_index = 19
 ball_no = 5
 transparent_color = "1"
 
-[node name="Ball7" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball7" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.0127941, 0.102912, -0.0612941 )
-script = ExtResource( 7 )
 ball_size = 8.0
 fuzz_amount = 2
 outline = 0
@@ -96,9 +86,8 @@ color_index = 19
 ball_no = 6
 transparent_color = "1"
 
-[node name="Ball8" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball8" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0.022, 0.0475882, -0.0232353 )
-script = ExtResource( 7 )
 ball_size = 17.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -108,18 +97,16 @@ ball_no = 7
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball9" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball9" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.0105882, 0.0970588, -0.0835294 )
-script = ExtResource( 7 )
 ball_size = 4.0
 outline = 1
 color_index = 245
 ball_no = 8
 transparent_color = Color( 1, 1, 1, 1 )
 
-[node name="Ball10" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball10" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.0264706, 0.00764706, -0.0358824 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -129,9 +116,8 @@ ball_no = 9
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball11" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball11" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0.0347059, 0.00529412, -0.0352941 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -140,9 +126,8 @@ ball_no = 10
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball12" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball12" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.0382353, 0.00647059, -0.0276471 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -152,9 +137,8 @@ ball_no = 11
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball13" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball13" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0.0237794, 0.0106, 0.0350618 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -164,9 +148,8 @@ ball_no = 12
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball14" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball14" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0.0281765, 0.00829412, -0.026 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -176,9 +159,8 @@ ball_no = 13
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Paintball" type="Spatial" parent="petholder/balls" instance=ExtResource( 10 )]
+[node name="Paintball" parent="petholder/balls" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0.0105882, 0.0941177, -0.0905882 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0105882, 0.0970588, -0.0835294 )
 base_ball_size = 6.5
 ball_size = 3.0
@@ -186,9 +168,8 @@ outline = 3
 color = Color( 0, 0, 0, 1 )
 outline_color = Color( 0, 0.5, 0.5, 1 )
 
-[node name="Ball15" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball15" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0.00647059, 0.0694118, -0.0888235 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 outline = 0
@@ -198,9 +179,8 @@ outline_color = Color( 0.52, 0.38, 0.21, 1 )
 ball_no = 15
 transparent_color = "1"
 
-[node name="Ball16" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball16" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0.0230588, 0.0470882, 0.0242353 )
-script = ExtResource( 7 )
 ball_size = 18.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -210,9 +190,8 @@ ball_no = 16
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball17" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball17" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.00235294, 0.0747059, -0.0982353 )
-script = ExtResource( 7 )
 ball_size = 5.0
 outline = -3
 color = Color( 0, 0, 0, 1 )
@@ -221,9 +200,8 @@ ball_no = 17
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball18" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball18" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.575, 0, 0, 0, 0.575, 0, 0, 0, 0.575, 0.0152941, 0.0676471, -0.0305882 )
-script = ExtResource( 7 )
 ball_size = 23.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -232,9 +210,8 @@ ball_no = 18
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball19" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball19" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, 0.0141176, 0.07, 0.0264706 )
-script = ExtResource( 7 )
 ball_size = 25.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -243,9 +220,8 @@ ball_no = 19
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball20" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball20" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.02, 0.00823529, 0.0270588 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -255,9 +231,8 @@ ball_no = 20
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball21" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball21" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, 0.0282353, 0.00882353, 0.0264706 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -266,9 +241,8 @@ ball_no = 21
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball22" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball22" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.0335294, 0.00882353, 0.0317647 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -278,9 +252,8 @@ ball_no = 22
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball23" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball23" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0.0241176, 0.0258824, -0.0205882 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -289,9 +262,8 @@ ball_no = 23
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball24" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball24" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0252941, 0.0290588, 0.0326177 )
-script = ExtResource( 7 )
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
 color_index = 25
@@ -299,9 +271,8 @@ ball_no = 24
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball25" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball25" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.00672353, 0.108335, -0.0769118 )
-script = ExtResource( 7 )
 ball_size = 4.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -309,9 +280,8 @@ color_index = 15
 ball_no = 25
 transparent_color = "1"
 
-[node name="Ball26" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball26" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0162647, 0.108147, -0.0790882 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -319,9 +289,8 @@ color_index = 15
 ball_no = 26
 transparent_color = "1"
 
-[node name="Ball27" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball27" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, -0.0218824, 0.100588, -0.0735294 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 outline = 0
@@ -330,9 +299,8 @@ color_index = 15
 ball_no = 27
 transparent_color = "1"
 
-[node name="Ball28" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball28" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0276471, 0.0917647, -0.0541176 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -340,9 +308,8 @@ color_index = 19
 ball_no = 28
 transparent_color = "1"
 
-[node name="Ball29" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball29" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.225, 0, 0, 0, 0.225, 0, 0, 0, 0.225, -0.0229412, 0.102353, -0.0617647 )
-script = ExtResource( 7 )
 ball_size = 9.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -350,9 +317,8 @@ color_index = 19
 ball_no = 29
 transparent_color = "1"
 
-[node name="Ball30" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball30" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.0151471, 0.103471, -0.0601765 )
-script = ExtResource( 7 )
 ball_size = 8.0
 fuzz_amount = 2
 outline = -2
@@ -361,9 +327,8 @@ color_index = 19
 ball_no = 30
 transparent_color = "1"
 
-[node name="Ball31" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball31" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, -0.0206471, 0.0451765, -0.0255294 )
-script = ExtResource( 7 )
 ball_size = 17.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -373,18 +338,16 @@ ball_no = 31
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball32" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball32" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.0123529, 0.0952941, -0.0841177 )
-script = ExtResource( 7 )
 ball_size = 4.0
 outline = 1
 color_index = 245
 ball_no = 32
 transparent_color = Color( 1, 1, 1, 1 )
 
-[node name="Ball33" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball33" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.0252941, 0.00647059, -0.0464706 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -394,9 +357,8 @@ ball_no = 33
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball34" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball34" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, -0.0347059, 0.00529412, -0.0452941 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -405,9 +367,8 @@ ball_no = 34
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball35" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball35" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.0376471, 0.00588235, -0.0382353 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -417,9 +378,8 @@ ball_no = 35
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball36" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball36" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, -0.0278824, 0.0106824, 0.0252088 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -429,9 +389,8 @@ ball_no = 36
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball37" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball37" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, -0.0279412, 0.00738235, -0.0371177 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -441,9 +400,8 @@ ball_no = 37
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Paintball2" type="Spatial" parent="petholder/balls" instance=ExtResource( 10 )]
+[node name="Paintball2" parent="petholder/balls" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0123529, 0.0923529, -0.0911765 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0123529, 0.0952941, -0.0841177 )
 base_ball_size = 6.5
 ball_size = 3.0
@@ -451,9 +409,8 @@ outline = 3
 color = Color( 0, 0, 0, 1 )
 outline_color = Color( 0, 0.5, 0.5, 1 )
 
-[node name="Ball38" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball38" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, -0.00705882, 0.07, -0.0888235 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 outline = -2
@@ -463,9 +420,8 @@ outline_color = Color( 0.52, 0.38, 0.21, 1 )
 ball_no = 39
 transparent_color = "1"
 
-[node name="Ball39" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball39" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.475, 0, 0, 0, 0.475, 0, 0, 0, 0.475, -0.0248824, 0.0483235, 0.0240588 )
-script = ExtResource( 7 )
 ball_size = 19.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -475,9 +431,8 @@ ball_no = 40
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball40" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball40" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.00352941, 0.0747059, -0.0982353 )
-script = ExtResource( 7 )
 ball_size = 5.0
 outline = -3
 color = Color( 0.11, 0.11, 0.11, 1 )
@@ -486,9 +441,8 @@ ball_no = 41
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball41" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball41" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.575, 0, 0, 0, 0.575, 0, 0, 0, 0.575, -0.0152941, 0.0658824, -0.0305882 )
-script = ExtResource( 7 )
 ball_size = 23.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -497,9 +451,8 @@ ball_no = 42
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball42" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball42" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.625, 0, 0, 0, 0.625, 0, 0, 0, 0.625, -0.0170588, 0.0723529, 0.0229412 )
-script = ExtResource( 7 )
 ball_size = 25.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -508,9 +461,8 @@ ball_no = 43
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball43" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball43" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.0241176, 0.00764706, 0.0176471 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -520,9 +472,8 @@ ball_no = 44
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball44" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball44" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.175, 0, 0, 0, 0.175, 0, 0, 0, 0.175, -0.0323529, 0.00823529, 0.0170588 )
-script = ExtResource( 7 )
 ball_size = 7.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -531,9 +482,8 @@ ball_no = 45
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball45" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball45" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.0376471, 0.00823529, 0.0223529 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -543,9 +493,8 @@ ball_no = 46
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball46" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball46" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, -0.0211765, 0.0229412, -0.0276471 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -554,9 +503,8 @@ ball_no = 47
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball47" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball47" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.00176471, 0.0647059, -0.00117647 )
-script = ExtResource( 7 )
 ball_size = 30.0
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -565,9 +513,8 @@ ball_no = 48
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball48" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball48" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.775, 0, 0, 0, 0.775, 0, 0, 0, 0.775, 0, 0.0705882, 0.0282353 )
-script = ExtResource( 7 )
 ball_size = 31.0
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -576,9 +523,8 @@ ball_no = 49
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball49" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball49" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -0.000176471, 0.0641765, -0.0265882 )
-script = ExtResource( 7 )
 ball_size = 30.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -587,9 +533,8 @@ ball_no = 50
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball50" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball50" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.00117647, 0.0647059, -0.0817647 )
-script = ExtResource( 7 )
 ball_size = 8.0
 fuzz_amount = 2
 outline = 1
@@ -599,9 +544,8 @@ outline_color = Color( 0.55, 0.42, 0.21, 1 )
 ball_no = 51
 transparent_color = "1"
 
-[node name="Ball51" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball51" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.675, 0, 0, 0, 0.675, 0, 0, 0, 0.675, -0.00117647, 0.0911765, -0.0635294 )
-script = ExtResource( 7 )
 ball_size = 27.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -610,9 +554,8 @@ ball_no = 52
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball52" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball52" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.0811765, -0.0594118 )
-script = ExtResource( 7 )
 ball_size = 18.0
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -621,9 +564,8 @@ ball_no = 53
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball53" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball53" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.575, 0, 0, 0, 0.575, 0, 0, 0, 0.575, -0.00117647, 0.0794118, -0.0488235 )
-script = ExtResource( 7 )
 ball_size = 23.0
 fuzz_amount = 3
 color = Color( 0.83, 0.81, 0.78, 1 )
@@ -632,9 +574,8 @@ ball_no = 54
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball54" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball54" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.000588235, 0.0705882, -0.0970588 )
-script = ExtResource( 7 )
 ball_size = 4.0
 color = Color( 0, 0, 0, 1 )
 color_index = 244
@@ -642,9 +583,8 @@ ball_no = 55
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball55" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball55" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.00117647, 0.0811765, -0.0835294 )
-script = ExtResource( 7 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 color_index = 15
@@ -652,9 +592,8 @@ ball_no = 56
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball56" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball56" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0.0864706, 0.0447059 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -663,9 +602,8 @@ ball_no = 57
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball57" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball57" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -5.88235e-06, 0.0865353, 0.0448529 )
-script = ExtResource( 7 )
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
 color_index = 25
@@ -673,9 +611,8 @@ ball_no = 58
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball58" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball58" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, -1.75882e-05, 0.0866935, 0.0450985 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -684,9 +621,8 @@ ball_no = 59
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball59" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball59" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -2.32947e-05, 0.0869677, 0.0453652 )
-script = ExtResource( 7 )
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
 color_index = 25
@@ -694,9 +630,8 @@ ball_no = 60
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball60" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball60" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -2.89441e-05, 0.0873334, 0.0455586 )
-script = ExtResource( 7 )
 ball_size = 8.0
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -705,9 +640,8 @@ ball_no = 61
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball61" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball61" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -3.4537e-05, 0.0877541, 0.0456324 )
-script = ExtResource( 7 )
 ball_size = 4.0
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -716,9 +650,8 @@ ball_no = 62
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball62" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball62" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.00247059, 0.0824118, -0.0655882 )
-script = ExtResource( 7 )
 ball_size = 2.0
 color = Color( 0.82, 0.53, 0.62, 1 )
 color_index = 75
@@ -726,9 +659,8 @@ ball_no = 63
 texture = ExtResource( 13 )
 transparent_color = "1"
 
-[node name="Ball63" type="Spatial" parent="petholder/balls" instance=ExtResource( 1 )]
+[node name="Ball63" parent="petholder/balls" instance=ExtResource( 1 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.00204235, 0.072433, -0.0754118 )
-script = ExtResource( 7 )
 ball_size = 2.0
 color = Color( 0.82, 0.53, 0.62, 1 )
 color_index = 75
@@ -742,774 +674,677 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Line" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -1, 1.2739e-08, 5.41151e-07, 0, 0.011765, -0.780861, -8.66252e-07, -0.0147058, -0.624704, -0.00117648, 0.0852941, -0.0561768 )
-script = ExtResource( 9 )
 line_widths = Vector2( 55, 44.65 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line2" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line2" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.99899, 0.00100001, -0.0253765, 0, -0.0152351, -0.825207, -0.0449277, 0.0222357, -0.56426, -0.000676472, 0.0717941, -0.037706 )
-script = ExtResource( 9 )
 line_widths = Vector2( 51.85, 44.65 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line3" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line3" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.998053, 0.00158827, -0.00129673, 0, -0.000529409, -0.999784, -0.062379, -0.025412, 0.0207474, -0.000970589, 0.0644412, -0.0138825 )
-script = ExtResource( 9 )
 line_widths = Vector2( 57.95, 57.95 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line4" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line4" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.998205, 0.00176474, 0.0117256, 0, 0.00588235, -0.980649, -0.0598929, 0.0294121, 0.195424, -0.000882353, 0.0676471, 0.0135296 )
-script = ExtResource( 9 )
 line_widths = Vector2( 56.7, 57.95 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line5" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line5" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.124015, -0.0141178, -0.0409912, 0, 0.000588248, -0.999146, 0.99228, 0.00176445, 0.00512308, 0.00705882, 0.0702941, 0.0273531 )
-script = ExtResource( 9 )
 line_widths = Vector2( 59.85, 48.45 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line6" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line6" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.296385, 0.0170591, -0.0939015, 0, -0.00176469, -0.995155, -0.955069, 0.00529392, -0.0291403, -0.00852941, 0.0714706, 0.0255884 )
-script = ExtResource( 9 )
 line_widths = Vector2( 59.85, 48.45 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line7" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line7" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.250339, -0.0154707, 0.205482, 0, -0.00347055, -0.977218, 0.968158, 0.00400029, -0.0531319, 0.00755882, 0.0659118, -0.0285884 )
-script = ExtResource( 9 )
 line_widths = Vector2( 57.95, 44.65 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line8" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line8" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.255805, 0.0151177, -0.104833, 0, -0.00170586, -0.994103, -0.966728, 0.00400029, -0.0277397, -0.0077353, 0.0650294, -0.0285884 )
-script = ExtResource( 9 )
 line_widths = Vector2( 57.95, 44.65 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line9" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line9" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 0.0158825, -0.719842, 0, 0.0164706, 0.694138, 0, 0.0785294, 0.0364708 )
-script = ExtResource( 9 )
 line_widths = Vector2( 23, 34.65 )
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line10" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line10" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.999206, 5.86751e-06, -0.0159941, 0, -6.45365e-05, -0.915902, -0.0398456, -0.000147139, 0.401084, -2.94118e-06, 0.086503, 0.0447796 )
-script = ExtResource( 9 )
 line_widths = Vector2( 23, 21 )
 fuzz_amount = 6
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line11" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line11" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.99887, 1.16912e-05, -0.0256795, 0, -0.000157973, -0.841446, -0.0475246, -0.000245726, 0.539731, -1.17353e-05, 0.0866144, 0.044976 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 23 )
 fuzz_amount = 6
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line12" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line12" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.999772, 5.70192e-06, -0.0152989, 0, -0.00027401, -0.697824, -0.0213592, -0.000266893, 0.716105, -2.04416e-05, 0.0868306, 0.0452321 )
-script = ExtResource( 9 )
 line_widths = Vector2( 23, 21 )
 fuzz_amount = 6
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line13" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line13" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.999572, -5.65213e-06, -0.0258807, 0, 0.000365818, -0.46687, 0.029266, 0.000193047, 0.883947, -2.61196e-05, 0.0871505, 0.0454621 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 21 )
 fuzz_amount = 6
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line14" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line14" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.997178, 5.59228e-06, -0.0739282, 0, -0.000420701, -0.174341, -0.075078, -7.4276e-05, 0.981906, -3.17407e-05, 0.0875437, 0.0455957 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 9 )
 fuzz_amount = 6
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line15" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line15" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.738891, 0.00670578, -0.603619, 0, -0.0200588, -0.44444, -0.673825, 0.0073533, -0.661905, 0.0186472, 0.0576177, -0.0269119 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33.25, 44.65 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line16" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line16" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.780927, 0.00211744, -0.617141, 0, -0.0217059, -0.154306, -0.624622, 0.00264731, -0.771574, 0.0230589, 0.0367353, -0.0219119 )
-script = ExtResource( 9 )
 line_widths = Vector2( 23, 28 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line17" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line17" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.799994, -0.00405911, -0.56001, 0, 0.0175881, -0.359, 0.600008, 0.00541204, 0.746665, 0.0261472, 0.0170882, -0.0232942 )
-script = ExtResource( 9 )
 line_widths = Vector2( 18.4, 19.55 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line18" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line18" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.686826, 0.0053532, 0.68479, 0, 0.0207059, -0.335136, -0.726822, -0.00505862, -0.647107, -0.0179707, 0.0555294, -0.028059 )
-script = ExtResource( 9 )
 line_widths = Vector2( 44.65, 33.25 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line19" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line19" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.970158, -0.00052921, 0.241315, 0, -0.0222353, -0.097687, 0.242474, -0.00211741, 0.965518, -0.0209119, 0.0340588, -0.0265884 )
-script = ExtResource( 9 )
 line_widths = Vector2( 23, 28 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line20" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line20" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.813733, 0.00676496, 0.465423, 0, 0.0155586, -0.599008, -0.581239, 0.00947092, 0.651591, -0.0245589, 0.0151618, -0.0323825 )
-script = ExtResource( 9 )
 line_widths = Vector2( 18.4, 19.55 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line21" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line21" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.242505, -0.00894147, -0.900057, 0, 0.0229117, -0.373202, 0.97015, 0.00223507, 0.224984, 0.0185883, 0.0585441, 0.0253531 )
-script = ExtResource( 9 )
 line_widths = Vector2( 48.45, 35.15 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line22" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line22" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.988699, 0.0020292, 0.117824, 0, 0.0172057, -0.618299, -0.149915, -0.0133827, -0.777061, 0.0220442, 0.0384853, 0.0309266 )
-script = ExtResource( 9 )
 line_widths = Vector2( 35.15, 19.95 )
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line23" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line23" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.6807, -0.00275027, -0.71906, 0, 0.0192824, -0.191113, 0.732563, 0.00255556, 0.668153, 0.0224045, 0.0202412, 0.0363399 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19.95, 19.55 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line24" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line24" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.141447, 0.00782383, 0.940388, 0, 0.0240293, -0.312437, -0.989946, -0.0011179, -0.134366, -0.0209707, 0.0603382, 0.0235001 )
-script = ExtResource( 9 )
 line_widths = Vector2( 48.45, 37.05 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line25" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line25" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.998843, 0.000412018, 0.0439318, 0, 0.0192646, -0.406418, -0.0480818, -0.00855918, -0.91263, -0.0250884, 0.0386912, 0.0283384 )
-script = ExtResource( 9 )
 line_widths = Vector2( 37.05, 19.95 )
 fuzz_amount = 3
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line26" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line26" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.944036, 0.00258855, 0.303338, 0, 0.0183765, -0.392744, -0.329841, 0.00740866, 0.868181, -0.0265884, 0.0198706, 0.0289134 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19.95, 19.55 )
 fuzz_amount = 1
 color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line27" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line27" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.228912, -0.00945875, 0.0558901, 0, -0.000558805, -0.99835, 0.973447, 0.00222428, -0.0131429, 0.00921179, 0.109074, -0.0785063 )
-script = ExtResource( 9 )
 line_widths = Vector2( 9, 13 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line28" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line28" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.736371, -0.00564744, -0.485183, 0, 0.00858844, -0.696958, 0.676578, -0.00614653, -0.52806, 0.0167648, 0.105059, -0.0765445 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 15 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line29" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line29" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.222474, 0.00954111, 0.018748, 0, 0.000188226, -0.999815, -0.974939, 0.00217721, 0.00427816, -0.0114942, 0.108241, -0.0780004 )
-script = ExtResource( 9 )
 line_widths = Vector2( 9, 13 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line30" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line30" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.703314, 0.00561806, 0.491364, 0, 0.00755901, -0.722658, -0.71088, -0.00555827, -0.486134, -0.0190736, 0.104368, -0.0763092 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 15 )
 fuzz_amount = 2
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line31" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line31" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.907936, -0.00352987, 0.0579808, 0, -0.00117648, -0.990384, 0.419108, -0.00764694, 0.125607, 0.0364708, 0.00588235, -0.0314708 )
-script = ExtResource( 9 )
 line_widths = Vector2( 14.25, 10.45 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line32" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line32" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.985421, -0.00170622, 0.0109548, 0, -0.000647073, -0.997925, 0.170135, -0.0098824, 0.0634501, 0.0273237, 0.00797059, -0.0309414 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line33" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line33" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.818262, 0.0065294, -0.146798, 0, -0.00300009, -0.966843, -0.574846, -0.00929424, 0.208959, 0.0314414, 0.00679412, -0.0306472 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13.5, 20.7 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line34" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line34" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.16157, 0.0100589, -0.173798, 0, -0.00182359, -0.98437, -0.986861, -0.00164686, 0.0284544, 0.0332061, 0.00738235, -0.0268237 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line35" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line35" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.962196, 0.00264744, -0.0254361, 0, -0.000911793, -0.995629, -0.272359, -0.00935293, 0.0898614, -0.0266178, 0.00692647, -0.0417944 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line36" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line36" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.770487, -0.00676478, 0.123082, 0, -0.00208833, -0.981182, 0.637456, -0.00817652, 0.148768, -0.0313237, 0.00633824, -0.0412061 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13.5, 20.7 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line37" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line37" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.114361, -0.00970601, 0.150761, 0, -0.00150005, -0.988418, 0.993439, -0.00111732, 0.017355, -0.0327943, 0.00663235, -0.0376767 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line38" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line38" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.895185, 0.00376489, -0.15071, 0, -0.00303518, -0.941094, -0.445696, -0.00756181, 0.302703, -0.0260001, 0.00916471, 0.021428 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line39" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line39" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.876775, -0.00447032, 0.122423, 0, -0.00244704, -0.967054, 0.4809, -0.00815026, 0.223201, -0.0301178, 0.00945882, 0.0211339 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13.5, 20.7 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line40" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line40" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.280741, -0.0097647, 0.224454, 0, -0.0024471, -0.972271, 0.959784, -0.00285622, 0.0656538, -0.0327649, 0.00945882, 0.023781 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line41" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line41" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.904235, -0.00377952, 0.110224, 0, -0.0023646, -0.966114, 0.427035, -0.00800302, 0.233397, 0.0218898, 0.00941765, 0.0310604 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line42" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line42" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.887722, 0.0044556, -0.0831154, 0, -0.00177644, -0.983568, -0.46038, -0.00859144, 0.160266, 0.0260075, 0.00971177, 0.0307663 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13.5, 20.7 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line43" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line43" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.320378, 0.00974996, -0.161121, 0, -0.00177649, -0.985429, -0.94729, -0.00329748, 0.0544918, 0.0286546, 0.00971177, 0.0334134 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 23 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line44" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line44" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -1, 1.25567e-08, -2.8078e-07, 0, -0.0100002, -0.894423, -6.27833e-07, -0.0200001, 0.447221, -0.00117648, 0.0861765, -0.0735298 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 55 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line45" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line45" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.998618, -0.0011765, 0.031151, 0, -0.0164709, -0.805443, 0.0525601, -0.022353, 0.591855, -0.000588241, 0.0729412, -0.0705886 )
-script = ExtResource( 9 )
 line_widths = Vector2( 14.45, 33.3 )
 fuzz_amount = 1
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line46" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line46" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.97239, -0.00352928, -0.0917885, 0, 0.00647024, -0.919395, 0.23336, 0.0147062, 0.382475, 0.00058823, 0.0779412, -0.0908828 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 11 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line47" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line47" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.987442, 0.00235287, 0.0629501, 0, 0.00647023, -0.917185, -0.157983, 0.0147062, 0.393459, -0.00235295, 0.0779412, -0.0908828 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 11 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line48" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line48" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 6.61174e-05, -0.0135295, -0.0434368, 0, 0.000588235, -0.999056, 1, 8.94539e-07, 2.87193e-06, -0.000294153, 0.0697059, -0.088824 )
-script = ExtResource( 9 )
 line_widths = Vector2( 14.25, 14.25 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line49" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line49" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.569271, -0.00764703, -0.64493, 0, 0.0117644, -0.6202, 0.82215, 0.00529493, 0.446561, 0.00264705, 0.0752941, -0.0861769 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 15 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line50" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line50" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.669022, 0.00588232, 0.606557, 0, 0.0111762, -0.577917, -0.743243, 0.00529491, 0.545986, -0.00411765, 0.0755882, -0.0861769 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 15 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line51" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line51" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.811519, -0.0105887, -0.0566374, 0, 0.00176476, -0.995291, 0.584326, -0.0147057, -0.0786586, 0.00411764, 0.0802941, -0.0761769 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 33 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line52" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line52" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.796146, 0.011177, 0.0575505, 0, 0.00176476, -0.995467, -0.605105, -0.0147057, -0.07572, -0.00676471, 0.0802941, -0.0761769 )
-script = ExtResource( 9 )
 line_widths = Vector2( 21, 33 )
 fuzz_amount = 1
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line53" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line53" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.98936, -0.00294116, -0.0855854, 0, 0.0147055, -0.808674, 0.14549, 0.0200005, 0.581998, 0.00147059, 0.0738235, -0.0694121 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33.3, 13 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line54" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line54" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.959368, 0.00588232, 0.162639, 0, 0.0147055, -0.81716, -0.282159, 0.0200005, 0.55299, -0.00294118, 0.0738235, -0.0694121 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33.3, 13 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line55" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line55" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.496269, 0.00411738, 0.302743, 0, 0.00176458, -0.937229, -0.868169, 0.0023536, 0.173056, 0.000882368, 0.0655883, -0.0805886 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 17 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line56" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line56" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.44734, -0.00470563, -0.284389, 0, 0.00176461, -0.948098, 0.894364, 0.00235364, 0.142244, -0.00352944, 0.0655883, -0.0805886 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 17 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line57" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line57" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 1, 1.18742e-08, -6.68722e-06, 0, -0.0164705, -0.106584, -6.72554e-06, 0.00176555, -0.994304, -0.00117648, 0.0729412, -0.0826475 )
-script = ExtResource( 9 )
 line_widths = Vector2( 0, 21 )
 color = Color( 0, 0, 0, 1 )
 r_color = Color( 0.36, 0.36, 0.36, 1 )
 l_color = Color( 0.36, 0.36, 0.36, 1 )
 
-[node name="Line58" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line58" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.989361, 0.00294104, 0.0645043, 0, 0.00999966, -0.896336, -0.145485, 0.0200004, 0.438659, 0.00794122, 0.0744118, -0.0788239 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33, 10.5 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line59" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line59" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.8533, 0.00647046, 0.376347, 0, 0.0129408, -0.692128, -0.52142, 0.0105889, 0.61589, 0.00617652, 0.0729412, -0.074118 )
-script = ExtResource( 9 )
 line_widths = Vector2( 31.35, 12.35 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line60" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line60" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.853301, -0.00647044, -0.376346, 0, 0.0129408, -0.692128, 0.521418, 0.0105889, 0.615891, -0.00911771, 0.0729412, -0.074118 )
-script = ExtResource( 9 )
 line_widths = Vector2( 31.35, 12.35 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line61" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line61" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -1, 1.21595e-08, -1.00395e-13, 0, -2.31416e-10, -1, -2.29676e-06, -0.00529417, 4.37114e-08, -0.00117648, 0.0647059, -0.0791181 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 13 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line62" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line62" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.99763, -0.00117651, 0.0477332, 0, -0.0164709, -0.720216, 0.0688046, -0.0170587, 0.692106, -0.000588241, 0.0729412, -0.0679416 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 33.3 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line63" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line63" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.882786, -0.000815772, 0.439028, 0, -0.00456062, -0.35584, 0.469776, 0.00153297, -0.825005, 0.00287848, 0.0846922, -0.0663548 )
-script = ExtResource( 9 )
 line_widths = Vector2( 5, 5 )
 color = Color( 0.82, 0.53, 0.62, 1 )
 
-[node name="Line64" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line64" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.988933, 0.00124396, 0.128523, 0, 0.0145393, -0.499567, -0.148363, 0.00829182, 0.856688, 0.00266437, 0.0797028, -0.0712665 )
-script = ExtResource( 9 )
 line_widths = Vector2( 5, 5 )
 color = Color( 0.82, 0.53, 0.62, 1 )
 
-[node name="Line65" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line65" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.164292, 0.00705902, 0.0808093, 0, 0.000588236, -0.996639, -0.986412, -0.00117571, -0.0134592, 0.00647064, 0.0667647, -0.0800004 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 13 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line66" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line66" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.164292, -0.00705902, -0.0808095, 0, 0.000588238, -0.996639, 0.986412, -0.00117572, -0.0134593, -0.00941183, 0.0667647, -0.0800004 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 13 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line67" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line67" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.773977, 0.0105881, 0.418172, 0, 0.0147056, -0.750917, -0.633214, 0.0129419, 0.511132, 0.00411769, 0.0720588, -0.0752945 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33, 17 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line68" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line68" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.966709, -0.00529392, -0.105951, 0, 0.00941145, -0.910246, 0.255879, 0.0200004, 0.400284, -0.00970594, 0.0747059, -0.0788239 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33, 10.5 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line69" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line69" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.756844, -0.0111763, -0.426166, 0, 0.0147056, -0.75819, 0.653596, 0.0129419, 0.493487, -0.00676477, 0.0720588, -0.0752945 )
-script = ExtResource( 9 )
 line_widths = Vector2( 33, 17 )
 color = Color( 0.78, 0.76, 0.73, 1 )
 r_color = Color( 0.78, 0.76, 0.73, 1 )
 l_color = Color( 0.78, 0.76, 0.73, 1 )
 
-[node name="Line70" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line70" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.919127, -0.0035298, -0.100072, 0, 0.00235311, -0.9672, 0.393961, -0.00823517, -0.233473, 0.00823533, 0.0682353, -0.0847063 )
-script = ExtResource( 9 )
 line_widths = Vector2( 14.25, 18.05 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line71" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line71" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.8137, 0.00588285, 0.162227, 0, 0.00294131, -0.960267, -0.581284, -0.008235, -0.22709, -0.01, 0.0685294, -0.0847063 )
-script = ExtResource( 9 )
 line_widths = Vector2( 14.25, 18.05 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line72" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line72" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.0652508, -0.00720592, -0.0769876, 0, 0.000558804, -0.997019, 0.997869, 0.000471196, 0.00503423, 0.0163971, 0.102632, -0.0615297 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line73" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line73" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.868218, -0.00470628, -0.311432, 0, 0.00764722, -0.778491, 0.496183, -0.00823502, -0.544942, 0.022353, 0.0985294, -0.0576474 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 15 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line74" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line74" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.19974, 0.00779409, 0.136331, 0, 0.0011176, -0.990273, -0.979849, 0.0015888, 0.0277907, -0.0190442, 0.102912, -0.0609709 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line75" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line75" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.851628, 0.00470628, 0.399763, 0, 0.0105884, -0.646761, -0.524147, -0.00764671, -0.64953, -0.0252942, 0.0970588, -0.0579415 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line76" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line76" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.682332, -0.00882353, -0.293638, 0, 0.00529391, -0.915784, 0.731043, 0.0082356, 0.274073, 0.0202942, 0.097353, -0.049412 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 15 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line77" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line77" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.970142, -0.00411774, 0.033294, 0, -0.00235285, -0.990533, 0.242538, 0.0164708, -0.133174, 0.0179413, 0.101176, -0.0535296 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line78" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line78" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.707166, -0.00176496, -0.683418, 0, 0.00941162, -0.256365, 0.707048, 0.00176525, 0.683532, 0.0255884, 0.09, -0.054412 )
-script = ExtResource( 9 )
 line_widths = Vector2( 15, 7 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line79" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line79" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.707096, -0.00823545, 0.292627, 0, -0.00529429, -0.910354, 0.707118, -0.00823519, 0.292618, -0.0235296, 0.0944118, -0.0500003 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 11 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line80" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line80" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.976186, 0.00352955, -0.0671225, 0, -0.00529392, -0.950928, -0.216936, 0.0158826, -0.302044, -0.0211766, 0.0997059, -0.0538238 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line81" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line81" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.686634, -0.0105884, -0.516541, 0, 0.0147056, -0.703689, 0.727003, 0.0100005, 0.487859, 0.0211766, 0.0926471, -0.0502944 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 7 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line82" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line82" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.686634, 0.0105884, 0.516541, 0, 0.0147056, -0.70369, -0.727004, 0.0100005, 0.487858, -0.024706, 0.0897059, -0.0508826 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 7 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line83" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line83" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.600072, 0.00235322, 0.763518, 0, 0.0094116, -0.298331, -0.799946, 0.00176525, 0.572746, -0.0288237, 0.0870588, -0.0550003 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 7 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line84" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line84" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.759262, -0.0141177, 0.0701731, 0, -0.00235287, -0.99417, 0.650785, 0.0164709, -0.0818699, 0.0229413, 0.101176, -0.0535296 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line85" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line85" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.747415, 0.0141177, -0.1606, 0, -0.00529396, -0.970342, -0.664358, 0.0158827, -0.180678, -0.0264707, 0.0997059, -0.0538238 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line86" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line86" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.98188, 0.00308803, -0.0333322, 0, -0.00291166, -0.984409, -0.189502, 0.0160002, -0.172706, 0.0143383, 0.101456, -0.0532943 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 17 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line87" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line87" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.958265, -0.00426447, 0.11289, 0, -0.00641157, -0.91873, 0.28588, 0.0142944, -0.378405, -0.0172795, 0.100265, -0.0530296 )
-script = ExtResource( 9 )
 line_widths = Vector2( 11, 17 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line88" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line88" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.707151, 0.00647041, -0.623071, 0, -0.0170587, -0.472724, -0.707062, 0.00647122, -0.623149, 0.0232354, 0.0938235, -0.0585297 )
-script = ExtResource( 9 )
 line_widths = Vector2( 7, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line89" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line89" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.640236, -0.00705863, 0.69803, 0, -0.0199999, -0.417487, 0.768178, 0.005883, -0.581772, -0.0264707, 0.0923529, -0.0588238 )
-script = ExtResource( 9 )
 line_widths = Vector2( 7, 19 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line90" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line90" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.0273757, -0.017206, -0.0324363, 0, 0.000558814, -0.999473, 0.999625, 0.000471204, 0.0008883, 0.0213971, 0.102632, -0.0615297 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line91" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line91" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.0861113, 0.0183825, 0.0602371, 0, 0.00111762, -0.99817, -0.996285, 0.00158884, 0.00520643, -0.0243383, 0.102912, -0.0609709 )
-script = ExtResource( 9 )
 line_widths = Vector2( 17, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line92" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line92" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 6.18259e-05, -0.0100001, 4.37114e-08, 0, -4.37118e-10, -1, 1, 6.18265e-07, -2.7025e-12, 0.0250001, 0.102353, -0.061765 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line93" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line93" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 5.84881e-05, 0.0105883, -4.37114e-08, 0, -4.62831e-10, -1, -1, 6.19291e-07, -2.55659e-12, -0.0282354, 0.102353, -0.061765 )
-script = ExtResource( 9 )
 line_widths = Vector2( 19, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line94" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line94" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.841183, -0.00529424, 0.332852, 0, -0.00764672, -0.788108, 0.54075, 0.00823564, -0.517779, 0.0273531, 0.0985294, -0.0576473 )
-script = ExtResource( 9 )
 line_widths = Vector2( 15, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line95" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line95" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( 0.792631, 0.00588255, -0.450657, 0, -0.0105879, -0.673548, -0.609701, 0.00764751, -0.585868, -0.0305884, 0.0970588, -0.0579415 )
-script = ExtResource( 9 )
 line_widths = Vector2( 13, 13 )
 color = Color( 0.76, 0.75, 0.71, 1 )
 r_color = Color( 0.76, 0.75, 0.71, 1 )
 l_color = Color( 0.76, 0.75, 0.71, 1 )
 
-[node name="Line96" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line96" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.157946, -0.0139708, 0.630401, 0, -0.0117353, -0.769693, 0.987448, -0.00223469, 0.100835, 0.00580882, 0.0970441, -0.0624121 )
-script = ExtResource( 9 )
 line_widths = Vector2( 55, 17 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
 l_color = Color( 0.83, 0.81, 0.78, 1 )
 
-[node name="Line97" type="Spatial" parent="petholder/lines" instance=ExtResource( 6 )]
+[node name="Line97" parent="petholder/lines" instance=ExtResource( 6 )]
 transform = Transform( -0.233331, 0.0139709, -0.63221, 0, -0.0122941, -0.759801, -0.972398, -0.00335236, 0.151701, -0.00816177, 0.0973235, -0.0618533 )
-script = ExtResource( 9 )
 line_widths = Vector2( 55, 17 )
 color = Color( 0.83, 0.81, 0.78, 1 )
 r_color = Color( 0.83, 0.81, 0.78, 1 )
@@ -1523,9 +1358,8 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Paintball" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.0264706, 0.000147059, -0.0336324 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0264706, 0.00764706, -0.0358824 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1533,9 +1367,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 9
 
-[node name="Paintball2" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball2" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0.0347059, -0.00370588, -0.0325941 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0347059, 0.00529412, -0.0352941 )
 base_ball_size = 9.0
 ball_size = 3.0
@@ -1543,9 +1376,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 10
 
-[node name="Paintball3" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball3" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.0382353, -0.00102941, -0.0253971 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0382353, 0.00647059, -0.0276471 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1553,9 +1385,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 11
 
-[node name="Paintball4" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball4" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.0281765, -0.00520588, -0.026 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0281765, 0.00829412, -0.026 )
 base_ball_size = 13.5
 ball_size = 6.0
@@ -1563,9 +1394,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 13
 
-[node name="Paintball5" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball5" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.0252941, -0.00102941, -0.0442206 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0252941, 0.00647059, -0.0464706 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1573,9 +1403,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 33
 
-[node name="Paintball6" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball6" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0347059, -0.00370588, -0.0425941 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0347059, 0.00529412, -0.0452941 )
 base_ball_size = 9.0
 ball_size = 3.0
@@ -1583,9 +1412,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 34
 
-[node name="Paintball7" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball7" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.0376471, -0.00161765, -0.0359853 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0376471, 0.00588235, -0.0382353 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1593,9 +1421,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 35
 
-[node name="Paintball8" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball8" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0279412, -0.00611765, -0.0371177 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0279412, 0.00738235, -0.0371177 )
 base_ball_size = 13.5
 ball_size = 6.0
@@ -1603,9 +1430,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 37
 
-[node name="Paintball9" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball9" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.0241176, 0.000147059, 0.0198971 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0241176, 0.00764706, 0.0176471 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1613,9 +1439,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 44
 
-[node name="Paintball10" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball10" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.0323529, -0.00126471, 0.0199088 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0323529, 0.00823529, 0.0170588 )
 base_ball_size = 9.5
 ball_size = 3.0
@@ -1623,9 +1448,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 45
 
-[node name="Paintball11" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball11" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -0.0376471, 0.000735294, 0.0246029 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0376471, 0.00823529, 0.0223529 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1633,9 +1457,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 46
 
-[node name="Paintball12" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball12" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0278824, -0.00231765, 0.0252088 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.0278824, 0.0106824, 0.0252088 )
 base_ball_size = 13.0
 ball_size = 6.0
@@ -1643,9 +1466,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 36
 
-[node name="Paintball13" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball13" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.02, 0.000735294, 0.0293088 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.02, 0.00823529, 0.0270588 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1653,9 +1475,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 20
 
-[node name="Paintball14" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball14" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0.0282353, -0.00067647, 0.0293206 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0282353, 0.00882353, 0.0264706 )
 base_ball_size = 9.5
 ball_size = 3.0
@@ -1663,9 +1484,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 21
 
-[node name="Paintball15" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball15" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.0335294, 0.00132353, 0.0340147 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0335294, 0.00882353, 0.0317647 )
 base_ball_size = 7.5
 ball_size = 2.0
@@ -1673,9 +1493,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 22
 
-[node name="Paintball16" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball16" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.0237794, -0.0024, 0.0350618 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( 0.0237794, 0.0106, 0.0350618 )
 base_ball_size = 13.0
 ball_size = 6.0
@@ -1683,9 +1502,8 @@ color = Color( 0, 0, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 base_ball_no = 12
 
-[node name="Paintball17" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball17" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -0.000176471, 0.0869265, 0.00591177 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.000176471, 0.0641765, -0.0265882 )
 base_ball_size = 32.5
 ball_size = 18.0
@@ -1694,9 +1512,8 @@ color = Color( 0.36, 0.36, 0.36, 1 )
 outline_color = Color( 0.83, 0.81, 0.78, 1 )
 base_ball_no = 50
 
-[node name="Paintball18" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball18" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -0.000176471, 0.0414265, 0.00591177 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.000176471, 0.0641765, -0.0265882 )
 base_ball_size = 32.5
 ball_size = 18.0
@@ -1706,9 +1523,8 @@ outline_color = Color( 0.83, 0.81, 0.78, 1 )
 z_add = 1e-07
 base_ball_no = 50
 
-[node name="Paintball19" type="Spatial" parent="petholder/paintballs" instance=ExtResource( 10 )]
+[node name="Paintball19" parent="petholder/paintballs" instance=ExtResource( 10 )]
 transform = Transform( 0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -0.000176471, 0.0641765, 0.00591177 )
-script = ExtResource( 4 )
 base_ball_position = Vector3( -0.000176471, 0.0641765, -0.0265882 )
 base_ball_size = 32.5
 ball_size = 18.0
@@ -1724,118 +1540,106 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Ball" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0, 0.0717647, -0.152941 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.38, 0.18, 0.09, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 67
 base_ball_no = 48
 
-[node name="Ball2" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball2" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.0135294, 0.0170588, -0.12 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.61, 0.35, 0.04, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 68
 base_ball_no = 33
 
-[node name="Ball3" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball3" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.00176471, 0.0647059, -0.136471 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.82, 0.53, 0.62, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 69
 base_ball_no = 48
 
-[node name="Ball4" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball4" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0.00411765, -0.0182353, -0.0817647 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.57, 0.14, 0, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 70
 base_ball_no = 33
 
-[node name="Ball5" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball5" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0.00152941, -0.0116706, 0.172268 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.32, 0.18, 0.04, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 71
 base_ball_no = 36
 
-[node name="Ball6" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball6" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.00176471, 0.0176471, -0.00117647 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.58, 0.45, 0.21, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 72
 base_ball_no = 48
 
-[node name="Ball7" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball7" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0.00411765, -0.0829412, -0.0935294 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.29, 0.31, 0.36, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 73
 base_ball_no = 33
 
-[node name="Ball8" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball8" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.00176471, 0.0647059, -0.00117647 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.83, 0.81, 0.78, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 74
 base_ball_no = 48
 
-[node name="Ball9" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball9" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.00176471, 0.0647059, -0.00117647 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.83, 0.81, 0.78, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 75
 base_ball_no = 48
 
-[node name="Ball10" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball10" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, -0.00176471, 0.0647059, -0.00117647 )
 visible = false
-script = ExtResource( 7 )
 ball_size = 15.0
 color = Color( 0.83, 0.81, 0.78, 1 )
 outline_color = Color( 1, 1, 1, 1 )
 ball_no = 76
 base_ball_no = 48
 
-[node name="Ball11" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball11" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.00328635, 0.0869726, -0.0671206 )
-script = ExtResource( 7 )
 ball_size = 2.0
 color = Color( 0.82, 0.53, 0.62, 1 )
 outline_color = null
 ball_no = 77
 base_ball_no = 63
 
-[node name="Ball12" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball12" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.00941177, 0.0794118, -0.0688235 )
-script = ExtResource( 7 )
 ball_size = 16.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1843,9 +1647,8 @@ outline_color = null
 ball_no = 78
 base_ball_no = 51
 
-[node name="Ball13" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball13" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.0123529, 0.0794118, -0.0688235 )
-script = ExtResource( 7 )
 ball_size = 16.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1853,9 +1656,8 @@ outline_color = null
 ball_no = 79
 base_ball_no = 51
 
-[node name="Ball14" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball14" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.00294118, 0.0664706, -0.0794118 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1863,9 +1665,8 @@ outline_color = Color( 0.44, 0.44, 0.44, 1 )
 ball_no = 80
 base_ball_no = 51
 
-[node name="Ball15" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball15" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.00588235, 0.0664706, -0.0794118 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1873,9 +1674,8 @@ outline_color = Color( 0.44, 0.44, 0.44, 1 )
 ball_no = 81
 base_ball_no = 51
 
-[node name="Ball16" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball16" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, 0.0158824, 0.1, -0.0452941 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1883,9 +1683,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 82
 base_ball_no = 4
 
-[node name="Ball17" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball17" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.125, 0, 0, 0, 0.125, 0, 0, 0, 0.125, -0.0194118, 0.0970588, -0.0458824 )
-script = ExtResource( 7 )
 ball_size = 5.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1893,9 +1692,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 83
 base_ball_no = 28
 
-[node name="Ball18" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball18" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, 0.0264706, 0.0852941, -0.0552941 )
-script = ExtResource( 7 )
 ball_size = 3.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1903,9 +1701,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 84
 base_ball_no = 4
 
-[node name="Ball19" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball19" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.075, 0, 0, 0, 0.075, 0, 0, 0, 0.075, -0.03, 0.0823529, -0.0558824 )
-script = ExtResource( 7 )
 ball_size = 3.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1913,9 +1710,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 85
 base_ball_no = 28
 
-[node name="Ball20" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball20" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.03, 0.102353, -0.0617647 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1923,9 +1719,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 86
 base_ball_no = 5
 
-[node name="Ball21" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball21" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0335294, 0.102353, -0.0617647 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.76, 0.75, 0.71, 1 )
@@ -1933,9 +1728,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 87
 base_ball_no = 29
 
-[node name="Ball22" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball22" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.00117647, 0.0647059, -0.0764706 )
-script = ExtResource( 7 )
 ball_size = 6.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1943,9 +1737,8 @@ outline_color = Color( 0.44, 0.44, 0.44, 1 )
 ball_no = 88
 base_ball_no = 51
 
-[node name="Ball23" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball23" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.00764706, 0.0764706, -0.0805882 )
-script = ExtResource( 7 )
 ball_size = 12.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1953,9 +1746,8 @@ outline_color = Color( 0.38, 0.38, 0.38, 1 )
 ball_no = 89
 base_ball_no = 15
 
-[node name="Ball24" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball24" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -0.00882353, 0.0770588, -0.0805882 )
-script = ExtResource( 7 )
 ball_size = 12.0
 fuzz_amount = 2
 color = Color( 0.78, 0.76, 0.73, 1 )
@@ -1963,9 +1755,8 @@ outline_color = Color( 0.38, 0.38, 0.38, 1 )
 ball_no = 90
 base_ball_no = 39
 
-[node name="Ball25" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball25" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0.0237794, 0.0200118, 0.0374147 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -1973,9 +1764,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 91
 base_ball_no = 12
 
-[node name="Ball26" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball26" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, -0.0278824, 0.0200941, 0.0275618 )
-script = ExtResource( 7 )
 ball_size = 11.0
 fuzz_amount = 2
 color = Color( 0.36, 0.36, 0.36, 1 )
@@ -1983,9 +1773,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 92
 base_ball_no = 36
 
-[node name="Ball27" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball27" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.225, 0, 0, 0, 0.225, 0, 0, 0, 0.225, 0.01, 0.0670588, -0.0805882 )
-script = ExtResource( 7 )
 ball_size = 9.0
 fuzz_amount = 2
 outline = -2
@@ -1994,9 +1783,8 @@ outline_color = Color( 1, 1, 1, 1 )
 ball_no = 93
 base_ball_no = 56
 
-[node name="Ball28" type="Spatial" parent="petholder/addballs" instance=ExtResource( 1 )]
+[node name="Ball28" parent="petholder/addballs" instance=ExtResource( 1 )]
 transform = Transform( 0.225, 0, 0, 0, 0.225, 0, 0, 0, 0.225, -0.0129412, 0.0670588, -0.0805882 )
-script = ExtResource( 7 )
 ball_size = 9.0
 fuzz_amount = 2
 outline = 0
@@ -2139,7 +1927,7 @@ __meta__ = {
 [connection signal="value_changed" from="VBoxContainer/HSlider3" to="petholder" method="_on_HSlider3_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Button" to="VBoxContainer/OptionButton" method="_on_Button_pressed"]
 [connection signal="file_saved" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_file_saved"]
-[connection signal="file_selected" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_file_selected"]
 [connection signal="file_selected" from="VBoxContainer/OptionButton" to="TextEdit" method="_on_OptionButton_file_selected"]
+[connection signal="file_selected" from="VBoxContainer/OptionButton" to="Node" method="_on_OptionButton_file_selected"]
 [connection signal="item_selected" from="VBoxContainer/OptionButton" to="VBoxContainer/OptionButton" method="_on_OptionButton_item_selected"]
 [connection signal="file_saved" from="TextEdit" to="VBoxContainer/OptionButton" method="_on_TextEdit_file_saved"]

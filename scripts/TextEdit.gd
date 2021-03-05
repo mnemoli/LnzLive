@@ -6,12 +6,12 @@ signal file_saved
 func open_file(file_name):
 	current_file_name = file_name
 	var file = File.new()
-	file.open("resources/" + current_file_name, File.READ)
+	file.open("res://resources/" + current_file_name, File.READ)
 	text = file.get_as_text()
 
 func save_file():
 	var file = File.new()
-	file.open("resources/" + current_file_name, File.WRITE)
+	file.open("res://resources/" + current_file_name, File.WRITE)
 	file.store_string(text)
 
 func _unhandled_key_input(event):
