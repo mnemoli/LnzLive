@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
 [ext_resource path="res://scenes/dog_generator.gd" type="Script" id=3]
+[ext_resource path="res://scenes/editor/PetViewContainer.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0.501961, 0.501961, 1 )
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("PetRoot/petholder/Viewport")
 
 [node name="Root" type="Node"]
 
@@ -21,37 +28,48 @@ script = ExtResource( 3 )
 
 [node name="lines" type="Spatial" parent="PetRoot/petholder"]
 
+[node name="Viewport" type="Viewport" parent="PetRoot/petholder"]
+size = Vector2( 1000, 1000 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="CameraHolder" type="Spatial" parent="PetRoot/petholder/Viewport"]
+
+[node name="Camera" type="Camera" parent="PetRoot/petholder/Viewport/CameraHolder"]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
+keep_aspect = 0
+projection = 1
+
 [node name="SceneRoot" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -984.0
-margin_bottom = -728.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot"]
-margin_right = 1029.0
-margin_bottom = 773.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer"]
-margin_right = 337.0
-margin_bottom = 773.0
+margin_right = 335.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="SceneRoot/HSplitContainer/VBoxContainer"]
-margin_right = 337.0
+margin_right = 335.0
 margin_bottom = 20.0
 text = "Add"
 
 [node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer"]
 margin_top = 24.0
-margin_right = 337.0
-margin_bottom = 773.0
+margin_right = 335.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 hide_root = true
@@ -61,42 +79,43 @@ __meta__ = {
 }
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
-margin_left = 349.0
-margin_right = 1029.0
-margin_bottom = 773.0
+margin_left = 347.0
+margin_right = 1024.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Panel2" type="ViewportContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_right = 468.0
-margin_bottom = 773.0
-size_flags_horizontal = 7
-size_flags_vertical = 7
-stretch = true
+[node name="PetViewContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
+margin_right = 465.0
+margin_bottom = 768.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+script = ExtResource( 4 )
 
-[node name="Viewport" type="Viewport" parent="SceneRoot/HSplitContainer/HSplitContainer/Panel2"]
-size = Vector2( 468, 773 )
-handle_input_locally = false
-render_target_update_mode = 3
+[node name="TextureRect" type="TextureRect" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
+margin_right = 465.0
+margin_bottom = 768.0
+texture = SubResource( 1 )
+expand = true
+stretch_mode = 4
+flip_v = true
 
-[node name="Camera" type="Camera" parent="SceneRoot/HSplitContainer/HSplitContainer/Panel2/Viewport"]
-transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
-projection = 1
-
-[node name="PanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_left = 480.0
-margin_right = 680.0
-margin_bottom = 773.0
+[node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
+margin_left = 477.0
+margin_right = 677.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 13
 size_flags_vertical = 3
 
-[node name="LnzTextEdit" type="TextEdit" parent="SceneRoot/HSplitContainer/HSplitContainer/PanelContainer"]
+[node name="LnzTextEdit" type="TextEdit" parent="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 193.0
-margin_bottom = 766.0
+margin_bottom = 761.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
@@ -104,10 +123,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/PanelContainer/LnzTextEdit" method="_on_example_file_selected"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/PanelContainer/LnzTextEdit" method="_on_user_file_selected"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/PanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/PanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
