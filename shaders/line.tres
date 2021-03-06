@@ -14,6 +14,8 @@ uniform vec4 l_color : hint_color = vec4(vec3(0.0), 1.0);
 varying flat vec2 center_of_line;
 varying float right_boundary;
 varying float left_boundary;
+uniform vec3 ball_world_pos1 = vec3(0.0);
+uniform vec3 ball_world_pos2 = vec3(0.0);
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
@@ -121,7 +123,14 @@ void vertex() {
 	// Pad the offset for later
 	offset *= 2.0;
 	
-	VERTEX = vec3(vert_in_ndc_space, vert_in_clip_space.z + 0.0001) + offset;
+	float z_pos = vert_in_clip_space.z + 0.001;
+	// Find the minimum z for this line
+	if (!(ball_world_pos1 == vec3(0.0) && ball_world_pos2 == vec3(0.0))) {
+		vec4 ball_screen_pos1 = PROJECTION_MATRIX * INV_CAMERA_MATRIX * vec4(ball_world_pos1, 1.0);
+		vec4 ball_screen_pos2 = PROJECTION_MATRIX * INV_CAMERA_MATRIX * vec4(ball_world_pos2, 1.0);
+		z_pos = max(ball_screen_pos1.z + 0.0001, ball_screen_pos2.z + 0.0001);
+	}
+	VERTEX = vec3(vert_in_ndc_space, z_pos) + offset;
 	
 	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
 	vec4 center_view = projection * vec4(vec3(0.0), 1.0);
@@ -159,3 +168,5 @@ shader_param/line_width_in_pixels_end = 20
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/r_color = Color( 0, 0, 0, 1 )
 shader_param/l_color = Color( 0, 0, 0, 1 )
+shader_param/ball_world_pos1 = Vector3( 0, 0, 0 )
+shader_param/ball_world_pos2 = Vector3( 0, 0, 0 )

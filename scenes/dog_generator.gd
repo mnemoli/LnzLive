@@ -469,6 +469,16 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		ab_parent.add_child(visual_ball)
 		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
+		if ball.texture_id > -1:
+			var tex_info = texture_list[ball.texture_id]
+			var texture_filename = tex_info.filename
+			var transparent_color = tex_info.transparent_color
+			var texture = load("res://resources/textures/"+texture_filename)
+			visual_ball.texture = texture
+			visual_ball.transparent_color = transparent_color
+		else:
+			visual_ball.transparent_color = ball.color
+		visual_ball.color_index = ball.color_index
 		visual_ball.visible = true
 		if !draw_addballs:
 			visual_ball.visible = false
@@ -552,6 +562,8 @@ func generate_lines(line_data: Array):
 			visual_line.l_color = start.color
 		else:
 			visual_line.l_color = line.l_color
+		visual_line.ball_world_pos1 = start_pos
+		visual_line.ball_world_pos2 = target_pos
 		visual_line.fuzz_amount = line.fuzz
 		var final_line_width = Vector2(start.ball_size * 2 + 1, end.ball_size * 2 + 1)
 		final_line_width = final_line_width * (Vector2(line.s_thick, line.e_thick) / 100)

@@ -59,3 +59,17 @@ func scan_local_storage(selected_filepath):
 				new_item.select(0)
 		filename = dir2.get_next()
 	dir2.list_dir_end()
+
+
+func _on_Tree_item_rmb_selected(position):
+	var item = get_selected() as TreeItem
+	$ItemPopupMenu.rect_global_position = position
+	$ItemPopupMenu.show()
+	
+func _on_ItemPopupMenu_id_pressed(id):
+	if id == 0: # delete file
+		var item = get_selected() as TreeItem
+		var filepath = item.get_metadata(0)
+		var dir = Directory.new()
+		dir.remove(filepath)
+		rescan(null)

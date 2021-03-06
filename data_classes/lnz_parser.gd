@@ -479,7 +479,7 @@ func get_addballs(file: File):
 		var color = color_chart.get(line.color)
 		var outline_color = color_chart.get(line.outline_color)
 		var pos = Vector3(line.x, line.y, line.z)
-		var ball = AddBallData.new(line.base, max_ball_num, line.size, pos, color, outline_color, line.outline, line.fuzz, 0, line.group, line.body_area)
+		var ball = AddBallData.new(line.base, max_ball_num, line.size, pos, color, line.color, outline_color, line.outline, line.fuzz, 0, line.group, line.body_area, line.texture)
 		addballs[max_ball_num] = ball
 		max_ball_num += 1
 		
