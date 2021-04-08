@@ -19,6 +19,7 @@ uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
 varying flat vec2 center_fragcoord;
+varying flat vec4 center_view;
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
@@ -45,7 +46,6 @@ void fragment() {
   // pixel perfect scaling
   c = floor(c / inverse_camera_scale) * inverse_camera_scale;
   st = floor(st / inverse_camera_scale) * inverse_camera_scale;
-  st -= offset_dist;
   
   // FUZZING
   // Find random number based on y-pixel, offset to center of ball
@@ -71,32 +71,32 @@ void fragment() {
     // one sided outline
     st2.x -= 1.0 * inverse_camera_scale;
     vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
 	modified_outline = 0;
   } else if (outline == -2) {
     // one sided outline
     st2.x += 1.0 * inverse_camera_scale;
     vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
 	modified_outline = 0;
   } else if (outline == -1) {
     pct2 = 0.0;
     modified_outline = 0;
   } else if (outline > 1) {
     vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
 	modified_outline -= 1;
   } else if (outline == 1) {
     // dotted outline
 	float side = sign(st2.x - c.x);
     vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
     modified_outline = 0;
 	st.x += 1.0 * inverse_camera_scale * side;
   } else if (outline == -3) {
 	// nose, need to do special here
 	vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
 	modified_outline = 3;
   } else if (outline < -1) {
 	// use as debug for now
@@ -105,7 +105,7 @@ void fragment() {
 	st2.x -= 1.0 * inverse_camera_scale * side;
 	st2.y -= 1.0 * inverse_camera_scale * side2;
     vec2 vec = st2 - c;
-    pct2 = step(floor(length(vec)), float(ball_size) * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
     modified_outline = 0;
   }
   
@@ -113,7 +113,7 @@ void fragment() {
   vec2 vector_from_center = st - c;
   // Draw a circle.
   // Base ball size gives exact pixel size at camera scale 1.
-  float pct = step(floor(length(vector_from_center)), (float(ball_size) - float(modified_outline)) * inverse_camera_scale);
+  float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)) * inverse_camera_scale);
 
   if(outline != -1)	
  	 pct2 -= pct;
@@ -150,20 +150,20 @@ void fragment() {
 void vertex() {
 	// Billboard and retain scaling
 	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
-//	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
 	
 	// Find the original position of the vertex
 	vec3 vert_in_clip_space = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	
 	vec4 center_clip_space = MODELVIEW_MATRIX * vec4(vec3(0.0), 1.0);
 	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
-	vec4 center_view = PROJECTION_MATRIX * center_clip_space;
+	center_view = PROJECTION_MATRIX * center_clip_space;
 	vec2 center_ndc = (center_view.xy + 1.0) / 2.0;
-	// Must be an exact pixel coordinate or you get strange pixel effects
-	center_fragcoord = floor(center_ndc * VIEWPORT_SIZE);
+
+	center_fragcoord = floor(center_ndc * VIEWPORT_SIZE) + 0.5;
 	
-	vert_in_clip_space.z += z_add * 100.0;
-	float b = float(ball_size + fuzz_amount + 3) / VIEWPORT_SIZE.x;
+	vert_in_clip_space.z = center_clip_space.z;
+	vert_in_clip_space.z += z_add * 0.001;
+	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / VIEWPORT_SIZE.x;
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);
 	
@@ -174,11 +174,11 @@ void vertex() {
 resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/fuzz_amount = 0
-shader_param/ball_size = 10
+shader_param/ball_size = 11
 shader_param/outline = -1
 shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
-shader_param/outline_color = Color( 0, 0, 0, 1 )
+shader_param/outline_color = Color( 0, 1, 0.552941, 1 )
 shader_param/z_add = 0.0
 shader_param/transparent_index = 0
 shader_param/palette = ExtResource( 1 )

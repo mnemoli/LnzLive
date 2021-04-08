@@ -8,6 +8,8 @@ var balls = []
 var lines = []
 
 var ball_map = {}
+var paintball_map = {}
+var lines_map = {}
 
 var legs_dog = [
 	[0, 12, 16, 20, 21, 22, 24, 36, 44, 45, 46], # back legs
@@ -35,170 +37,100 @@ var foot_ext_cat = [
 	[ 41, 49, 50, 51 ],
 	[ 42, 52, 53, 54 ]
 ]
-var ear_ext_dog = [ 5, 6, 29, 30 ]
-var ear_ext_cat = [ 8, 9, 10, 11  ]
+var ear_ext_dog = { 4: [5, 6], 28: [29, 30] }
+var ear_ext_cat = { 8: [9], 10: [11]  }
 var eyes_dog = {14: 8, 38: 32} # iris = eye
 var eyes_cat = { 27: 14, 28: 15}
 
 export var draw_balls = true
 export var draw_addballs = true
+export var draw_lines = true
+export var draw_paintballs = true
 
 var ball_scene = preload("res://Ball.tscn")
 var paintball_scene = preload("res://Paintball.tscn")
 var line_scene = preload("res://Line.tscn")
+var bhd: BhdParser
+var lnz: LnzParser
+var current_animation = 0
+var current_frame = 0
+var current_bdt: BdtParser
 
-func init_ball_data(species: int):
+signal animation_loaded(num_of_frames)
+signal bhd_loaded(num_of_animations)
+
+func set_animation(anim_index: int):
+	current_animation = anim_index
+	bhd.get_frame_offsets_for(anim_index)
+	var species = "CAT"
+	if lnz.species == 2:
+		species = "DOG"
+	var anim_frames = bhd.get_frame_offsets_for(anim_index)
+	current_bdt = BdtParser.new(species + str(anim_index) + ".bdt", anim_frames, bhd.num_balls)
+	set_frame(0)
+	emit_signal("animation_loaded", anim_frames.size())
+
+func set_frame(frame: int):
+	current_frame = frame
+	balls = []
+	for n in bhd.num_balls:
+		var x = current_bdt.frames[frame][n]
+		balls.append(BallData.new(bhd.ball_sizes[n], x.position, n, x.rotation))
+	init_visual_balls(lnz, false)
+
+func init_ball_data(species):
 	if species == 2:
-		balls = [
-			BallData.new(29, Vector3(35, -44, 88), 0), #Right ankle      
-			BallData.new(14, Vector3(11, -190, -129), 1), #Left eyebrow 1   
-			BallData.new(21, Vector3(25, -187, -135), 2), #Left eyebrow 2   
-			BallData.new(21, Vector3(36, -172, -123), 3), #Left eyebrow 3   
-			BallData.new(16, Vector3(50, -189, -84), 4), #Left ear 1       
-			BallData.new(27, Vector3(34, -196, -98), 5), #Left ear 2       
-			BallData.new(30, Vector3(24, -188, -103), 6), #Left ear 3       
-			BallData.new(45, Vector3(43, -87, -40), 7), #Left elbow       
-			BallData.new(38, Vector3(18, -168, -142), 8, Color.white, Color.black, 1, 0, 0.00005), #Eye 1            
-			BallData.new(22, Vector3(45, -15, -57), 9), #Left finger 1    
-			BallData.new(24, Vector3(59, -11, -56), 10), #Left finger 2    
-			BallData.new(22, Vector3(65, -13, -43), 11), #Left finger 3    
-			BallData.new(39, Vector3(40, -19, 80), 12), #Left foot        
-			BallData.new(40, Vector3(47, -20, -39), 13), #Left hand        
-			BallData.new(20, Vector3(18, -163, -154), 14, Color.black, Color("897e66"), 3, 0, 0.0002), #Iris 1           
-			BallData.new(35, Vector3(12, -117, -155), 15), #Left jowl        
-			BallData.new(48, Vector3(40, -76, 61), 16), #Left knee        
-			BallData.new(25, Vector3(5, -127, -177), 17), #Left nostril     
-			BallData.new(61, Vector3(34, -125, -60), 18), #Left shoulder    
-			BallData.new(65, Vector3(24, -115, 70), 19), #Left hip         
-			BallData.new(22, Vector3(34, -12, 61), 20), #Left toe 1       
-			BallData.new(26, Vector3(48, -13, 60), 21), #Left toe 2       
-			BallData.new(22, Vector3(57, -13, 69), 22), #Left toe 3       
-			BallData.new(30, Vector3(41, -48, -34), 23), #Left wrist       
-			BallData.new(29, Vector3(-43, -42, 78), 24), #Left ankle       
-			BallData.new(14, Vector3(-14, -189, -128), 25), #Right eyebrow 1  
-			BallData.new(21, Vector3(-28, -185, -134), 26), #Right eyebrow 2  
-			BallData.new(21, Vector3(-39, -172, -123), 27), #Right eyebrow 3  
-			BallData.new(17, Vector3(-54, -184, -85), 28), #Right ear 1      
-			BallData.new(27, Vector3(-38, -196, -98), 29), #Right ear 2      
-			BallData.new(30, Vector3(-27, -189, -101), 30), #Right ear 3      
-			BallData.new(45, Vector3(-41, -83, -43), 31), #Right elbow      
-			BallData.new(38, Vector3(-20, -165, -143), 32, Color.white, Color.black, 1, 0, 0.00005), #Eye 2            
-			BallData.new(22, Vector3(-43, -13, -78), 33), #Right finger 1   
-			BallData.new(24, Vector3(-59, -11, -76), 34), #Right finger 2   
-			BallData.new(22, Vector3(-64, -12, -64), 35), #Right finger 3   
-			BallData.new(39, Vector3(-47, -19, 64), 36), #Right foot       
-			BallData.new(40, Vector3(-46, -18, -60), 37), #Right hand       
-			BallData.new(20, Vector3(-20, -160, -155), 38, Color.black, Color("897e66"), 3, 0, 0.0002), #Iris 2           
-			BallData.new(35, Vector3(-12, -118, -155), 39), #Right jowl       
-			BallData.new(49, Vector3(-43, -80, 61), 40), #Right knee       
-			BallData.new(25, Vector3(-6, -127, -177), 41), #Right nostril    
-			BallData.new(61, Vector3(-34, -122, -60), 42), #Right shoulder   
-			BallData.new(65, Vector3(-29, -119, 64), 43), #Right hip        
-			BallData.new(22, Vector3(-41, -11, 45), 44), #Right toe 1      
-			BallData.new(26, Vector3(-55, -12, 44), 45), #Right toe 2      
-			BallData.new(22, Vector3(-64, -12, 53), 46), #Right toe 3      
-			BallData.new(30, Vector3(-36, -43, -46), 47), #Right wrist      
-			BallData.new(102, Vector3(-3, -110, -2), 48), #Belly            
-			BallData.new(96, Vector3(0, -123, 58), 49), #Butt             
-			BallData.new(90, Vector3(0, -117, -53), 50), #Chest            
-			BallData.new(32, Vector3(-1, -105, -138), 51), #Jaw              
-			BallData.new(85, Vector3(-2, -155, -108), 52), #Head             
-			BallData.new(24, Vector3(1, -137, -105), 53), #Chin             
-			BallData.new(68, Vector3(-2, -140, -80), 54), #Neck             
-			BallData.new(24, Vector3(0, -120, -173), 55), #Nose bottom      
-			BallData.new(52, Vector3(-1, -132, -147), 56), #Snout            
-			BallData.new(25, Vector3(0, -147, 96), 57), #Tail 1           
-			BallData.new(21, Vector3(-1, -158, 121), 58), #Tail 2           
-			BallData.new(16, Vector3(-2, -174, 138), 59), #Tail 3           
-			BallData.new(15, Vector3(-1, -194, 142), 60), #Tail 4           
-			BallData.new(14, Vector3(-1, -210, 130), 61), #Tail 5           
-			BallData.new(14, Vector3(-1, -220, 110), 62), #Tail 6           
-			BallData.new(0, Vector3(7, -140, -121), 63), #Tongue 1         
-			BallData.new(0, Vector3(6, -122, -134), 64) #Tongue 2         
-		]
+		bhd = BhdParser.new("res://resources/animations/DOG.bhd")
+		emit_signal("bhd_loaded", bhd.animation_ranges.size())
+		var first_anim_frames = bhd.get_frame_offsets_for(current_animation)
+		var bdt = BdtParser.new("DOG"+str(current_animation)+".bdt", first_anim_frames, bhd.num_balls)
+		emit_signal("animation_loaded", first_anim_frames.size())
+		current_bdt = bdt
+		
+		for n in bhd.num_balls:
+			balls.append(BallData.new(bhd.ball_sizes[n], bdt.frames[current_frame][n].position, n, bdt.frames[current_frame][n].rotation))
 	else:
-		balls = [
-			BallData.new(31, Vector3(46, -57, 74), 0),            #eBall_ankleL,
-			BallData.new(31, Vector3(-49, -56, 65), 1),            #eBall_ankleR,
-			BallData.new(91, Vector3(0, -109, 0), 2),            #eBall_belly,
-			BallData.new(102, Vector3(0, -112, 65), 3),            #eBall_butt,
-			BallData.new(67, Vector3(26, -148, -142), 4),            #eBall_cheekL,
-			BallData.new(67, Vector3(-26, -148, -142), 5),            #eBall_cheekR,
-			BallData.new(77, Vector3(0, -101, -62), 6),            #eBall_chest,
-			BallData.new(31, Vector3(0, -137, -177), 7),            #eBall_chin,
-			BallData.new(65, Vector3(20, -184, -109), 8),            #eBall_earL1,
-			BallData.new(1, Vector3(60, -232, -90), 9),            #eBall_earL2,
-			BallData.new(66, Vector3(-20, -184, -109), 10),            #eBall_earR1,
-			BallData.new(1, Vector3(-60, -232, -90), 11),            #eBall_earR2,
-			BallData.new(40, Vector3(30, -80, -20), 12),            #eBall_elbowL,
-			BallData.new(40, Vector3(-45, -71, -27), 13),            #eBall_elbowR,
-			BallData.new(38, Vector3(18, -177, -159), 14, Color.white, Color.black, 1, 0, 0.00005),            #eBall_eyeL,
-			BallData.new(38, Vector3(-19, -177, -159), 15, Color.white, Color.black, 1, 0, 0.00005),            #eBall_eyeR,
-			BallData.new(22, Vector3(22, -10, -69), 16),            #eBall_fingerL1,
-			BallData.new(22, Vector3(30, -10, -74), 17),            #eBall_fingerL2,
-			BallData.new(22, Vector3(37, -10, -68), 18),            #eBall_fingerL3,
-			BallData.new(22, Vector3(-22, -10, -89), 19),            #eBall_fingerR1,
-			BallData.new(22, Vector3(-29, -10, -95), 20),            #eBall_fingerR2,
-			BallData.new(22, Vector3(-37, -10, -90), 21),            #eBall_fingerR3,
-			BallData.new(31, Vector3(30, -14, -55), 22),            #eBall_handL,
-			BallData.new(31, Vector3(-29, -14, -76), 23),            #eBall_handR,
-			BallData.new(105, Vector3(0, -165, -125), 24),            #eBall_head,
-			BallData.new(81, Vector3(32, -110, 69), 25),            #eBall_hipL,
-			BallData.new(81, Vector3(-33, -110, 69), 26),            #eBall_hipR,
-			BallData.new(16, Vector3(18, -177, -171), 27),            #eBall_irisL,
-			BallData.new(16, Vector3(-19, -177, -171), 28),            #eBall_irisR,
-			BallData.new(21, Vector3(0, -140, -151), 29),            #eBall_jaw,
-			BallData.new(35, Vector3(14, -154, -182), 30),            #eBall_jowlL,
-			BallData.new(35, Vector3(-15, -154, -182), 31),            #eBall_jowlR,
-			BallData.new(53, Vector3(43, -86, 34), 32),            #eBall_kneeL,
-			BallData.new(53, Vector3(-44, -91, 30), 33),            #eBall_kneeR,
-			BallData.new(31, Vector3(50, -14, 57), 34),            #eBall_knuckleL,
-			BallData.new(31, Vector3(-54, -14, 41), 35),            #eBall_knuckleR,
-			BallData.new(45, Vector3(0, -131, -91), 36),            #eBall_neck,
-			BallData.new(27, Vector3(0, -162, -187), 37),            #eBall_nose,
-			BallData.new(51, Vector3(27, -98, -67), 38),            #eBall_shoulderL,
-			BallData.new(51, Vector3(-28, -98, -66), 39),            #eBall_shoulderR,
-			BallData.new(42, Vector3(0, -161, -168), 40),            #eBall_snout,
-			BallData.new(34, Vector3(50, -16, 69), 41),            #eBall_soleL,
-			BallData.new(34, Vector3(-54, -17, 53), 42),            #eBall_soleR,
-			BallData.new(30, Vector3(0, -140, 105), 43),            #eBall_tail1,
-			BallData.new(30, Vector3(0, -164, 123), 44),            #eBall_tail2,
-			BallData.new(29, Vector3(0, -193, 133), 45),            #eBall_tail3,
-			BallData.new(27, Vector3(0, -222, 125), 46),            #eBall_tail4,
-			BallData.new(26, Vector3(0, -244, 104), 47),            #eBall_tail5,
-			BallData.new(22, Vector3(0, -256, 77), 48),            #eBall_tail6,
-			BallData.new(22, Vector3(42, -10, 43), 49),            #eBall_toeL1,
-			BallData.new(22, Vector3(50, -10, 38), 50),            #eBall_toeL2,
-			BallData.new(22, Vector3(57, -10, 44), 51),            #eBall_toeL3,
-			BallData.new(22, Vector3(-47, -11, 28), 52),            #eBall_toeR1,
-			BallData.new(22, Vector3(-54, -11, 22), 53),            #eBall_toeR2,
-			BallData.new(22, Vector3(-62, -11, 27), 54),            #eBall_toeR3,
-			BallData.new(0, Vector3(0, -147, -158), 55),            #eBall_tongue1,
-			BallData.new(0, Vector3(0, -146, -168), 56),            #eBall_tongue2,
-			BallData.new(10, Vector3(61, -167, -179), 57),            #eBall_whiskerL1,
-			BallData.new(10, Vector3(66, -145, -183), 58),            #eBall_whiskerL2,
-			BallData.new(10, Vector3(54, -128, -175), 59),            #eBall_whiskerL3,
-			BallData.new(10, Vector3(-63, -166, -179), 60),            #eBall_whiskerR1,
-			BallData.new(10, Vector3(-69, -144, -183), 61),            #eBall_whiskerR2,
-			BallData.new(10, Vector3(-54, -128, -175), 62),            #eBall_whiskerR3,
-			BallData.new(34, Vector3(30, -16, -43), 63),            #eBall_wristL,
-			BallData.new(34, Vector3(-29, -16, -64), 64),            #eBall_wristR,
-			BallData.new(41, Vector3(0, -20, -308), 65),            #eBall_zorient,
-			BallData.new(70, Vector3(0, -34, -263), 66)            #eBall_ztrans,
-		]
+		bhd = BhdParser.new("res://resources/animations/CAT.bhd")
+		emit_signal("bhd_loaded", bhd.animation_ranges.size())
+		var first_anim_frames = bhd.get_frame_offsets_for(current_animation)
+		var bdt = BdtParser.new("CAT"+str(current_animation)+".bdt", first_anim_frames, bhd.num_balls)
+		emit_signal("animation_loaded", first_anim_frames.size())
+		current_bdt = bdt
+		
+		for n in bhd.num_balls:
+			balls.append(BallData.new(bhd.ball_sizes[n], bdt.frames[current_frame][n].position, n, bdt.frames[current_frame][n].rotation))
 
 func generate_pet(file_path):
 	var lnz_info = LnzParser.new(file_path)
+	lnz = lnz_info
 	init_ball_data(lnz_info.species)
+	init_visual_balls(lnz_info, true)
+	
+func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var collated_data = collate_base_ball_data()
-	collated_data = {balls = collated_data, addballs = lnz_info.addballs, paintballs = lnz_info.paintballs}
-	collated_data = apply_extensions(collated_data, lnz_info)
+	# dumb code - duplicate the lnz info to prevent movements being applied multiple times
+	var addballs = {}
+	for k in lnz_info.addballs:
+		var a = lnz_info.addballs[k]
+		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color, a.color_index, a.outline_color, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
+	
+	var paintballs = {}
+	
+	for k in lnz_info.paintballs:
+		var ar = lnz_info.paintballs[k]
+		paintballs[k] = ar.duplicate()
+		var i = 0
+		for a in ar:
+			paintballs[k][i] = {base = a.base, size = a.size, normalised_position = a.normalised_position, color = a.color, outline_color = a.outline_color, outline = a.outline, fuzz = a.fuzz, z_add = a.z_add}
+			i+=1
+	collated_data = {balls = collated_data, addballs = addballs, paintballs = paintballs}
 	collated_data = munge_balls(collated_data, lnz_info)
-	collated_data = apply_projections(collated_data, lnz_info)
+	collated_data = apply_extensions(collated_data, lnz_info)
 	collated_data = apply_sizes(collated_data, lnz_info)
 	collated_data.omissions = lnz_info.omissions
-	generate_balls(collated_data, lnz_info.species, lnz_info.texture_list)
-	generate_lines(lnz_info.lines)
+	generate_balls(collated_data, lnz_info.species, lnz_info.texture_list, new_create)
+	apply_projections()
+	generate_lines(lnz_info.lines, new_create)
 
 func collate_base_ball_data():
 	var ball_data_map = {}
@@ -221,6 +153,7 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 	var head_ext
 	var foot_ext
 	var ear_ext
+	var ear_bases
 	if lnz.species == 2:
 		legs = self.legs_dog
 		body_ext = self.body_ext_dog
@@ -275,17 +208,17 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 			mod_v = mod_v * (lnz.head_enlargement.x / 100.0)
 			mod_v += head_pos
 			ball.position = Vector3(floor(mod_v.x), floor(mod_v.y), floor(mod_v.z))
-			for n in addballs:
-				mod_v = n.position
-				mod_v = mod_v * (lnz.head_enlargement.x / 100.0)
-				n.position = Vector3(floor(mod_v.x), floor(mod_v.y), floor(mod_v.z))
-				addball_dict[n.ball_no] = n
+#			for n in addballs:
+#				mod_v = n.position
+#				mod_v = mod_v * (lnz.head_enlargement.x / 100.0)
+#				n.position = Vector3(floor(mod_v.x), floor(mod_v.y), floor(mod_v.z))
+#				addball_dict[n.ball_no] = n
 		ball.size = floor(ball.size * (lnz.head_enlargement.x / 100.0))
 		ball.size += lnz.head_enlargement.y
-		for n in addballs:
-			n.size = floor(n.size * (lnz.head_enlargement.x / 100.0))
-			n.size += lnz.head_enlargement.y
-			addball_dict[n.ball_no] = n
+#		for n in addballs:
+#			n.size = floor(n.size * (lnz.head_enlargement.x / 100.0))
+#			n.size += lnz.head_enlargement.y
+#			addball_dict[n.ball_no] = n
 		
 		
 	# feet
@@ -302,11 +235,15 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 			ball.size += lnz.foot_enlargement.y
 			
 	# ears
-	for ball_no in ear_ext:
-		var ball = base_ball_dict[ball_no]
-		ball.position *= (lnz.ear_extension / 100.0)
-		for addball in addballs_by_base.get(ball_no, []):
-			addball.position *= (lnz.ear_extension / 100.0)
+	for base_ball_no in ear_ext:
+		var base_ball = base_ball_dict[base_ball_no]
+		for k in ear_ext[base_ball_no]:
+			var ear_ball = base_ball_dict[k] 
+			var vector_from_base = ear_ball.position - base_ball.position
+			vector_from_base *= (lnz.ear_extension / 100.0)
+			ear_ball.position = base_ball.position + vector_from_base
+#		for addball in addballs_by_base.get(ball_no, []):
+#			addball.position *= (lnz.ear_extension / 100.0)
 	
 	return {balls = base_ball_dict, addballs = addball_dict, paintballs = all_ball_dict.paintballs}
 	
@@ -323,53 +260,52 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		b.outline_color = v.outline_color
 		b.outline = v.outline
 		b.fuzz = v.fuzz
-		b.position += v.position
+		var moves = lnz.moves.get(k, [])
+		var q = Quat()
+		for m in moves:
+			var move_base = b
+#			var move_base = base_ball_dict.get(m.relative_to)
+			var rot = move_base.rotation
+			q.set_euler(Vector3(deg2rad(rot.x), deg2rad(rot.y), deg2rad(rot.z)))
+			b.position = move_base.position + q.xform(m.position)
 		b.texture_id = v.texture_id
 		b.color_index = v.color_index
 		base_ball_dict[k] = b
 	
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
 
-func apply_projections(all_ball_dict: Dictionary, lnz: LnzParser):
-	var base_ball_dict = all_ball_dict.balls
-	var addball_dict = all_ball_dict.addballs
-	for k in base_ball_dict:
-		var ball = base_ball_dict[k]
-		var project_list = lnz.project_ball.get(ball.ball_no, [])
-		for p in project_list:
-			var base_ball = base_ball_dict[p.base]
-			var current_vector = ball.position - base_ball.position
-			var scaled_vector = current_vector * (p.amount / 100.0)
-			ball.position = base_ball.position + scaled_vector
-			base_ball_dict[k] = ball
-	for k in addball_dict:
-		var ball = addball_dict[k]
-		var add_base_ball = base_ball_dict[ball.base]
-		var project_list = lnz.project_ball.get(ball.ball_no, [])
-		for p in project_list:
-			# all the addballs should be projected from a base ball
-			# otherwise it's kind of meaningless
-			var base_ball = base_ball_dict[p.base]
-			var actual_position = ball.position + add_base_ball.position
-			var current_vector = actual_position - base_ball.position
-			var scaled_vector = current_vector * (p.amount / 100.0)
-			actual_position = base_ball.position + scaled_vector
-			ball.position = actual_position - add_base_ball.position
-			addball_dict[k] = ball
-			
-	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs} 
+func apply_projections():
+	# have to apply projections now
+	# can't do it earlier because it's hard to calculate
+	# the global_position yourself
+	# important to process these in order too
+	var outputs = {}
+	
+	for project_ball_data in lnz.project_ball:
+		var visual_ball = ball_map[project_ball_data.ball] as Spatial
+		var static_ball = ball_map[project_ball_data.base] as Spatial
+		var vec = visual_ball.global_transform.origin - static_ball.global_transform.origin
+		vec *= (project_ball_data.amount / 100.0)
+		outputs[project_ball_data.ball] = outputs.get(project_ball_data.base, static_ball.global_transform.origin) + vec
 
+	for k in outputs:
+		ball_map[k].global_transform.origin = outputs[k]
+		
 func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 	for k in all_ball_dict.balls:
 		var ball = all_ball_dict.balls[k]
-		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
+		ball.size = ball.size - 2
+		ball.size = round(ball.size * (lnz.scales[1] / 255.0))
+		ball.size -= 1 - fmod(ball.size, 2)
 #		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
 		ball.position = (ball.position * (lnz.scales[0] / 255.0))
 		all_ball_dict.balls[k] = ball
 		
 	for k in all_ball_dict.addballs:
 		var ball = all_ball_dict.addballs[k]
-		ball.size = floor(ball.size * (lnz.scales[1] / 255.0))
+		ball.size = ball.size - 2
+		ball.size = round(ball.size * (lnz.scales[1] / 255.0))
+		ball.size -= 1 - fmod(ball.size, 2)
 #		ball.fuzz = floor(ball.fuzz * (lnz.scales[1] / 255.0))
 		ball.position = (ball.position * (lnz.scales[0] / 255.0))
 		all_ball_dict.addballs[k] = ball
@@ -382,7 +318,7 @@ func get_root():
 	else:
 		return get_tree().root.get_node("Root/PetRoot")
 
-func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array):
+func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array, new_create: bool):
 	var ball_data = all_ball_data.balls
 	var addball_data = all_ball_data.addballs
 	var paintball_data = all_ball_data.paintballs
@@ -391,15 +327,18 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 	var parent = root.get_node("petholder/balls")
 	var pb_parent = root.get_node("petholder/paintballs")
 	var ab_parent = root.get_node("petholder/addballs")
-	for c in parent.get_children():
-		parent.remove_child(c)
-		c.queue_free()
-	for c in pb_parent.get_children():
-		pb_parent.remove_child(c)
-		c.queue_free()
-	for c in ab_parent.get_children():
-		ab_parent.remove_child(c)
-		c.queue_free()
+	if new_create:
+		for c in parent.get_children():
+			parent.remove_child(c)
+			c.queue_free()
+		for c in pb_parent.get_children():
+			pb_parent.remove_child(c)
+			c.queue_free()
+		for c in ab_parent.get_children():
+			ab_parent.remove_child(c)
+			c.queue_free()
+		ball_map = {}
+		paintball_map = {}
 	
 	var eyes: Dictionary
 	if species == 2:
@@ -410,9 +349,14 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		var ball = ball_data[key]
 		var visual_ball
 		if(key in eyes.keys()): # treat irises like paintballs
-			visual_ball = paintball_scene.instance()
+			if new_create:
+				visual_ball = paintball_scene.instance()
+				visual_ball.add_to_group("balls")
+				visual_ball.z_add = 10
+			else:
+				visual_ball = ball_map[key]
 			var base_ball = ball_data[eyes[key]]
-			visual_ball.base_ball_size = base_ball.size / 2
+			visual_ball.base_ball_size = base_ball.size
 			var bbp = base_ball.position
 			bbp.y *= -1
 			bbp *= pixel_world_size
@@ -421,11 +365,68 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
 		else:
-			visual_ball = ball_scene.instance()
+			if new_create:
+				visual_ball = ball_scene.instance()
+				visual_ball.add_to_group("balls")
+			else:
+				visual_ball = ball_map[key]
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
 			visual_ball.ball_no = ball.ball_no
+			if new_create:
+				if ball.texture_id > -1:
+					var tex_info = texture_list[ball.texture_id]
+					var texture_filename = tex_info.filename
+					var transparent_color = tex_info.transparent_color
+					var texture = load("res://resources/textures/"+texture_filename)
+					visual_ball.texture = texture
+					visual_ball.transparent_color = transparent_color
+				else:
+					visual_ball.transparent_color = ball.color
+				visual_ball.color_index = ball.color_index
+		if new_create:
+			visual_ball.ball_size = get_real_ball_size(ball.size)
+			visual_ball.color = ball.color
+			visual_ball.outline = ball.outline
+			visual_ball.outline_color = ball.outline_color
+			visual_ball.fuzz_amount = ball.fuzz / 2
+		visual_ball.rotation_degrees = ball.rotation
+		if new_create:
+			parent.add_child(visual_ball)
+			visual_ball.set_owner(root)
+		ball_map[ball.ball_no] = visual_ball
+		if !draw_balls:
+			visual_ball.visible_override = false
+		if omissions.get(key, false):
+			visual_ball.visible_override = false
+			visual_ball.omitted = true
+			
+	for key in addball_data:
+		var ball = addball_data[key]
+		var visual_ball
+		if new_create:
+			visual_ball = ball_scene.instance()
+		else:
+			visual_ball = ball_map[key]
+		if new_create:
+			ball_map[ball.base].add_child(visual_ball)
+			visual_ball.set_owner(root)
+			visual_ball.add_to_group("addballs")
+			visual_ball.z_add = ball.size / 2.0
+			visual_ball.ball_size = ball.size
+		var total_pos = ball.position
+		total_pos.y *= -1.0
+		visual_ball.transform.origin = total_pos * pixel_world_size
+		if new_create:
+			visual_ball.color = ball.color
+			visual_ball.outline = ball.outline
+			visual_ball.outline_color = ball.outline_color
+			visual_ball.fuzz_amount = ball.fuzz / 2
+			visual_ball.ball_no = ball.ball_no
+			visual_ball.base_ball_no = ball.base
+		visual_ball.scale = Vector3(1,1,1)
+		if new_create:
 			if ball.texture_id > -1:
 				var tex_info = texture_list[ball.texture_id]
 				var texture_filename = tex_info.filename
@@ -436,54 +437,12 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			else:
 				visual_ball.transparent_color = ball.color
 			visual_ball.color_index = ball.color_index
-		visual_ball.ball_size = get_real_ball_size(ball.size)
-		visual_ball.z_add = ball.z_add
-		visual_ball.color = ball.color
-		visual_ball.outline = ball.outline
-		visual_ball.outline_color = ball.outline_color
-		visual_ball.fuzz_amount = ball.fuzz / 2
-		parent.add_child(visual_ball)
-		visual_ball.set_owner(root)
 		ball_map[ball.ball_no] = visual_ball
-		visual_ball.visible = true
-		if !draw_balls:
-			visual_ball.visible = false
-		if omissions.get(key, false):
-			visual_ball.hide()
-			
-	for key in addball_data:
-		var ball = addball_data[key]
-		var visual_ball = ball_scene.instance()
-		visual_ball.ball_size = get_real_ball_size(ball.size)
-		var base_pos = ball_data[ball.base].position
-		var rotated_pos = ball.position + base_pos
-		rotated_pos.y *= -1.0
-		visual_ball.transform.origin = rotated_pos * pixel_world_size
-		visual_ball.color = ball.color
-		visual_ball.outline = ball.outline
-		visual_ball.outline_color = ball.outline_color
-		visual_ball.z_add = ball.z_add
-		visual_ball.fuzz_amount = ball.fuzz / 2
-		visual_ball.ball_no = ball.ball_no
-		visual_ball.base_ball_no = ball.base
-		ab_parent.add_child(visual_ball)
-		visual_ball.set_owner(root)
-		ball_map[ball.ball_no] = visual_ball
-		if ball.texture_id > -1:
-			var tex_info = texture_list[ball.texture_id]
-			var texture_filename = tex_info.filename
-			var transparent_color = tex_info.transparent_color
-			var texture = load("res://resources/textures/"+texture_filename)
-			visual_ball.texture = texture
-			visual_ball.transparent_color = transparent_color
-		else:
-			visual_ball.transparent_color = ball.color
-		visual_ball.color_index = ball.color_index
-		visual_ball.visible = true
 		if !draw_addballs:
-			visual_ball.visible = false
+			visual_ball.visible_override = false
 		if omissions.get(key, false):
-			visual_ball.hide()
+			visual_ball.visible_override = false
+			visual_ball.omitted = true
 			
 	for key in paintball_data:
 		var merged_dict = {}
@@ -496,44 +455,47 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		paintballs_for_base_ball.invert()
 		var count = 0
 		for paintball in paintballs_for_base_ball:
-			var base_position = base_ball.position
-			if base_ball is AddBallData:
-				var real_base_ball = merged_dict[base_ball.base]
-				base_position += real_base_ball.position
-			var final_position = base_ball.position + (paintball.normalised_position * base_ball.size / 2)
-			final_position.y *= -1.0
-			final_position *= pixel_world_size
-			base_position.y *= -1.0
-			base_position *= pixel_world_size
-			var final_size = get_real_ball_size(base_ball.size * (paintball.size / 100.0))
-			var visual_ball = paintball_scene.instance()
-			visual_ball.base_ball_position = base_position
-			visual_ball.transform.origin = final_position
+			var final_size = base_ball.size * (paintball.size / 100.0)
+			final_size -= 1 - fmod(final_size, 2)
+			var visual_ball
+			if new_create:
+				visual_ball = paintball_scene.instance()
+			else:
+				visual_ball = paintball_map[key][count]
+			if new_create:
+				ball_map[key].add_child(visual_ball)
+				visual_ball.set_owner(root)
+				visual_ball.add_to_group("paintballs")
+			visual_ball.base_ball_position = ball_map[key].global_transform.origin
+			visual_ball.transform.origin = paintball.normalised_position * Vector3(1, -1, 1) * (base_ball.size / 2.0) * pixel_world_size
 			visual_ball.ball_size = final_size
-			visual_ball.base_ball_size = base_ball.size / 2
+			visual_ball.base_ball_size = base_ball.size
 			visual_ball.color = paintball.color
 			visual_ball.outline_color = paintball.outline_color
 			visual_ball.outline = paintball.outline
 			visual_ball.fuzz_amount = paintball.fuzz / 2
-			visual_ball.z_add = count * 0.0000001
+			visual_ball.z_add = count * 0.1
 			visual_ball.base_ball_no = paintball.base
 			count += 1
-			pb_parent.add_child(visual_ball)
-			visual_ball.set_owner(root)
-			if !draw_balls:
-				visual_ball.visible = false
+			var ar = paintball_map.get(key, [])
+			ar.append(visual_ball)
+			paintball_map[key] = ar
+			if !draw_paintballs:
+				visual_ball.visible_override = false
 				
 func get_real_ball_size(ball_size):
-	var half_size = floor(ball_size / 2.0)
-	return max(half_size - 2, 2)
+	return ball_size
 				
-func generate_lines(line_data: Array):
+func generate_lines(line_data: Array, new_create: bool):
 	var root = get_root()
 	var parent = root.get_node("petholder/lines")
-	for c in parent.get_children():
-		parent.remove_child(c)
-		c.queue_free()
+	if new_create:
+		for c in parent.get_children():
+			parent.remove_child(c)
+			c.queue_free()
+		lines_map = {}
 	
+	var i = 0
 	for line in line_data:
 		var start = ball_map.get(line.start)
 		var end = ball_map.get(line.end)
@@ -541,15 +503,28 @@ func generate_lines(line_data: Array):
 		if start == null or end == null:
 			print("Could not make a line between " + str(line.start) + " and " + str(line.end))
 			continue
-		
-		var visual_line = line_scene.instance()
+		var omissions = lnz.omissions as Dictionary
+		if omissions.has(line.start) or omissions.has(line.end):
+			print("Skipping line between " + str(line.start) + " and " + str(line.end))
+			continue
+		var visual_line
+		if new_create:
+			visual_line = line_scene.instance()
+			visual_line.add_to_group("lines")
+		else:
+			visual_line = lines_map[i]
 		var start_pos = start.global_transform.origin
 		var target_pos = end.global_transform.origin
 		var distance = (target_pos - start_pos).length()
-		var middle_point = lerp(start.global_transform.origin, end.transform.origin, 0.5)
-		visual_line.look_at_from_position(middle_point, target_pos, Vector3.UP)
-		visual_line.rotation_degrees.x += 90
-		visual_line.scale.y = distance
+		var middle_point = lerp(start.global_transform.origin, end.global_transform.origin, 0.5)
+		if target_pos == middle_point:
+			visual_line.global_transform.origin = middle_point
+			visual_line.rotation_degrees.x += 90
+			visual_line.scale.y = distance
+		else:
+			visual_line.look_at_from_position(middle_point, target_pos, Vector3.UP)
+			visual_line.rotation_degrees.x += 90
+			visual_line.scale.y = distance
 		if line.color == null:
 			visual_line.color = start.color
 		else:
@@ -565,25 +540,40 @@ func generate_lines(line_data: Array):
 		visual_line.ball_world_pos1 = start_pos
 		visual_line.ball_world_pos2 = target_pos
 		visual_line.fuzz_amount = line.fuzz
-		var final_line_width = Vector2(start.ball_size * 2 + 1, end.ball_size * 2 + 1)
+		var final_line_width = Vector2(start.ball_size, end.ball_size)
 		final_line_width = final_line_width * (Vector2(line.s_thick, line.e_thick) / 100)
 		visual_line.line_widths = final_line_width
-		
-		parent.add_child(visual_line)
-		visual_line.set_owner(root)
-
-
-func _on_showballs_toggled(button_pressed):
-	get_tree().root.get_node("Spatial/petholder/balls").visible = button_pressed
-
-func _on_showlines_toggled(button_pressed):
-	get_tree().root.get_node("Spatial/petholder/lines").visible = button_pressed
-
-func _on_CheckBox3_toggled(button_pressed):
-	get_tree().root.get_node("Spatial/petholder/paintballs").visible = button_pressed
+		lines_map[i] = visual_line
+		if !draw_lines:
+			visual_line.hide()
+		if new_create:
+			parent.add_child(visual_line)
+			visual_line.set_owner(root)
+		i+=1
 
 func _on_OptionButton_file_selected(file_name):
 	generate_pet(file_name)
 	
 func _on_OptionButton_file_saved(file_name):
 	generate_pet(file_name)
+	
+func _on_AnimPicker_text_entered(new_text):
+	var i = int(new_text)
+	if i < bhd.animation_ranges.size():
+		set_animation(int(new_text))
+
+func _on_BallCheckBox_toggled(button_pressed):
+	get_tree().call_group("balls", "set_visible", button_pressed)
+	draw_balls = button_pressed
+	
+func _on_AddballCheckBox_toggled(button_pressed):
+	get_tree().call_group("addballs", "set_visible", button_pressed)
+	draw_addballs = button_pressed
+	
+func _on_PaintballCheckBox_toggled(button_pressed):
+	get_tree().call_group("paintballs", "set_visible", button_pressed)
+	draw_paintballs = button_pressed
+	
+func _on_LineCheckBox_toggled(button_pressed):
+	get_tree().call_group("lines", "set_visible", button_pressed)
+	draw_lines = button_pressed

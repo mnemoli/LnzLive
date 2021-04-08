@@ -12,6 +12,7 @@ var face_extension = 0
 var ear_extension = 0
 var head_enlargement = Vector2(100, 0)
 var foot_enlargement = Vector2(100, 0)
+var moves = {}
 var balls = {}
 var lines = []
 var color_chart = {
@@ -275,7 +276,7 @@ var color_chart = {
 var addballs = {}
 var paintballs = {}
 var omissions = {}
-var project_ball = {}
+var project_ball = []
 var texture_list = []
 
 func get_next_section(file: File, section_name: String):
@@ -395,7 +396,13 @@ func _init(file_path):
 		var x = int(split_line[1].get_string())
 		var y = int(split_line[2].get_string())
 		var z = int(split_line[3].get_string())
+		var relative_ball = base
+		if split_line.size() > 4:
+			relative_ball = int(split_line[4].get_string())
 		var pos = Vector3(x, y, z)
+		var ar = moves.get(base, [])
+		ar.append({position = pos, relative_to = relative_ball})
+		moves[base] = ar
 		var ball = self.balls[base]
 		ball.position = pos
 		
@@ -467,7 +474,7 @@ func get_balls(file: File):
 	for line in parsed_lines:
 		var color = color_chart.get(line.color)
 		var outline_color = color_chart.get(line.outline_color)
-		var bd = BallData.new(line.size, Vector3.ZERO, i, color, line.color, outline_color, line.outline, line.fuzz, 0.0, line.group, line.texture)
+		var bd = BallData.new(line.size, Vector3.ZERO, i, 0, color, line.color, outline_color, line.outline, line.fuzz, 0.0, line.group, line.texture)
 		self.balls[i] = bd
 		i += 1
 
@@ -487,9 +494,7 @@ func get_project_balls(file: File):
 	get_next_section(file, "Project Ball")
 	var parsed_lines = get_parsed_lines(file, ["base", "projected", "amount"])
 	for line in parsed_lines:
-		var ar = project_ball.get(line.projected, [])
-		ar.append({base = line.base, amount = line.amount})
-		project_ball[line.projected] = ar
+		project_ball.append({ball = line.projected, base = line.base, amount = line.amount})
 
 func get_species(file: File):
 	get_next_section(file, "Species")

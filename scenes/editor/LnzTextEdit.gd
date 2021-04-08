@@ -44,7 +44,7 @@ func save_file():
 		var file = File.new()
 		if file.file_exists(possible_file_name):
 			possible_file_name = possible_file_name.replace(".lnz", str(OS.get_unix_time()) + ".lnz")
-		var x = file.open(possible_file_name, File.WRITE)
+		var _possible_error = file.open(possible_file_name, File.WRITE)
 		file.store_string(text)
 		file.close()
 		filepath = possible_file_name

@@ -123,14 +123,14 @@ void vertex() {
 	// Pad the offset for later
 	offset *= 2.0;
 	
-	float z_pos = vert_in_clip_space.z + 0.001;
+	float z_pos = vert_in_clip_space.z;
 	// Find the minimum z for this line
 	if (!(ball_world_pos1 == vec3(0.0) && ball_world_pos2 == vec3(0.0))) {
 		vec4 ball_screen_pos1 = PROJECTION_MATRIX * INV_CAMERA_MATRIX * vec4(ball_world_pos1, 1.0);
 		vec4 ball_screen_pos2 = PROJECTION_MATRIX * INV_CAMERA_MATRIX * vec4(ball_world_pos2, 1.0);
-		z_pos = max(ball_screen_pos1.z + 0.0001, ball_screen_pos2.z + 0.0001);
+		z_pos = max(ball_screen_pos1.z, ball_screen_pos2.z);
 	}
-	VERTEX = vec3(vert_in_ndc_space, z_pos) + offset;
+	VERTEX = vec3(vert_in_ndc_space, z_pos + 0.001 / 1000.0) + offset;
 	
 	// Calculate center fragcoord. Do in vertex shader to avoid calculating per frag.
 	vec4 center_view = projection * vec4(vec3(0.0), 1.0);

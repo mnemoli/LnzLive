@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
 [ext_resource path="res://scenes/dog_generator.gd" type="Script" id=3]
 [ext_resource path="res://scenes/editor/PetViewContainer.gd" type="Script" id=4]
+[ext_resource path="res://scenes/editor/FrameSlider.gd" type="Script" id=5]
+[ext_resource path="res://scenes/editor/PlayButton.gd" type="Script" id=6]
+[ext_resource path="res://scenes/editor/FPSLabel.gd" type="Script" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0.501961, 0.501961, 1 )
@@ -40,6 +43,8 @@ render_target_update_mode = 3
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
 keep_aspect = 0
 projection = 1
+near = 0.01
+far = 1000.0
 
 [node name="SceneRoot" type="Control" parent="."]
 anchor_right = 1.0
@@ -76,7 +81,7 @@ __meta__ = {
 [node name="ItemPopupMenu" type="PopupMenu" parent="SceneRoot/HSplitContainer/VBoxContainer/Tree"]
 margin_right = 20.0
 margin_bottom = 20.0
-items = [ "Delete", null, 0, false, false, 0, 0, null, "", false ]
+items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false ]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
 margin_left = 347.0
@@ -103,6 +108,85 @@ expand = true
 stretch_mode = 4
 flip_v = true
 
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
+margin_right = 465.0
+margin_bottom = 768.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
+margin_right = 465.0
+margin_bottom = 24.0
+size_flags_vertical = 0
+
+[node name="AnimPicker" type="LineEdit" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FrameSlider" type="HSlider" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
+margin_left = 62.0
+margin_right = 396.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 15.0
+max_value = 5.0
+rounded = true
+script = ExtResource( 5 )
+
+[node name="Button" type="Button" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
+margin_left = 400.0
+margin_right = 438.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+toggle_mode = true
+text = "Play"
+script = ExtResource( 6 )
+
+[node name="Timer" type="Timer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button"]
+wait_time = 0.06
+
+[node name="FPSLabel" type="Label" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
+margin_left = 442.0
+margin_top = 5.0
+margin_right = 465.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+script = ExtResource( 7 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 465.0
+margin_bottom = 52.0
+
+[node name="BallCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 94.0
+margin_bottom = 24.0
+pressed = true
+text = "Draw balls"
+
+[node name="AddballCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 98.0
+margin_right = 215.0
+margin_bottom = 24.0
+pressed = true
+text = "Draw addballs"
+
+[node name="PaintballCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 219.0
+margin_right = 345.0
+margin_bottom = 24.0
+pressed = true
+text = "Draw paintballs"
+
+[node name="LineCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 349.0
+margin_right = 444.0
+margin_bottom = 24.0
+pressed = true
+text = "Draw lines"
+
 [node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
 margin_left = 477.0
 margin_right = 677.0
@@ -123,12 +207,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
+[node name="RenameDialog" type="AcceptDialog" parent="SceneRoot"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -256.0
+margin_top = -34.0
+margin_right = 256.0
+margin_bottom = 34.0
+window_title = "Rename file"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="SceneRoot/RenameDialog"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 504.0
+margin_bottom = 32.0
+
+[connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
 [connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
+[connection signal="text_entered" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/AnimPicker" to="PetRoot/Node" method="_on_AnimPicker_text_entered"]
+[connection signal="value_changed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" to="PetRoot/Node" method="set_frame"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button" method="_on_Button_toggled"]
+[connection signal="timeout" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button/Timer" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_Timer_timeout"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/BallCheckBox" to="PetRoot/Node" method="_on_BallCheckBox_toggled"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/AddballCheckBox" to="PetRoot/Node" method="_on_AddballCheckBox_toggled"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/PaintballCheckBox" to="PetRoot/Node" method="_on_PaintballCheckBox_toggled"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
+[connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]

@@ -12,17 +12,24 @@ export var ball_no = 0
 export var base_ball_no = -1
 export var texture: Texture setget set_texture
 export var transparent_color = 0 setget set_transparent_color
+export var visible_override = true setget set_visible
+export var omitted = false
 
 var palette = preload("res://resources/textures/petzpalette.png")
 
 func _ready():
 	$MeshInstance.material_override.set_shader_param("palette", palette)
 
+func set_visible(new_value):
+	visible_override = new_value
+	if !omitted:
+		$MeshInstance.visible = new_value
+
 func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
 	var a = ball_size * 0.025
-	scale = Vector3(a,a,a)
+#	scale = Vector3(a,a,a)
 	
 func set_fuzz_amount(new_value):
 	fuzz_amount = new_value

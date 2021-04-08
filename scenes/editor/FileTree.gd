@@ -9,6 +9,7 @@ var root: TreeItem
 
 export var example_file_location = "res://resources/"
 export var user_file_location = "user://resources/"
+onready var rename_dialog = get_tree().root.get_node("Root/SceneRoot/RenameDialog") as WindowDialog
 
 func _ready():
 	root = create_item()
@@ -62,8 +63,9 @@ func scan_local_storage(selected_filepath):
 
 
 func _on_Tree_item_rmb_selected(position):
-	var item = get_selected() as TreeItem
 	$ItemPopupMenu.rect_global_position = position
+	var item = get_selected() as TreeItem
+	$ItemPopupMenu.set_item_disabled(1, item.get_parent() != local_storage)
 	$ItemPopupMenu.show()
 	
 func _on_ItemPopupMenu_id_pressed(id):
@@ -73,3 +75,18 @@ func _on_ItemPopupMenu_id_pressed(id):
 		var dir = Directory.new()
 		dir.remove(filepath)
 		rescan(null)
+	elif id == 1: # rename file
+		var item = get_selected() as TreeItem
+		var filepath = item.get_metadata(0) as String
+		rename_dialog.popup()
+		rename_dialog.get_node("LineEdit").text = filepath.get_file()
+
+func _on_RenameDialog_confirmed():
+	var item = get_selected() as TreeItem
+	var filepath = item.get_metadata(0) as String
+	var dir = Directory.new()
+	var new_filename = rename_dialog.get_node("LineEdit").text
+	var new_filepath = filepath.replace(filepath.get_file(), new_filename)
+	dir.rename(filepath, new_filepath)
+	rescan(new_filepath)
+	emit_signal("user_file_selected", new_filepath)

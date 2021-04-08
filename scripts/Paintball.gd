@@ -10,6 +10,11 @@ export var color = Color.white setget set_color
 export var outline_color = Color.black setget set_outline_color
 export var z_add = 0.0 setget set_z_add
 export var base_ball_no = 0
+export var visible_override = true setget set_visible
+
+func set_visible(new_value):
+	visible_override = new_value
+	$MeshInstance.visible = new_value
 
 func set_z_add(new_value):
 	z_add = new_value

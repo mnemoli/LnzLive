@@ -20,6 +20,16 @@ _global_script_classes=[ {
 "path": "res://data_classes/ball_data.gd"
 }, {
 "base": "Node",
+"class": "BdtParser",
+"language": "GDScript",
+"path": "res://data_classes/bdt_parser.gd"
+}, {
+"base": "Node",
+"class": "BhdParser",
+"language": "GDScript",
+"path": "res://data_classes/bhd_parser.gd"
+}, {
+"base": "Node",
 "class": "LineData",
 "language": "GDScript",
 "path": "res://data_classes/line_data.gd"
@@ -37,6 +47,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AddBallData": "",
 "BallData": "",
+"BdtParser": "",
+"BhdParser": "",
 "LineData": "",
 "LnzParser": "",
 "PaintBallData": ""
@@ -55,6 +67,8 @@ gdscript/warnings/shadowed_variable=false
 [display]
 
 window/size/height=768
+window/size/test_width=1000
+window/size/test_height=1000
 window/stretch/aspect="expand"
 
 [rendering]

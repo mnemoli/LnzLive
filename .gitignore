@@ -11,4 +11,4 @@ export_presets.cfg
 
 *.TMP
 
-export/*
+export/*.zip

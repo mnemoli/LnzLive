@@ -12,11 +12,13 @@ export var z_add = 0.0
 export var fuzz = 0
 export var group = -1
 export var texture_id = -1
+export var rotation = Vector3.ZERO
 
 func _init(
  size: int,
  position: Vector3,
  ball_no: int,
+ rotation = Vector3.ZERO,
  color: Color = Color.white,
  color_index = 0,
  outline_color = Color.black,
@@ -36,3 +38,4 @@ func _init(
 	self.group = group
 	self.texture_id = texture_id
 	self.color_index = color_index
+	self.rotation = rotation

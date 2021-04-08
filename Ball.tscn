@@ -6,7 +6,6 @@
 [sub_resource type="QuadMesh" id=1]
 
 [node name="Ball" type="Spatial"]
-transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0 )
 script = ExtResource( 2 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
