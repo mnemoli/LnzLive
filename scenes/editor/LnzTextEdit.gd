@@ -216,3 +216,69 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 		set_line(start_of_section + i, final_line)
 		i += 1
 	save_file()
+
+
+func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index):
+	var species = KeyBallsData.species
+	var balls_to_exclude = []
+	if species == KeyBallsData.Species.CAT:
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_cat)
+	else:
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_dog)
+		
+	var section_find = search('[Ballz Info]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		if i in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";"):
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		if !(i in core_ball_nos):
+			i += 1
+			continue
+		# here the first number is color
+		var color_break = line.find(" ")
+		var line_without_color = line.substr(color_break)
+		set_line(start_of_section + i, str(color_index) + line_without_color)
+		i += 1
+	
+	section_find = search('[Add Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";"):
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the fifth number is color
+		var parsed_line = r.search_all(line)
+		if !(int(parsed_line[0].get_string()) in core_ball_nos):
+			i+=1
+			continue
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 4:
+				final_line += str(color_index) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(start_of_section + i, final_line)
+		i += 1
+	save_file()
