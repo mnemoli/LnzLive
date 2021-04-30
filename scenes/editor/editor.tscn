@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://scenes/editor/PlayButton.gd" type="Script" id=6]
 [ext_resource path="res://scenes/editor/FPSLabel.gd" type="Script" id=7]
 [ext_resource path="res://new_dynamicfontdata.tres" type="DynamicFontData" id=8]
+[ext_resource path="res://scenes/editor/unhandled_input_handler.gd" type="Script" id=9]
+[ext_resource path="res://scenes/editor/ToolsMenu.gd" type="Script" id=10]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -33,6 +35,7 @@ font_data = ExtResource( 8 )
 font_data = ExtResource( 8 )
 
 [node name="Root" type="Node"]
+script = ExtResource( 9 )
 
 [node name="PetRoot" type="Spatial" parent="."]
 
@@ -309,7 +312,6 @@ __meta__ = {
 }
 
 [node name="PopupDialog" type="WindowDialog" parent="SceneRoot"]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -389,6 +391,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ToolsMenu" type="PopupMenu" parent="SceneRoot"]
+margin_left = 373.78
+margin_top = 169.492
+margin_right = 493.78
+margin_bottom = 203.492
+items = [ "Color entire pet", null, 0, false, false, 0, 0, null, "", false ]
+allow_search = true
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorPopup" type="Popup" parent="SceneRoot"]
+visible = true
+margin_right = 200.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="SceneRoot/ColorPopup"]
+margin_right = 58.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
@@ -413,3 +441,6 @@ __meta__ = {
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
+[connection signal="color_entire_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_entire_pet"]
+[connection signal="id_pressed" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_id_pressed"]
+[connection signal="gui_input" from="SceneRoot/ColorPopup/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]

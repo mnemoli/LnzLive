@@ -38,6 +38,7 @@ func _on_Tree_item_activated():
 		emit_signal("example_file_selected", filepath)
 	else:
 		emit_signal("user_file_selected", filepath)
+	release_focus()
 
 func rescan(selected_filepath):
 	if local_storage != null:
@@ -66,7 +67,7 @@ func _on_Tree_item_rmb_selected(position):
 	$ItemPopupMenu.rect_global_position = position
 	var item = get_selected() as TreeItem
 	$ItemPopupMenu.set_item_disabled(1, item.get_parent() != local_storage)
-	$ItemPopupMenu.show()
+	$ItemPopupMenu.popup()
 	
 func _on_ItemPopupMenu_id_pressed(id):
 	if id == 0: # delete file

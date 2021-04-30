@@ -10,37 +10,6 @@ var ball_map = {}
 var paintball_map = {}
 var lines_map = {}
 
-var legs_dog = [
-	[0, 12, 16, 20, 21, 22, 24, 36, 44, 45, 46], # back legs
-	[7, 9, 10, 11, 13, 31, 33, 34, 35, 37] # front legs 
-]
-var legs_cat = [ 
-	[0, 1, 32, 33, 41, 42, 49, 50, 51, 52, 53, 54], # back
-	[12, 13, 16, 17, 18, 22, 23, 34, 35, 63, 64] # front
-]
-var body_ext_dog = [ 49, 0, 12, 16, 20, 21, 22, 24, 36, 44, 45, 46, 43, 19, 40, 57, 58, 59, 60, 61, 62 ]
-var body_ext_cat = [ 2, 3, 0, 1, 32, 33, 41, 42, 49, 50, 51, 52, 53, 54, 25, 26, 43, 44, 45, 46, 47, 48 ]
-var face_ext_dog = [ 51, 53, 55, 56, 63, 64, 17, 41, 15, 39 ]
-var face_ext_cat = [ 7, 30, 31, 37, 40, 57, 58, 59, 60, 61, 62, 29 ]
-var head_ext_dog = [ 52, 1, 2, 3, 4, 5, 6, 8, 14, 15, 17, 25, 26, 27, 28, 29, 30, 32, 38, 39, 41, 51, 53, 55, 56, 63, 64 ]
-var head_ext_cat = [ 24, 4, 5, 7, 8, 9, 10, 11, 14, 15, 29, 30, 31, 37, 40, 57, 58, 59, 60, 61, 62 ]
-var foot_ext_dog = [ 
-	[ 12, 20, 21, 22 ],
-	[ 13, 9, 10, 11 ],
-	[ 36, 44, 45, 46 ],
-	[ 37, 33, 34, 35 ]
-]
-var foot_ext_cat = [
-	[ 22, 16, 17, 18 ],
-	[ 23, 19, 20, 21 ],
-	[ 41, 49, 50, 51 ],
-	[ 42, 52, 53, 54 ]
-]
-var ear_ext_dog = { 4: [5, 6], 28: [29, 30] }
-var ear_ext_cat = { 8: [9], 10: [11]  }
-var eyes_dog = {14: 8, 38: 32} # iris = eye
-var eyes_cat = { 27: 14, 28: 15}
-
 export var draw_balls = true
 export var draw_addballs = true
 export var draw_lines = true
@@ -65,7 +34,7 @@ func set_animation(anim_index: int):
 	current_animation = anim_index
 	bhd.get_frame_offsets_for(anim_index)
 	var species = "CAT"
-	if lnz.species == 2:
+	if lnz.species == KeyBallsData.Species.DOG:
 		species = "DOG"
 	var anim_frames = bhd.get_frame_offsets_for(anim_index)
 	current_bdt = BdtParser.new(species + str(anim_index) + ".bdt", anim_frames, bhd.num_balls)
@@ -81,7 +50,7 @@ func set_frame(frame: int):
 	init_visual_balls(lnz, false)
 
 func init_ball_data(species):
-	if species == 2:
+	if species == KeyBallsData.Species.DOG:
 		bhd = BhdParser.new("res://resources/animations/DOG.bhd")
 		emit_signal("bhd_loaded", bhd.animation_ranges.size())
 		var first_anim_frames = bhd.get_frame_offsets_for(current_animation)
@@ -102,9 +71,12 @@ func init_ball_data(species):
 		for n in bhd.num_balls:
 			balls.append(BallData.new(bhd.ball_sizes[n], bdt.frames[current_frame][n].position, n, bdt.frames[current_frame][n].rotation))
 
+	KeyBallsData.max_base_ball_num = bhd.num_balls
+
 func generate_pet(file_path):
 	var lnz_info = LnzParser.new(file_path)
 	lnz = lnz_info
+	KeyBallsData.species = lnz_info.species
 	init_ball_data(lnz_info.species)
 	init_visual_balls(lnz_info, true)
 	
@@ -156,20 +128,20 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 	var foot_ext
 	var ear_ext
 	var ear_bases
-	if lnz.species == 2:
-		legs = self.legs_dog
-		body_ext = self.body_ext_dog
-		face_ext = self.face_ext_dog
-		head_ext = self.head_ext_dog
-		foot_ext = self.foot_ext_dog
-		ear_ext = self.ear_ext_dog
+	if lnz.species == KeyBallsData.Species.DOG:
+		legs = KeyBallsData.legs_dog
+		body_ext = KeyBallsData.body_ext_dog
+		face_ext = KeyBallsData.face_ext_dog
+		head_ext = KeyBallsData.head_ext_dog
+		foot_ext = KeyBallsData.foot_ext_dog
+		ear_ext = KeyBallsData.ear_ext_dog
 	else:
-		legs = self.legs_cat
-		body_ext = self.body_ext_cat
-		face_ext = self.face_ext_cat
-		head_ext = self.head_ext_cat
-		foot_ext = self.foot_ext_cat
-		ear_ext = self.ear_ext_cat
+		legs = KeyBallsData.legs_cat
+		body_ext = KeyBallsData.body_ext_cat
+		face_ext = KeyBallsData.face_ext_cat
+		head_ext = KeyBallsData.head_ext_cat
+		foot_ext = KeyBallsData.foot_ext_cat
+		ear_ext = KeyBallsData.ear_ext_cat
 		
 	# legs
 	for ball_no in legs[0]:
@@ -340,10 +312,10 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		paintball_map = {}
 	
 	var eyes: Dictionary
-	if species == 2:
-		eyes = eyes_dog
+	if species == KeyBallsData.Species.DOG:
+		eyes = KeyBallsData.eyes_dog
 	else:
-		eyes = eyes_cat
+		eyes = KeyBallsData.eyes_cat
 	for key in ball_data:
 		var ball = ball_data[key]
 		var visual_ball

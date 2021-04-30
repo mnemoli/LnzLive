@@ -66,6 +66,10 @@ config/name="PetzRendering"
 run/main_scene="res://scenes/editor/editor.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+KeyBallsData="*res://data_classes/key_balls_data.gd"
+
 [debug]
 
 gdscript/warnings/shadowed_variable=false

@@ -28,8 +28,6 @@ func _on_user_file_selected(filepath):
 func _unhandled_key_input(event):
 	if Input.is_key_pressed(KEY_CONTROL) and event.pressed and event.scancode == KEY_S:
 		save_file()
-		emit_signal("file_saved", filepath)
-		print("saved file")
 		
 func save_file():
 	if is_user_file:
@@ -53,6 +51,7 @@ func save_file():
 		file.close()
 		filepath = possible_file_name
 		is_user_file = true
+	emit_signal("file_saved", filepath)
 
 func _on_Node_ball_selected(section, ball_no, is_addball, max_addball_no):
 	# need to find line number for the ball
@@ -157,3 +156,63 @@ func find_line_in_ball_or_addball_section(ball_no, start_point):
 			break;
 		i += 1
 	return start_point + i
+
+
+func _on_ToolsMenu_color_entire_pet(color_index):
+	var species = KeyBallsData.species
+	var balls_to_exclude = []
+	if species == KeyBallsData.Species.CAT:
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_cat)
+	else:
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_dog)
+		
+	var section_find = search('[Ballz Info]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		if i in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";"):
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the first number is color
+		var color_break = line.find(" ")
+		var line_without_color = line.substr(color_break)
+		set_line(start_of_section + i, str(color_index) + " " + line_without_color)
+		i += 1
+	
+	section_find = search('[Add Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";"):
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the fifth number is color
+		var parsed_line = r.search_all(line)
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 4:
+				final_line += str(color_index) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(start_of_section + i, final_line)
+		i += 1
+	save_file()
