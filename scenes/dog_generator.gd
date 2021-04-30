@@ -1,4 +1,3 @@
-tool
 extends Node
 
 export var pixel_world_size = 0.001;
@@ -58,6 +57,9 @@ var current_bdt: BdtParser
 
 signal animation_loaded(num_of_frames)
 signal bhd_loaded(num_of_animations)
+signal ball_mouse_enter(ball_info)
+signal ball_mouse_exit(ball_no)
+signal ball_selected(ball_no, is_addball)
 
 func set_animation(anim_index: int):
 	current_animation = anim_index
@@ -285,11 +287,8 @@ func apply_projections():
 		var visual_ball = ball_map[project_ball_data.ball] as Spatial
 		var static_ball = ball_map[project_ball_data.base] as Spatial
 		var vec = visual_ball.global_transform.origin - static_ball.global_transform.origin
-		vec *= (project_ball_data.amount / 100.0)
-		outputs[project_ball_data.ball] = outputs.get(project_ball_data.base, static_ball.global_transform.origin) + vec
-
-	for k in outputs:
-		ball_map[k].global_transform.origin = outputs[k]
+		var base_pos = static_ball.global_transform.origin
+		visual_ball.global_transform.origin = base_pos + (vec * project_ball_data.amount / 100.0)
 		
 func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 	for k in all_ball_dict.balls:
@@ -353,6 +352,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball = paintball_scene.instance()
 				visual_ball.add_to_group("balls")
 				visual_ball.z_add = 10
+#				visual_ball.connect("ball_mouse_enter", self, "ball_mouse_enter")
 			else:
 				visual_ball = ball_map[key]
 			var base_ball = ball_data[eyes[key]]
@@ -368,6 +368,9 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			if new_create:
 				visual_ball = ball_scene.instance()
 				visual_ball.add_to_group("balls")
+				visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
+				visual_ball.connect("ball_mouse_exit", self, "signal_ball_mouse_exit")
+				visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			else:
 				visual_ball = ball_map[key]
 			var rotated_pos = ball.position
@@ -413,8 +416,10 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			ball_map[ball.base].add_child(visual_ball)
 			visual_ball.set_owner(root)
 			visual_ball.add_to_group("addballs")
-			visual_ball.z_add = ball.size / 2.0
+			visual_ball.z_add = ball.size / 10.0
 			visual_ball.ball_size = ball.size
+			visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
+			visual_ball.connect("ball_selected", self, "signal_ball_selected")
 		var total_pos = ball.position
 		total_pos.y *= -1.0
 		visual_ball.transform.origin = total_pos * pixel_world_size
@@ -457,7 +462,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		for paintball in paintballs_for_base_ball:
 			var final_size = base_ball.size * (paintball.size / 100.0)
 			final_size -= 1 - fmod(final_size, 2)
-			var visual_ball
+			var visual_ball: Spatial
 			if new_create:
 				visual_ball = paintball_scene.instance()
 			else:
@@ -466,6 +471,8 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				ball_map[key].add_child(visual_ball)
 				visual_ball.set_owner(root)
 				visual_ball.add_to_group("paintballs")
+				visual_ball.connect("paintball_mouse_enter", self, "signal_paintball_mouse_enter")
+				visual_ball.connect("paintball_mouse_exit", self, "signal_paintball_mouse_exit")
 			visual_ball.base_ball_position = ball_map[key].global_transform.origin
 			visual_ball.transform.origin = paintball.normalised_position * Vector3(1, -1, 1) * (base_ball.size / 2.0) * pixel_world_size
 			visual_ball.ball_size = final_size
@@ -525,18 +532,23 @@ func generate_lines(line_data: Array, new_create: bool):
 			visual_line.look_at_from_position(middle_point, target_pos, Vector3.UP)
 			visual_line.rotation_degrees.x += 90
 			visual_line.scale.y = distance
-		if line.color == null:
-			visual_line.color = start.color
-		else:
-			visual_line.color = line.color
-		if line.r_color == null:
-			visual_line.r_color = start.color
-		else:
-			visual_line.r_color = line.r_color
-		if line.l_color == null:
-			visual_line.l_color = start.color
-		else:
-			visual_line.l_color = line.l_color
+		if new_create:
+			visual_line.texture = start.texture
+			visual_line.transparent_color = start.transparent_color
+			if line.color == null:
+				visual_line.color = start.color
+				visual_line.color_index = start.color_index
+			else:
+				visual_line.color = line.color
+				visual_line.color_index = line.color_index
+			if line.r_color == null:
+				visual_line.r_color = start.color
+			else:
+				visual_line.r_color = line.r_color
+			if line.l_color == null:
+				visual_line.l_color = start.color
+			else:
+				visual_line.l_color = line.l_color
 		visual_line.ball_world_pos1 = start_pos
 		visual_line.ball_world_pos2 = target_pos
 		visual_line.fuzz_amount = line.fuzz
@@ -577,3 +589,22 @@ func _on_PaintballCheckBox_toggled(button_pressed):
 func _on_LineCheckBox_toggled(button_pressed):
 	get_tree().call_group("lines", "set_visible", button_pressed)
 	draw_lines = button_pressed
+
+func signal_ball_mouse_enter(ball_info):
+	emit_signal("ball_mouse_enter", ball_info)
+	
+func signal_ball_mouse_exit(ball_no):
+	emit_signal("ball_mouse_exit", ball_no)
+
+func signal_paintball_mouse_enter(ball_info):
+	emit_signal("ball_mouse_enter", {ball_no = "Paintball on " + str(ball_info.base_ball_no)})
+	
+func signal_paintball_mouse_exit():
+	emit_signal("ball_mouse_exit", 0)
+
+func signal_ball_selected(ball_no, section):
+	var ball = ball_map[ball_no]
+	var is_addball = false
+	if ball.base_ball_no != -1:
+		is_addball = true
+	emit_signal("ball_selected", section, ball_no, is_addball, lnz.balls.keys().max() + 1)

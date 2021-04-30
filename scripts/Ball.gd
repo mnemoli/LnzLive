@@ -15,7 +15,15 @@ export var transparent_color = 0 setget set_transparent_color
 export var visible_override = true setget set_visible
 export var omitted = false
 
+var old_outline
+var old_outline_color
+var is_over = false
+
 var palette = preload("res://resources/textures/petzpalette.png")
+
+signal ball_mouse_enter(ball_info)
+signal ball_mouse_exit(ball_no)
+signal ball_selected(ball_no, section)
 
 func _ready():
 	$MeshInstance.material_override.set_shader_param("palette", palette)
@@ -24,11 +32,17 @@ func set_visible(new_value):
 	visible_override = new_value
 	if !omitted:
 		$MeshInstance.visible = new_value
+		$Area/CollisionShape.disabled = !new_value
+		$Area/CollisionShape.visible = new_value
+	else:
+		$Area/CollisionShape.disabled = true
+		$Area/CollisionShape.visible = false
 
 func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
-	var a = ball_size * 0.025
+	var a = ball_size * 0.05
+	$Area/CollisionShape.shape.radius = (a * 0.008)
 #	scale = Vector3(a,a,a)
 	
 func set_fuzz_amount(new_value):
@@ -62,3 +76,35 @@ func set_texture(new_value):
 func set_transparent_color(new_value):
 	transparent_color = new_value
 	$MeshInstance.material_override.set_shader_param("transparent_index", new_value)
+
+func _on_Area_mouse_entered():
+	is_over = true
+	old_outline = outline
+	old_outline_color = outline_color
+	set_outline(3)
+	set_outline_color(Color.white)
+	emit_signal("ball_mouse_enter", {ball_no = ball_no})
+	
+func _on_Area_mouse_exited():
+	is_over = false
+	set_outline(old_outline)
+	set_outline_color(old_outline_color)
+	outline_color = old_outline_color
+	emit_signal("ball_mouse_exit", ball_no)
+	
+func selected():
+		emit_signal("ball_selected", ball_no, Section.Section.BALL)
+
+func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.doubleclick:
+		selected()
+
+func _input(event):
+	if event is InputEventKey and event.pressed and is_over:
+		if event.scancode == KEY_B or event.scancode == KEY_Z:
+			emit_signal("ball_selected", ball_no, Section.Section.BALL)
+		elif event.scancode == KEY_M or event.scancode == KEY_X:
+			emit_signal("ball_selected", ball_no, Section.Section.MOVE)
+		elif event.scancode == KEY_P or event.scancode == KEY_C:
+			emit_signal("ball_selected", ball_no, Section.Section.PROJECT)
+		get_tree().set_input_as_handled()

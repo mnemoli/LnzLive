@@ -279,6 +279,8 @@ var omissions = {}
 var project_ball = []
 var texture_list = []
 
+var file_path
+
 func get_next_section(file: File, section_name: String):
 	file.seek(0)
 	var this_line = ""
@@ -323,6 +325,7 @@ func get_parsed_line_strings(file: File, keys: Array):
 	return return_array
 
 func _init(file_path):
+	self.file_path = file_path
 	r.compile("[-.\\d]+")
 	str_r.compile("[\\S]+")
 	var file = File.new()
@@ -464,7 +467,7 @@ func get_lines(file: File):
 		var color = color_chart.get(line.color)
 		var l_color = color_chart.get(line.l_color)
 		var r_color = color_chart.get(line.r_color)
-		var line_data = LineData.new(line.start, line.end, line.start_thickness, line.end_thickness, line.fuzz, color, l_color, r_color)
+		var line_data = LineData.new(line.start, line.end, line.start_thickness, line.end_thickness, line.fuzz, color, line.color, l_color, r_color)
 		lines.append(line_data)
 		
 func get_balls(file: File):

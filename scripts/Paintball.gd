@@ -12,8 +12,17 @@ export var z_add = 0.0 setget set_z_add
 export var base_ball_no = 0
 export var visible_override = true setget set_visible
 
+var old_outline
+var old_outline_color
+var is_over
+
+signal paintball_mouse_enter(paintball_info)
+signal paintball_mouse_exit()
+
 func set_visible(new_value):
 	visible_override = new_value
+	$Area/CollisionShape.disabled = !new_value
+	$Area/CollisionShape.visible = new_value
 	$MeshInstance.visible = new_value
 
 func set_z_add(new_value):
@@ -31,8 +40,9 @@ func set_base_ball_size(new_value):
 func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
-	var a = ball_size * 0.025
-	scale = Vector3(a,a,a)
+	var a = ball_size * 0.25
+	$Area/CollisionShape.shape.radius = a * 0.008
+#	scale = Vector3(a,a,a)
 	
 func set_fuzz_amount(new_value):
 	fuzz_amount = new_value
@@ -49,3 +59,24 @@ func set_color(new_value):
 func set_outline_color(new_value):
 	outline_color = new_value
 	$MeshInstance.material_override.set_shader_param("outline_color", new_value)
+
+func selected():
+	pass
+
+func _on_Area_mouse_entered():
+	old_outline = outline
+	old_outline_color = outline_color
+	set_outline(3)
+	set_outline_color(Color.white)
+	emit_signal("paintball_mouse_enter", {base_ball_no = base_ball_no})
+	is_over = true
+
+func _on_Area_mouse_exited():
+	set_outline(old_outline)
+	set_outline_color(old_outline_color)
+	emit_signal("paintball_mouse_exit")
+	is_over = false
+	
+func _input(event):
+	if event is InputEventKey and event.pressed and is_over:
+		get_tree().set_input_as_handled()

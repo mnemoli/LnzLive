@@ -136,7 +136,7 @@ void vertex() {
 	base_center_fragcoord = floor(base_center_ndc * VIEWPORT_SIZE) + 0.5;
 	
 	if (vert_in_clip_space.z - base_center_clip_space.z > 0.0) {
-		vert_in_clip_space.z = base_center_clip_space.z + (float(base_ball_size) / 2.0 * 0.001) + 0.001;
+		vert_in_clip_space.z = base_center_clip_space.z + 0.001;
 	}
 	vert_in_clip_space.z = center_clip_space.z;
 	vert_in_clip_space.z += z_add * 0.001 + 0.001;

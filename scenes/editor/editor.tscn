@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
@@ -7,12 +7,30 @@
 [ext_resource path="res://scenes/editor/FrameSlider.gd" type="Script" id=5]
 [ext_resource path="res://scenes/editor/PlayButton.gd" type="Script" id=6]
 [ext_resource path="res://scenes/editor/FPSLabel.gd" type="Script" id=7]
+[ext_resource path="res://new_dynamicfontdata.tres" type="DynamicFontData" id=8]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0, 0.501961, 0.501961, 1 )
 
-[sub_resource type="ViewportTexture" id=2]
-viewport_path = NodePath("PetRoot/petholder/Viewport")
+[sub_resource type="ViewportTexture" id=3]
+viewport_path = NodePath("SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/Viewport")
+
+[sub_resource type="DynamicFontData" id=4]
+font_path = "res://resources/DroidSans.ttf"
+
+[sub_resource type="DynamicFont" id=5]
+size = 32
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = SubResource( 4 )
+
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=7]
+font_data = ExtResource( 8 )
 
 [node name="Root" type="Node"]
 
@@ -31,24 +49,16 @@ script = ExtResource( 3 )
 
 [node name="lines" type="Spatial" parent="PetRoot/petholder"]
 
-[node name="Viewport" type="Viewport" parent="PetRoot/petholder"]
-size = Vector2( 1000, 1000 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="CameraHolder" type="Spatial" parent="PetRoot/petholder/Viewport"]
-
-[node name="Camera" type="Camera" parent="PetRoot/petholder/Viewport/CameraHolder"]
-transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
-keep_aspect = 0
-projection = 1
-near = 0.01
-far = 1000.0
+[node name="MeshInstance" type="MeshInstance" parent="PetRoot"]
+transform = Transform( 0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0 )
+visible = false
+mesh = SubResource( 1 )
+material/0 = null
 
 [node name="SceneRoot" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -56,18 +66,20 @@ __meta__ = {
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer"]
-margin_right = 335.0
+margin_right = 285.0
 margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer"]
-margin_right = 335.0
+margin_right = 285.0
 margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -84,7 +96,8 @@ margin_bottom = 20.0
 items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false ]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
-margin_left = 347.0
+show_behind_parent = true
+margin_left = 297.0
 margin_right = 1024.0
 margin_bottom = 768.0
 size_flags_horizontal = 3
@@ -92,42 +105,67 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="PetViewContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 768.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 2 )
 script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TextureRect" type="TextureRect" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 768.0
-texture = SubResource( 2 )
+mouse_default_cursor_shape = 3
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 3 )
 expand = true
 stretch_mode = 4
 flip_v = true
 
+[node name="Viewport" type="Viewport" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
+size = Vector2( 1000, 1000 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+physics_object_picking = true
+
+[node name="CameraHolder" type="Spatial" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/Viewport"]
+
+[node name="Camera" type="Camera" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/Viewport/CameraHolder"]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
+keep_aspect = 0
+projection = 1
+near = 0.01
+far = 1000.0
+
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 768.0
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 24.0
-size_flags_vertical = 0
+mouse_filter = 0
 
 [node name="AnimPicker" type="LineEdit" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
 margin_right = 58.0
 margin_bottom = 24.0
+mouse_filter = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="FrameSlider" type="HSlider" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
 margin_left = 62.0
-margin_right = 396.0
+margin_right = 443.0
 margin_bottom = 16.0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 15.0
 max_value = 5.0
@@ -135,9 +173,10 @@ rounded = true
 script = ExtResource( 5 )
 
 [node name="Button" type="Button" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
-margin_left = 400.0
-margin_right = 438.0
+margin_left = 447.0
+margin_right = 485.0
 margin_bottom = 20.0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 0
 toggle_mode = true
@@ -148,21 +187,24 @@ script = ExtResource( 6 )
 wait_time = 0.06
 
 [node name="FPSLabel" type="Label" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
-margin_left = 442.0
+margin_left = 489.0
 margin_top = 5.0
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 19.0
+mouse_filter = 1
 size_flags_horizontal = 3
 script = ExtResource( 7 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
 margin_top = 28.0
-margin_right = 465.0
+margin_right = 515.0
 margin_bottom = 52.0
+mouse_filter = 0
 
 [node name="BallCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
 margin_right = 94.0
 margin_bottom = 24.0
+mouse_filter = 1
 pressed = true
 text = "Draw balls"
 
@@ -170,6 +212,7 @@ text = "Draw balls"
 margin_left = 98.0
 margin_right = 215.0
 margin_bottom = 24.0
+mouse_filter = 1
 pressed = true
 text = "Draw addballs"
 
@@ -177,6 +220,7 @@ text = "Draw addballs"
 margin_left = 219.0
 margin_right = 345.0
 margin_bottom = 24.0
+mouse_filter = 1
 pressed = true
 text = "Draw paintballs"
 
@@ -184,12 +228,33 @@ text = "Draw paintballs"
 margin_left = 349.0
 margin_right = 444.0
 margin_bottom = 24.0
+mouse_filter = 1
 pressed = true
 text = "Draw lines"
 
+[node name="SelectCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 448.0
+margin_right = 515.0
+margin_bottom = 24.0
+text = "Select"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
+margin_right = 515.0
+margin_bottom = 768.0
+mouse_filter = 2
+alignment = 2
+
+[node name="HelpButton" type="Button" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer2"]
+margin_left = 473.0
+margin_top = 748.0
+margin_right = 515.0
+margin_bottom = 768.0
+size_flags_horizontal = 8
+text = "Help"
+
 [node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_left = 477.0
-margin_right = 677.0
+margin_left = 527.0
+margin_right = 727.0
 margin_bottom = 768.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 13
@@ -202,13 +267,25 @@ margin_right = 193.0
 margin_bottom = 761.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+highlight_current_line = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label" type="Label" parent="SceneRoot"]
+visible = false
+margin_left = 442.0
+margin_top = 481.0
+margin_right = 558.0
+margin_bottom = 519.0
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="RenameDialog" type="AcceptDialog" parent="SceneRoot"]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -227,14 +304,100 @@ margin_left = 8.0
 margin_top = 8.0
 margin_right = 504.0
 margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupDialog" type="WindowDialog" parent="SceneRoot"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -250.0
+margin_top = -250.0
+margin_right = 250.0
+margin_bottom = 250.0
+window_title = "Help"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SceneRoot/PopupDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+custom_fonts/bold_font = SubResource( 6 )
+custom_fonts/normal_font = SubResource( 7 )
+bbcode_enabled = true
+bbcode_text = "[b]Basic Controls[/b]
+
+Load a sample pet by double-clicking it in the left-hand menu.
+
+Click and drag in the centre screen to rotate the pet. Use the mouse wheel to zoom.
+
+Edit the LNZ file in the right-hand text box. Hit Ctrl+S to save your changes and refresh the pet render.
+
+When you save, the edited LNZ will be stored in your browser's local storage.
+
+If you want to load your own pet, extract the LNZ using LNZ Pro, paste into the text box and save. Only pet files are fully supported; breed files may not display correctly. Pasting requires browser permission to access your clipboard. No data is sent anywhere; all files and data are processed client-side in your browser.
+
+To view animations, type an animation number in the box at the top and hit enter. There are roughly 500 animations per species.
+
+[b]Selecting[/b]
+
+Tick the Select checkbox to turn on selecting.
+
+Highlight balls/paintballs using the mouse. Use the checkboxes to hide addballs/balls/paintballs if you don't want to select them.
+
+While a ball or addball is selected:
+- Double-click or press Z or B to go to the ball in the Ball Info/Add Ball section.
+
+- Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
+
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+text = "Basic Controls
+
+Load a sample pet by double-clicking it in the left-hand menu.
+
+Click and drag in the centre screen to rotate the pet. Use the mouse wheel to zoom.
+
+Edit the LNZ file in the right-hand text box. Hit Ctrl+S to save your changes and refresh the pet render.
+
+When you save, the edited LNZ will be stored in your browser's local storage.
+
+If you want to load your own pet, extract the LNZ using LNZ Pro, paste into the text box and save. Only pet files are fully supported; breed files may not display correctly. Pasting requires browser permission to access your clipboard. No data is sent anywhere; all files and data are processed client-side in your browser.
+
+To view animations, type an animation number in the box at the top and hit enter. There are roughly 500 animations per species.
+
+Selecting
+
+Tick the Select checkbox to turn on selecting.
+
+Highlight balls/paintballs using the mouse. Use the checkboxes to hide addballs/balls/paintballs if you don't want to select them.
+
+While a ball or addball is selected:
+- Double-click or press Z or B to go to the ball in the Ball Info/Add Ball section.
+
+- Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
+
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
+[connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
 [connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
 [connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
 [connection signal="text_entered" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/AnimPicker" to="PetRoot/Node" method="_on_AnimPicker_text_entered"]
 [connection signal="value_changed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" to="PetRoot/Node" method="set_frame"]
@@ -244,6 +407,9 @@ margin_bottom = 32.0
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/AddballCheckBox" to="PetRoot/Node" method="_on_AddballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/PaintballCheckBox" to="PetRoot/Node" method="_on_PaintballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
+[connection signal="pressed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer2/HelpButton" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_HelpButton_pressed"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
+[connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]

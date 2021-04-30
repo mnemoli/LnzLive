@@ -20,6 +20,13 @@ If you want to load your own pet, extract the LNZ using LNZ Pro, paste into the 
 
 To view animations, type an animation number in the box at the top and hit enter. There are roughly 500 animations per species.
 
+Use the Select checkbox to turn on ball selection. Hide addballs/paintballs if you don't want to select them.
+
+While a ball/paintball is selected:
+- Double-click or press Z or B to go to the ball in the Ball Info/Add Ball section.
+- Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball.
+
 ## Limitations
 
 This app is in development. Expect crashes and visual bugs.

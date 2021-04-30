@@ -9,6 +9,7 @@ uniform int line_width_in_pixels_start = 20;
 uniform int fuzz_amount = 0;
 uniform int line_width_in_pixels_end = 20;
 uniform vec4 color : hint_color = vec4(vec3(1.0), 1.0);
+uniform int color_index = 0;
 uniform vec4 r_color : hint_color = vec4(vec3(0.0), 1.0);
 uniform vec4 l_color : hint_color = vec4(vec3(0.0), 1.0);
 varying flat vec2 center_of_line;
@@ -16,11 +17,22 @@ varying float right_boundary;
 varying float left_boundary;
 uniform vec3 ball_world_pos1 = vec3(0.0);
 uniform vec3 ball_world_pos2 = vec3(0.0);
+uniform sampler2D line_texture: hint_white;
+uniform int transparent_index = 0;
+uniform sampler2D palette: hint_white;
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
                          vec2(12.9898,78.233)))*
         43758.5453123);
+}
+
+vec3 get_shifted_color(int palette_index) {
+	int modded_color = color_index - int(mod(float(color_index), 10.0));
+	int amount_to_shift_index = int(mod(float(palette_index), 10.0));
+	int new_palette_index = modded_color + amount_to_shift_index;
+	vec3 new_color = texture(palette, vec2(float(new_palette_index)/256.0, 0.0)).rgb;
+	return new_color;
 }
 
 void fragment() {
@@ -63,7 +75,30 @@ void fragment() {
 	pct2 -= pct;
 	pct3 -= pct;
 	
-	ALBEDO = vec3(pct * color.rgb + pct2 * l_color.rgb + pct3 * r_color.rgb);
+	vec3 texture_color;
+  if (transparent_index > 0 && color_index < 150) {
+	  // get the base texture color
+	  texture_color = texture(line_texture, UV).rgb;
+	  int palette_index = 0;
+	  // find the palette index of the base texture color
+	  for(int i = 0; i < 256; i++) {
+		vec3 palette_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
+		if (palette_color == texture_color) {
+		  palette_index = i;
+		  break;
+		  }
+		}
+	  // if the index of the texture is the same as the transparent color
+	  // then palette shift	
+	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
+		texture_color = get_shifted_color(palette_index);
+	  }
+	}
+  else {
+	texture_color = color.rgb;  
+}
+	
+	ALBEDO = vec3(pct * texture_color + pct2 * l_color.rgb + pct3 * r_color.rgb);
 	ALPHA = pct + pct2 + pct3;
 }
 
@@ -162,11 +197,13 @@ void vertex() {
 [resource]
 resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/line_width_in_pixels_start = 20
-shader_param/fuzz_amount = 1
-shader_param/line_width_in_pixels_end = 20
-shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/line_width_in_pixels_start = 10.0
+shader_param/fuzz_amount = 0
+shader_param/line_width_in_pixels_end = 10.0
+shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/color_index = 0
 shader_param/r_color = Color( 0, 0, 0, 1 )
 shader_param/l_color = Color( 0, 0, 0, 1 )
 shader_param/ball_world_pos1 = Vector3( 0, 0, 0 )
 shader_param/ball_world_pos2 = Vector3( 0, 0, 0 )
+shader_param/transparent_index = 0
