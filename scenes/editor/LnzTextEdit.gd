@@ -718,7 +718,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	select(start_of_section, 0, start_of_section + lines_in_addball_section - 1, 999)
 	cut()
 	cursor_set_line(start_of_section)
-	center_viewport_to_cursor()
+	cursor_set_column(0)
 	var final_text = ""
 	for k in ball_map:
 		if k > 66:
@@ -733,7 +733,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	select(start_of_section, 0, start_of_section + lines_in_linez_section - 1, 999)
 	cut()
 	cursor_set_line(start_of_section)
-	center_viewport_to_cursor()
+	cursor_set_column(0)
 	final_text = ""
 	for k in lines_list:
 		final_text += k + "\n"
@@ -747,7 +747,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	select(start_of_section, 0, start_of_section + lines_in_move_section - 1, 999)
 	cut()
 	cursor_set_line(start_of_section)
-	center_viewport_to_cursor()
+	cursor_set_column(0)
 	final_text = ""
 	for k in moves_list:
 		final_text += k + "\n"
@@ -761,7 +761,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	select(start_of_section, 0, start_of_section + lines_in_projections_section - 1, 999)
 	cut()
 	cursor_set_line(start_of_section)
-	center_viewport_to_cursor()
+	cursor_set_column(0)
 	final_text = ""
 	for k in projections_list:
 		final_text += k + "\n"
@@ -775,7 +775,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	select(start_of_section, 0, start_of_section + lines_in_paintball_section - 1, 999)
 	cut()
 	cursor_set_line(start_of_section)
-	center_viewport_to_cursor()
+	cursor_set_column(0)
 	final_text = ""
 	for k in paintballs_list:
 		final_text += k + "\n"
@@ -788,3 +788,49 @@ func _on_ToolsMenu_copy_l_to_r():
 
 func _on_Tree_backup_file():
 	save_backup()
+
+func _on_ToolsMenu_add_ball(selected_visual_ball):
+	var real_base_ball = selected_visual_ball.ball_no
+	if selected_visual_ball.base_ball_no != -1:
+		real_base_ball = selected_visual_ball.base_ball_no
+		
+	var section_find = search('[Add Ball]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		i+=1
+	var lines_in_addball_section = i
+	var new_ball_no = 67 + i
+	var new_ball_cursor_position = start_of_section + lines_in_addball_section + 1
+	cursor_set_line(start_of_section + lines_in_addball_section)
+	cursor_set_column(0)
+	var position: Vector3
+	if selected_visual_ball.base_ball_no != -1:
+		position = selected_visual_ball.transform.origin * 1000.0
+	else:
+		position = Vector3.ZERO
+	var new_addball_text = "%s %d %d %d %s %s 0 %s 0 %s 10 0 0 0 0\n" % [real_base_ball, position.x, position.y, position.z, selected_visual_ball.color_index, selected_visual_ball.outline_color_index, selected_visual_ball.fuzz_amount, selected_visual_ball.old_outline]
+	insert_text_at_cursor(new_addball_text)
+	
+#	# add line
+	section_find = search('[Linez]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		i += 1
+	cursor_set_line(start_of_section + i)
+	cursor_set_column(0)
+	var new_line_text = "%s %s 1 -1 -1 -1 95 95 -1 0\n" % [new_ball_no, selected_visual_ball.ball_no]
+	insert_text_at_cursor(new_line_text)
+	cursor_set_line(new_ball_cursor_position)
+	center_viewport_to_cursor()
+	
+#	save_file()

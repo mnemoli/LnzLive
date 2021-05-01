@@ -448,6 +448,8 @@ size_flags_horizontal = 3
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
+[connection signal="about_to_show" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_about_to_show"]
+[connection signal="add_ball" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_add_ball"]
 [connection signal="color_entire_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_entire_pet"]
 [connection signal="color_part_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_part_pet"]
 [connection signal="copy_l_to_r" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_copy_l_to_r"]

@@ -13,6 +13,7 @@ export var fuzz = 0
 export var group = -1
 export var texture_id = -1
 export var rotation = Vector3.ZERO
+export var outline_color_index = 0
 
 func _init(
  size: int,
@@ -22,6 +23,7 @@ func _init(
  color: Color = Color.white,
  color_index = 0,
  outline_color = Color.black,
+ outline_color_index = 0,
  outline = -1,
  fuzz = 0,
  z_add = 0.0,
@@ -39,3 +41,4 @@ func _init(
 	self.texture_id = texture_id
 	self.color_index = color_index
 	self.rotation = rotation
+	self.outline_color_index = outline_color_index

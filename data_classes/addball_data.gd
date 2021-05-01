@@ -14,6 +14,7 @@ export var group = -1
 export var body_area = 1
 export var ball_no = -1
 export var texture_id = -1
+export var outline_color_index = 0
 
 func _init(
  base: int,
@@ -23,6 +24,7 @@ func _init(
  color: Color = Color.white,
  color_index: int = -1,
  outline_color = Color.black,
+ outline_color_index: int = 0,
  outline = -1,
  fuzz = 0,
  z_add = 0.0,
@@ -42,3 +44,4 @@ func _init(
 	self.body_area = body_area
 	self.ball_no = ball_no
 	self.texture_id = texture_id
+	self.outline_color_index = outline_color_index

@@ -56,7 +56,6 @@ func _gui_input(event):
 func _unhandled_key_input(event):
 	if event.pressed and last_selected_is_valid():
 		last_selected._input(event)
-		get_tree().set_input_as_handled()
 		
 func last_selected_is_valid():
 	return last_selected != null and is_instance_valid(last_selected)

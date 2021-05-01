@@ -86,7 +86,7 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var addballs = {}
 	for k in lnz_info.addballs:
 		var a = lnz_info.addballs[k]
-		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color, a.color_index, a.outline_color, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
+		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color, a.color_index, a.outline_color, a.outline_color_index, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
 	
 	var paintballs = {}
 	
@@ -232,6 +232,7 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		b.size += v.size
 		b.color = v.color
 		b.outline_color = v.outline_color
+		b.outline_color_index = v.outline_color_index
 		b.outline = v.outline
 		b.fuzz = v.fuzz
 		var moves = lnz.moves.get(k, [])
@@ -360,6 +361,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				else:
 					visual_ball.transparent_color = ball.color
 				visual_ball.color_index = ball.color_index
+				visual_ball.outline_color_index = ball.outline_color_index
 		if new_create:
 			visual_ball.ball_size = get_real_ball_size(ball.size)
 			visual_ball.color = ball.color
@@ -402,6 +404,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.fuzz_amount = ball.fuzz / 2
 			visual_ball.ball_no = ball.ball_no
 			visual_ball.base_ball_no = ball.base
+			visual_ball.outline_color_index = ball.outline_color_index
 		visual_ball.scale = Vector3(1,1,1)
 		if new_create:
 			if ball.texture_id > -1:

@@ -7,6 +7,7 @@ export var outline = -1 setget set_outline
 export var color = Color.white setget set_color
 export var color_index = 0 setget set_color_index
 export var outline_color = Color.black setget set_outline_color
+export var outline_color_index = 0 setget set_outline_color_index
 export var z_add = 0.0 setget set_z_add
 export var ball_no = 0
 export var base_ball_no = -1
@@ -65,6 +66,9 @@ func set_outline_color(new_value):
 	outline_color = new_value
 	$MeshInstance.material_override.set_shader_param("outline_color", new_value)
 	
+func set_outline_color_index(new_value):
+	outline_color_index = new_value
+	
 func set_z_add(new_value):
 	z_add = new_value
 	$MeshInstance.material_override.set_shader_param("z_add", new_value)
@@ -89,7 +93,6 @@ func _on_Area_mouse_exited():
 	is_over = false
 	set_outline(old_outline)
 	set_outline_color(old_outline_color)
-	outline_color = old_outline_color
 	emit_signal("ball_mouse_exit", ball_no)
 	
 func selected():
@@ -101,6 +104,8 @@ func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx
 
 func _input(event):
 	if event is InputEventKey and event.pressed and is_over:
+		if event.scancode == KEY_SPACE and event.control:
+			return
 		if event.scancode == KEY_B or event.scancode == KEY_Z:
 			emit_signal("ball_selected", ball_no, Section.Section.BALL)
 		elif event.scancode == KEY_M or event.scancode == KEY_X:

@@ -2,6 +2,7 @@ extends PopupMenu
 
 signal color_entire_pet(color_index)
 signal color_part_pet(core_ball_nos, color_index)
+signal add_ball(selected_ball)
 signal copy_l_to_r
 var current_action
 
@@ -9,7 +10,7 @@ enum RecolorAction { ENTIRE, LEGS, TAIL, HEAD, SNOUT, EARS, PAWS }
 
 func _ready():
 	add_submenu_item("Color...", "RecolorMenu")
-#	add_item("Add ball")
+	add_item("Add ball")
 	add_item("Copy L to R")
 
 func _on_LineEdit_gui_input(event):
@@ -72,5 +73,13 @@ func _on_RecolorMenu_id_pressed(id):
 	get_parent().get_node("ColorPopup").popup()
 
 func _on_ToolsMenu_index_pressed(index):
-	if index == 3: #copy l to r
+	if index == 2: #copy l to r
 		emit_signal("copy_l_to_r")
+	elif index == 1: # add ball
+		var view_container = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer")
+		if view_container.last_selected_is_valid():
+			emit_signal("add_ball", view_container.last_selected)
+
+func _on_ToolsMenu_about_to_show():
+	var view_container = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer")
+	set_item_disabled(1, !view_container.last_selected_is_valid())
