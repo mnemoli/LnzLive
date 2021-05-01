@@ -297,6 +297,20 @@ func get_corresponding_right_ball(left_ball_index):
 			return left_ball_index + 24
 	else:
 		return ball_map[ball_map[left_ball_index].corresponding_ball].new_ball_no
+		
+func get_corresponding_left_ball(right_ball_index):
+	if right_ball_index < 67:
+		if KeyBallsData.species == KeyBallsData.Species.CAT:
+			if right_ball_index in [10, 11]:
+				return right_ball_index - 2
+			elif right_ball_index in [19, 20, 21] or right_ball_index in [52, 53, 54] or right_ball_index in [60, 61, 62]: # finger, toe, whisker
+				return right_ball_index - 3
+			else:
+				return right_ball_index - 1
+		else:
+			return right_ball_index - 24
+	else:
+		return ball_map[ball_map[right_ball_index].corresponding_ball].new_ball_no
 
 var ball_map = {}
 	
@@ -440,8 +454,6 @@ func _on_ToolsMenu_copy_l_to_r():
 						additional_end_ball = final_end_ball
 					elif additional_start_ball == null:
 						additional_start_ball = final_start_ball
-					if additional_end_ball == 87 or final_end_ball == 87:
-						print("asdfsdfasdf")
 					var p = 0
 					for item in parsed_line:
 						if p == 0:
@@ -453,8 +465,6 @@ func _on_ToolsMenu_copy_l_to_r():
 						p+=1
 					lines_list.append(final_line)
 					final_line = ""
-				if final_end_ball == 87:
-					print("asdfsdfasdf")
 				var p = 0
 				for item in parsed_line:
 					if p == 0:
@@ -472,11 +482,6 @@ func _on_ToolsMenu_copy_l_to_r():
 			else:
 				var final_start_ball = ball_map[start_ball].new_ball_no
 				var final_end_ball = ball_map[end_ball].new_ball_no
-				
-				if final_end_ball == 87:
-					print("asdfsdfasdf")
-				if final_start_ball != start_ball or final_end_ball != end_ball:
-					print("pew pew")
 				var p = 0
 				for item in parsed_line:
 					if p == 0:
@@ -491,6 +496,175 @@ func _on_ToolsMenu_copy_l_to_r():
 	
 	var lines_in_linez_section = i
 	
+	# deal with moves. only need to care about base balls
+	section_find = search('[Move]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	var moves_list = []
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		var parsed_line = r.search_all(line)
+		var move_ball_no = int(parsed_line[0].get_string())
+		if move_ball_no in left_balls_list:
+			moves_list.append(line)
+			var final_line = ""
+			var p = 0
+			for item in parsed_line:
+				if p == 0:
+					final_line += str(get_corresponding_right_ball(move_ball_no)) + " "
+				elif p == 1:
+					final_line += str(int(item.get_string()) * -1.0) + " "
+				else:
+					final_line += item.get_string() + " "
+				p += 1
+			moves_list.append(final_line)
+		elif move_ball_no in middle_balls_list:
+			moves_list.append(line)
+		i += 1
+		
+	var lines_in_move_section = i
+	
+	# projections
+	section_find = search('[Project Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	var projections_list = []
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		var parsed_line = r.search_all(line)
+		var base_ball_no = int(parsed_line[0].get_string())
+		var move_ball_no = int(parsed_line[1].get_string())
+		if move_ball_no in left_balls_list:
+			if move_ball_no > 66:
+				var new_ball_no = ball_map[move_ball_no].new_ball_no
+				var final_line = ""
+				var p = 0
+				for item in parsed_line:
+					if p == 0:
+						final_line += str(ball_map[base_ball_no].new_ball_no) + " "
+					elif p == 1:
+						final_line += str(ball_map[move_ball_no].new_ball_no) + " "
+					else:
+						final_line += item.get_string() + " "
+					p += 1
+				projections_list.append(final_line)
+			else:
+				projections_list.append(line)
+			var final_line = ""
+			var p = 0
+			for item in parsed_line:
+				if p == 0:
+					if base_ball_no in left_balls_list:
+						final_line += str(get_corresponding_right_ball(base_ball_no)) + " "
+					elif !base_ball_no in middle_balls_list: #right ball!
+						final_line += str(get_corresponding_left_ball(base_ball_no)) + " "
+					else:
+						final_line += str(ball_map[base_ball_no].new_ball_no) + " "
+				elif p == 1:
+					if move_ball_no in left_balls_list:
+						final_line += str(get_corresponding_right_ball(move_ball_no)) + " "
+					else:
+						final_line += str(ball_map[move_ball_no].new_ball_no) + " "
+				else:
+					final_line += item.get_string() + " "
+				p += 1
+			projections_list.append(final_line)
+		elif move_ball_no in middle_balls_list:
+			var final_line = ""
+			var p = 0
+			for item in parsed_line:
+				if p == 0:
+					if base_ball_no in left_balls_list:
+						final_line += str(get_corresponding_right_ball(base_ball_no)) + " "
+					elif !base_ball_no in middle_balls_list: #right ball!
+						final_line += str(get_corresponding_left_ball(base_ball_no)) + " "
+					else:
+						final_line += str(ball_map[base_ball_no].new_ball_no) + " "
+				elif p == 1:
+					final_line += str(ball_map[move_ball_no].new_ball_no) + " "
+				else:
+					final_line += item.get_string()
+				p += 1
+			projections_list.append(final_line)
+		i += 1
+		
+	var lines_in_projections_section = i
+	
+	# paintballs
+	# deal with moves. only need to care about base balls
+	section_find = search('[Paint Ballz]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	var paintballs_list = []
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		var parsed_line = r.search_all(line)
+		var base_ball_no = int(parsed_line[0].get_string())
+		if base_ball_no in left_balls_list:
+			var new_base_ball_no = ball_map[base_ball_no].new_ball_no
+			# add original line
+			var final_line = ""
+			var p = 0
+			for item in parsed_line:
+				if p == 0:
+					final_line += str(new_base_ball_no) + " "
+				else:
+					final_line += item.get_string() + " "
+				p += 1
+			paintballs_list.append(final_line)
+			# add flipped line
+			final_line = ""
+			p = 0
+			for item in parsed_line:
+				if p == 0:
+					final_line += str(get_corresponding_right_ball(base_ball_no)) + " "
+				elif p == 2:
+					final_line += str(float(item.get_string()) * -1.0) +  " "
+				else:
+					final_line += item.get_string() + " "
+				p += 1
+			paintballs_list.append(final_line)
+		elif base_ball_no in middle_balls_list:
+			var x_pos = float(parsed_line[2].get_string())
+			if x_pos > 0.0: # right ball do nothing
+				pass
+			else:
+				var new_base_ball_no = ball_map[base_ball_no].new_ball_no
+				# add original line
+				var final_line = ""
+				var p = 0
+				for item in parsed_line:
+					if p == 0:
+						final_line += str(new_base_ball_no) + " "
+					else:
+						final_line += item.get_string() + " "
+					p += 1
+				paintballs_list.append(final_line)
+				if x_pos < 0.0: # left side
+					final_line = ""
+					p = 0
+					for item in parsed_line:
+						if p == 0:
+							final_line += str(new_base_ball_no) + " "
+						elif p == 2:
+							final_line += str(x_pos * -1.0) + " "
+						else:
+							final_line += item.get_string() + " "
+						p += 1
+					paintballs_list.append(final_line)
+		i += 1
+	
+	var lines_in_paintball_section = i
+	
 	# remove all the addball lines!
 	# in a really moronic way
 	section_find = search('[Add Ball]', 0, 0, 0)
@@ -503,6 +677,7 @@ func _on_ToolsMenu_copy_l_to_r():
 	for k in ball_map:
 		if k > 66:
 			final_text += ball_map[k].line + "\n"
+	final_text = final_text.strip_edges()
 	insert_text_at_cursor(final_text)
 	
 	# remove all the linez lines!
@@ -516,7 +691,52 @@ func _on_ToolsMenu_copy_l_to_r():
 	final_text = ""
 	for k in lines_list:
 		final_text += k + "\n"
+	final_text = final_text.strip_edges()
 	insert_text_at_cursor(final_text)
+	
+	# remove all the moves lines!
+	# in a really moronic way
+	section_find = search('[Move]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	select(start_of_section, 0, start_of_section + lines_in_move_section - 1, 999)
+	cut()
+	cursor_set_line(start_of_section)
+	center_viewport_to_cursor()
+	final_text = ""
+	for k in moves_list:
+		final_text += k + "\n"
+	final_text = final_text.strip_edges()
+	insert_text_at_cursor(final_text)
+	
+	# remove all the projections lines!
+	# in a really moronic way
+	section_find = search('[Project Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	select(start_of_section, 0, start_of_section + lines_in_projections_section - 1, 999)
+	cut()
+	cursor_set_line(start_of_section)
+	center_viewport_to_cursor()
+	final_text = ""
+	for k in projections_list:
+		final_text += k + "\n"
+	final_text = final_text.strip_edges()
+	insert_text_at_cursor(final_text)
+
+	# remove all the paintballs lines!
+	# in a really moronic way
+	section_find = search('[Paint Ballz]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	select(start_of_section, 0, start_of_section + lines_in_paintball_section - 1, 999)
+	cut()
+	cursor_set_line(start_of_section)
+	center_viewport_to_cursor()
+	final_text = ""
+	for k in paintballs_list:
+		final_text += k + "\n"
+	final_text = final_text.strip_edges()
+	insert_text_at_cursor(final_text)
+	
+	ball_map = {}
 	
 	save_file()
 
