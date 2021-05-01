@@ -30,6 +30,19 @@ func _unhandled_key_input(event):
 	if Input.is_key_pressed(KEY_CONTROL) and event.pressed and event.scancode == KEY_S:
 		save_file()
 		
+func save_backup():
+	if is_user_file:
+		var dir = Directory.new()
+		dir.open("user://")
+		dir.make_dir("resources")
+		var file = File.new()
+		file.open(filepath.replace( ".lnz", "_backup.lnz"), File.WRITE)
+		file.store_string(text)
+		file.close()
+	else:
+		save_file()
+		save_backup()
+		
 func save_file():
 	if is_user_file:
 		var dir = Directory.new()
@@ -205,6 +218,9 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 			break
 		# here the fifth number is color
 		var parsed_line = r.search_all(line)
+		if int(parsed_line[0].get_string()) in balls_to_exclude:
+			i += 1
+			continue
 		var n = 0
 		var final_line = ""
 		for r_item in parsed_line:
@@ -268,6 +284,9 @@ func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index):
 			break
 		# here the fifth number is color
 		var parsed_line = r.search_all(line)
+		if int(parsed_line[0].get_string()) in balls_to_exclude:
+			i += 1
+			continue
 		if !(int(parsed_line[0].get_string()) in core_ball_nos):
 			i+=1
 			continue
@@ -315,7 +334,9 @@ func get_corresponding_left_ball(right_ball_index):
 var ball_map = {}
 	
 func _on_ToolsMenu_copy_l_to_r():
-	# build up bal map
+	save_backup()
+	
+	# build up ball map
 	ball_map = {}
 	var section_find = search('[Ballz Info]', 0, 0, 0)
 	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
@@ -342,9 +363,24 @@ func _on_ToolsMenu_copy_l_to_r():
 		if i in left_balls_list or i in middle_balls_list:
 			var d = {line = line, new_ball_no = i}
 			if i in left_balls_list:
+				var parsed_line = r.search_all(line)
+				var mirrored_line = ""
+				if parsed_line[4].get_string() in ["0", "-2"]: # outline needs to be mirrored
+					var p = 0
+					for item in parsed_line:
+						if p == 4: #outline type
+							if item.get_string() == "0":
+								mirrored_line += "-2 "
+							else:
+								mirrored_line += "0 "
+						else:
+							mirrored_line += item.get_string() + " "
+						p += 1
+				else:
+					mirrored_line = line
 				d.corresponding_ball = get_corresponding_right_ball(i)
-				set_line(start_of_section + d.corresponding_ball, line)
-				ball_map[d.corresponding_ball] = {line = line, corresponding_ball = i, new_ball_no = d.corresponding_ball}
+				set_line(start_of_section + d.corresponding_ball, mirrored_line)
+				ball_map[d.corresponding_ball] = {line = mirrored_line, corresponding_ball = i, new_ball_no = d.corresponding_ball}
 			else:
 				d.corresponding_ball = null
 			ball_map[i] = d
@@ -383,6 +419,11 @@ func _on_ToolsMenu_copy_l_to_r():
 						new_right_ball_line += str(corresponding_right_ball) + " "
 					elif p == 1: # reverse x value
 						new_right_ball_line += str(int(item.get_string()) * -1.0) + " "
+					elif p == 9 and item.get_string() in ["0", "-2"]: # outline
+						if item.get_string() == "0":
+							new_right_ball_line += "-2 "
+						else:
+							new_right_ball_line += "0 "
 					else:
 						new_right_ball_line += item.get_string() + " "
 					p+=1
@@ -399,6 +440,11 @@ func _on_ToolsMenu_copy_l_to_r():
 					for item in parsed_line:
 						if p == 1: # reverse x value
 							new_right_ball_line += str(int(item.get_string()) * -1.0) + " "
+						elif p == 9 and item.get_string() in ["0", "-2"]: # outline
+							if item.get_string() == "0":
+								new_right_ball_line += "-2 "
+							else:
+								new_right_ball_line += "0 "
 						else:
 							new_right_ball_line += item.get_string() + " "
 						p+=1
@@ -740,3 +786,5 @@ func _on_ToolsMenu_copy_l_to_r():
 	
 	save_file()
 
+func _on_Tree_backup_file():
+	save_backup()

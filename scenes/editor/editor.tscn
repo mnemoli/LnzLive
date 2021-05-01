@@ -96,7 +96,7 @@ __meta__ = {
 [node name="ItemPopupMenu" type="PopupMenu" parent="SceneRoot/HSplitContainer/VBoxContainer/Tree"]
 margin_right = 20.0
 margin_bottom = 20.0
-items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false ]
+items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Back up", null, 0, false, false, 2, 0, null, "", false ]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
 show_behind_parent = true
@@ -396,7 +396,6 @@ margin_left = 373.78
 margin_top = 169.492
 margin_right = 493.78
 margin_bottom = 203.492
-items = [ "Copy L to R", null, 0, false, false, 0, 0, null, "", false ]
 allow_search = true
 script = ExtResource( 10 )
 __meta__ = {
@@ -408,7 +407,7 @@ margin_left = -373.78
 margin_top = -169.492
 margin_right = -353.78
 margin_bottom = -149.492
-items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", null, 0, false, false, 1, 0, null, "", false, "Tail", null, 0, false, false, 2, 0, null, "", false, "Head", null, 0, false, false, 3, 0, null, "", false, "Snout", null, 0, false, false, 4, 0, null, "", false ]
+items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", null, 0, false, false, 1, 0, null, "", false, "Tail", null, 0, false, false, 2, 0, null, "", false, "Head", null, 0, false, false, 3, 0, null, "", false, "Snout", null, 0, false, false, 4, 0, null, "", false, "Ears", null, 0, false, false, 5, 0, null, "", false, "Paws", null, 0, false, false, 6, 0, null, "", false ]
 
 [node name="ColorPopup" type="Popup" parent="SceneRoot"]
 visible = true
@@ -427,6 +426,7 @@ size_flags_horizontal = 3
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
+[connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]

@@ -50,7 +50,7 @@ func _gui_input(event):
 			camera.size *= 2.0
 		elif event.button_index == BUTTON_WHEEL_UP:
 			camera.size /= 2.0
-		elif event.doubleclick and last_selected_is_valid():
+		elif event.doubleclick and event.button_index == BUTTON_LEFT and last_selected_is_valid():
 			last_selected.selected()
 			
 func _unhandled_key_input(event):

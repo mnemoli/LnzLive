@@ -31,7 +31,7 @@ var ear_ext_cat = { 8: [9], 10: [11]  }
 var eyes_dog = {14: 8, 38: 32} # iris = eye
 var eyes_cat = { 27: 14, 28: 15}
 var nose_dog = [17, 41, 55]
-var nose_cat = [77, 78, 79]
+var nose_cat = [37]
 var tail_dog = [57, 58, 59, 60, 61, 62 ]
 var tail_cat = [43, 44, 45, 46, 47, 48 ]
 
