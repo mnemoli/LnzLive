@@ -35,7 +35,18 @@ var nose_cat = [77, 78, 79]
 var tail_dog = [57, 58, 59, 60, 61, 62 ]
 var tail_cat = [43, 44, 45, 46, 47, 48 ]
 
+var symmetry_mode_hide_balls_cat = [0, 4, 8, 9, 12, 14, 16, 17, 18, 22, 25, 27, 30, 32, 34, 38, 41, 49, 50, 51, 57, 58, 59, 63]
+var symmetry_mode_hide_balls_dog = []
+var symmetry_mode_right_balls_cat = [1, 5, 10, 11, 13, 15, 19, 20, 21, 23, 26, 28, 31, 33, 35, 39, 42, 52, 53, 54, 60, 61, 62, 64]
+var symmetry_mode_right_balls_dog = []
+
 var species
 var max_base_ball_num
 
 enum Species { CAT = 1, DOG = 2 }
+
+func _ready():
+	for n in range(0, 24):
+		symmetry_mode_hide_balls_dog.append(n)
+	for n in range(24, 48):
+		symmetry_mode_right_balls_dog.append(n)

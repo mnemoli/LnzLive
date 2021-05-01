@@ -103,7 +103,7 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	collated_data = apply_sizes(collated_data, lnz_info)
 	collated_data.omissions = lnz_info.omissions
 	generate_balls(collated_data, lnz_info.species, lnz_info.texture_list, new_create)
-	apply_projections()
+#	apply_projections()
 	generate_lines(lnz_info.lines, new_create)
 
 func collate_base_ball_data():

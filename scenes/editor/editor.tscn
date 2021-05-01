@@ -396,6 +396,7 @@ margin_left = 373.78
 margin_top = 169.492
 margin_right = 493.78
 margin_bottom = 203.492
+items = [ "Copy L to R", null, 0, false, false, 0, 0, null, "", false ]
 allow_search = true
 script = ExtResource( 10 )
 __meta__ = {
@@ -449,5 +450,7 @@ size_flags_horizontal = 3
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
 [connection signal="color_entire_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_entire_pet"]
 [connection signal="color_part_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_part_pet"]
+[connection signal="copy_l_to_r" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_copy_l_to_r"]
+[connection signal="index_pressed" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_index_pressed"]
 [connection signal="id_pressed" from="SceneRoot/ToolsMenu/RecolorMenu" to="SceneRoot/ToolsMenu" method="_on_RecolorMenu_id_pressed"]
 [connection signal="gui_input" from="SceneRoot/ColorPopup/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]

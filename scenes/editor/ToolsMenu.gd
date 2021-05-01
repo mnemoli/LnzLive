@@ -2,6 +2,7 @@ extends PopupMenu
 
 signal color_entire_pet(color_index)
 signal color_part_pet(core_ball_nos, color_index)
+signal copy_l_to_r
 var current_action
 
 enum RecolorAction { ENTIRE, LEGS, TAIL, HEAD, SNOUT }
@@ -43,3 +44,8 @@ func _on_RecolorMenu_id_pressed(id):
 	current_action = id
 	get_parent().get_node("ColorPopup").rect_position = get_global_mouse_position()
 	get_parent().get_node("ColorPopup").popup()
+
+
+func _on_ToolsMenu_index_pressed(index):
+	if index == 0: #copy l to r
+		emit_signal("copy_l_to_r")
