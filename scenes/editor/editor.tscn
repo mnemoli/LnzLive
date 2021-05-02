@@ -312,6 +312,7 @@ __meta__ = {
 }
 
 [node name="PopupDialog" type="WindowDialog" parent="SceneRoot"]
+visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -360,7 +361,27 @@ While a ball or addball is selected:
 
 - Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
 
-- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball.
+
+- Press V or L to go to the ball in the Linez section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Linez for that ball.
+
+[b]Tools Menu[/b]
+
+Press Ctrl+Space in the pet view to open the tools menu.
+
+You can color the entire pet or parts of the pet.
+
+While Select is on and you have a ball selected, you can add a new addball and line from the selected ball. If you have an addball selected, your new addball will be parented to the base ball, but connected via a line to the selected addball. The text editor will focus on your newly created addball.
+
+You can copy ball info, addballs, lines, and paintballs from the left side of the pet to the right. The left side of the pet is defined as the one which has ankle ball 0, i.e. the left side when looking at the pet face-on, NOT the pet's left side.
+
+This is a destructive operation - it will completely reorder your addballs, lines and paintballs, and will lose any non-symmetrical data from the right side of the pet.
+
+Because it's destructive, a backup will be created before running the operation.
+
+Note that this operation will mirror partial outlines, but does not know about mirrored textures (e.g. stripe16 vs stripe17).
+
+This operation will not work if you have comments or blank lines in your lnz file."
 text = "Basic Controls
 
 Load a sample pet by double-clicking it in the left-hand menu.
@@ -386,9 +407,29 @@ While a ball or addball is selected:
 
 - Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
 
-- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball.
+
+- Press V or L to go to the ball in the Linez section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Linez for that ball.
+
+Tools Menu
+
+Press Ctrl+Space in the pet view to open the tools menu.
+
+You can color the entire pet or parts of the pet.
+
+While Select is on and you have a ball selected, you can add a new addball and line from the selected ball. If you have an addball selected, your new addball will be parented to the base ball, but connected via a line to the selected addball. The text editor will focus on your newly created addball.
+
+You can copy ball info, addballs, lines, and paintballs from the left side of the pet to the right. The left side of the pet is defined as the one which has ankle ball 0, i.e. the left side when looking at the pet face-on, NOT the pet's left side.
+
+This is a destructive operation - it will completely reorder your addballs, lines and paintballs, and will lose any non-symmetrical data from the right side of the pet.
+
+Because it's destructive, a backup will be created before running the operation.
+
+Note that this operation will mirror partial outlines, but does not know about mirrored textures (e.g. stripe16 vs stripe17).
+
+This operation will not work if you have comments or blank lines in your lnz file."
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": true
 }
 
 [node name="ToolsMenu" type="PopupMenu" parent="SceneRoot"]
@@ -427,12 +468,12 @@ size_flags_horizontal = 3
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
 [connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
 [connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
 [connection signal="text_entered" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/AnimPicker" to="PetRoot/Node" method="_on_AnimPicker_text_entered"]
 [connection signal="value_changed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" to="PetRoot/Node" method="set_frame"]
@@ -444,8 +485,10 @@ size_flags_horizontal = 3
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
 [connection signal="pressed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer2/HelpButton" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_HelpButton_pressed"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
+[connection signal="find_ball" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="_on_LnzTextEdit_find_ball"]
+[connection signal="gui_input" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_LnzTextEdit_gui_input"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
 [connection signal="about_to_show" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_about_to_show"]

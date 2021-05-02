@@ -583,3 +583,8 @@ func signal_ball_selected(ball_no, section):
 	if ball.base_ball_no != -1:
 		is_addball = true
 	emit_signal("ball_selected", section, ball_no, is_addball, lnz.balls.keys().max() + 1)
+
+
+func _on_LnzTextEdit_find_ball(ball_no):
+	if ball_map.has(ball_no):
+		ball_map[ball_no].flash()

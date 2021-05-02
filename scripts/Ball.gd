@@ -83,16 +83,22 @@ func set_transparent_color(new_value):
 
 func _on_Area_mouse_entered():
 	is_over = true
+	turn_on_highlight()
+	emit_signal("ball_mouse_enter", {ball_no = ball_no})
+	
+func turn_on_highlight():
 	old_outline = outline
 	old_outline_color = outline_color
 	set_outline(3)
 	set_outline_color(Color.white)
-	emit_signal("ball_mouse_enter", {ball_no = ball_no})
+	
+func turn_off_highlight():
+	set_outline(old_outline)
+	set_outline_color(old_outline_color)
 	
 func _on_Area_mouse_exited():
 	is_over = false
-	set_outline(old_outline)
-	set_outline_color(old_outline_color)
+	turn_off_highlight()
 	emit_signal("ball_mouse_exit", ball_no)
 	
 func selected():
@@ -112,4 +118,24 @@ func _input(event):
 			emit_signal("ball_selected", ball_no, Section.Section.MOVE)
 		elif event.scancode == KEY_P or event.scancode == KEY_C:
 			emit_signal("ball_selected", ball_no, Section.Section.PROJECT)
+		elif event.scancode == KEY_L or event.scancode == KEY_V:
+			emit_signal("ball_selected", ball_no, Section.Section.LINE)
 		get_tree().set_input_as_handled()
+
+var timer_count = 0
+
+func flash():
+	timer_count = 0
+	if !is_over:
+		turn_on_highlight()
+		$FlashTimer.start()
+
+func _on_FlashTimer_timeout():
+	timer_count += 1
+	if !is_over:
+		if timer_count % 2 == 1:
+			turn_off_highlight()
+		else:
+			turn_on_highlight()
+		if timer_count > 4:
+			$FlashTimer.stop()

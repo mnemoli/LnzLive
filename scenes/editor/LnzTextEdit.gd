@@ -5,6 +5,7 @@ var filepath: String
 var r = RegEx.new()
 
 signal file_saved(filepath)
+signal find_ball(ball_no)
 
 func _ready():
 	wrap_enabled = false
@@ -82,6 +83,8 @@ func _on_Node_ball_selected(section, ball_no, is_addball, max_addball_no):
 			actual_start_point = find_line_in_move_section(ball_no)
 	elif section == Section.Section.PROJECT:
 		actual_start_point = find_line_in_project_section(ball_no)
+	elif section == Section.Section.LINE:
+		actual_start_point = find_line_in_linez_section(ball_no)
 	if actual_start_point == -1:
 		return
 	cursor_set_line(actual_start_point)
@@ -148,6 +151,34 @@ func find_line_in_project_section(ball_no):
 				i = 0
 				continue
 		if parsed_line[1].get_string() == str(ball_no):
+			break
+		
+		i += 1
+	return start_point + i
+	
+func find_line_in_linez_section(ball_no):
+	var section_find = search('[Linez]', 0, 0, 0)
+	var current_line = cursor_get_line()
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var end_of_section = search('[', 0, start_of_section, 0)[SEARCH_RESULT_LINE]
+	var start_point
+	if current_line >= start_of_section and current_line < end_of_section:
+		start_point = current_line + 1
+	else:
+		start_point = start_of_section
+	var i = 0
+	while true:
+		var looped = start_point + i
+		var line = get_line(looped).lstrip(" ")
+		var parsed_line = r.search_all(line)
+		if line.begins_with("["):
+			if start_point == start_of_section:
+				return start_of_section - 1
+			else:
+				start_point = start_of_section
+				i = 0
+				continue
+		if parsed_line[0].get_string() == str(ball_no) or parsed_line[1].get_string() == str(ball_no):
 			break
 		
 		i += 1
@@ -431,7 +462,7 @@ func _on_ToolsMenu_copy_l_to_r():
 			elif base_ball in middle_balls_list:
 				var parsed_line = r.search_all(line)
 				var x_pos = int(parsed_line[1].get_string())
-				if x_pos < 0.0: #left ball
+				if x_pos > 0.0: #left ball
 					ball_map[ball_no] = {line = line, new_ball_no = new_ball_count}
 					new_ball_count += 1
 					left_balls_list.append(ball_no)
@@ -449,7 +480,7 @@ func _on_ToolsMenu_copy_l_to_r():
 							new_right_ball_line += item.get_string() + " "
 						p+=1
 					balls_to_add_temp.append({line = new_right_ball_line, corresponding_ball = ball_no})
-				elif x_pos > 0.0: # right ball
+				elif x_pos < 0.0: # right ball
 					pass
 					# do nothing
 				else: # middle ball
@@ -681,7 +712,7 @@ func _on_ToolsMenu_copy_l_to_r():
 			paintballs_list.append(final_line)
 		elif base_ball_no in middle_balls_list:
 			var x_pos = float(parsed_line[2].get_string())
-			if x_pos > 0.0: # right ball do nothing
+			if x_pos < 0.0: # right ball do nothing
 				pass
 			else:
 				var new_base_ball_no = ball_map[base_ball_no].new_ball_no
@@ -695,7 +726,7 @@ func _on_ToolsMenu_copy_l_to_r():
 						final_line += item.get_string() + " "
 					p += 1
 				paintballs_list.append(final_line)
-				if x_pos < 0.0: # left side
+				if x_pos > 0.0: # left side
 					final_line = ""
 					p = 0
 					for item in parsed_line:
@@ -833,4 +864,18 @@ func _on_ToolsMenu_add_ball(selected_visual_ball):
 	cursor_set_line(new_ball_cursor_position)
 	center_viewport_to_cursor()
 	
-#	save_file()
+	save_file()
+
+func _on_LnzTextEdit_gui_input(event):
+	if event is InputEventKey and event.pressed and event.control and event.scancode == KEY_Q:
+		#if in the balls or addballs section, use line number
+		var nearest_section_start = search("[", SEARCH_BACKWARDS, cursor_get_line(), 0)
+		var nearest_section = get_line(nearest_section_start[SEARCH_RESULT_LINE])
+		if nearest_section == "[Ballz Info]":
+			var line_number = cursor_get_line() - nearest_section_start[SEARCH_RESULT_LINE] - 1
+			emit_signal("find_ball", line_number)
+		elif nearest_section == "[Add Ball]":
+			var line_number = cursor_get_line() - nearest_section_start[SEARCH_RESULT_LINE] - 1 + 66
+			emit_signal("find_ball", line_number)
+		else:
+			emit_signal("find_ball", int(get_word_under_cursor()))
