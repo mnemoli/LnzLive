@@ -7,8 +7,8 @@
 
 [sub_resource type="SphereShape" id=2]
 resource_local_to_scene = true
-margin = 0.001
-radius = 0.004
+margin = 0.0001
+radius = 0.01
 
 [node name="Ball" type="Spatial"]
 script = ExtResource( 2 )

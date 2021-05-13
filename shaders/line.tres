@@ -142,7 +142,7 @@ void vertex() {
 	}
 	
 	// Note - this requires that camera is set to 'keep width'
-	vec2 n = floor(normal * line_width_in_pixels * inverse_camera_scale) * orientation;
+	vec2 n = floor(normal * line_width_in_pixels * inverse_camera_scale * 2.0) * orientation;
 	vec3 offset = vec3(n / VIEWPORT_SIZE, 0.0);
 	
 	// Remove the mesh's default x-width from the final output

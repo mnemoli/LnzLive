@@ -38,14 +38,13 @@ vec3 get_shifted_color(int palette_index) {
 void fragment() {
   vec2 c = center_fragcoord;
   vec2 st = FRAGCOORD.xy;
-  float inverse_camera_scale = (1.0 / ORTHO_SIZE);
-  float offset_dist = 0.25;
+  float inverse_camera_scale = (1.0 / ORTHO_SIZE) * 2.0;
 
   // Artificially scale up the screen depending on camera scale
   // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
   // pixel perfect scaling
-  c = floor(c / inverse_camera_scale) * inverse_camera_scale;
-  st = floor(st / inverse_camera_scale) * inverse_camera_scale;
+  c = floor(c / inverse_camera_scale) * (inverse_camera_scale);
+  st = floor(st / inverse_camera_scale) * (inverse_camera_scale);
   
   // FUZZING
   // Find random number based on y-pixel, offset to center of ball
@@ -163,7 +162,7 @@ void vertex() {
 	
 	vert_in_clip_space.z = center_clip_space.z;
 	vert_in_clip_space.z += z_add * 0.001;
-	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / VIEWPORT_SIZE.x;
+	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / (VIEWPORT_SIZE.x / 2.0);
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);
 	
@@ -174,11 +173,11 @@ void vertex() {
 resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/fuzz_amount = 0
-shader_param/ball_size = 11
+shader_param/ball_size = 10
 shader_param/outline = -1
 shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
-shader_param/outline_color = Color( 0, 1, 0.552941, 1 )
+shader_param/outline_color = Color( 0, 0, 0, 1 )
 shader_param/z_add = 0.0
 shader_param/transparent_index = 0
 shader_param/palette = ExtResource( 1 )

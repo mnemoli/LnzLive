@@ -1,6 +1,6 @@
 extends Node
 
-export var pixel_world_size = 0.001;
+export var pixel_world_size = 0.002;
 
 var balls = []
 
@@ -79,7 +79,7 @@ func generate_pet(file_path):
 	KeyBallsData.species = lnz_info.species
 	init_ball_data(lnz_info.species)
 	init_visual_balls(lnz_info, true)
-	
+
 func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var collated_data = collate_base_ball_data()
 	# dumb code - duplicate the lnz info to prevent movements being applied multiple times

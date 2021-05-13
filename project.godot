@@ -79,6 +79,11 @@ gdscript/warnings/shadowed_variable=false
 window/size/height=768
 window/stretch/aspect="expand"
 
+[physics]
+
+3d/physics_engine="Bullet"
+3d/active_soft_world=false
+
 [rendering]
 
 quality/driver/driver_name="GLES2"

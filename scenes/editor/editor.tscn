@@ -143,6 +143,7 @@ physics_object_picking = true
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
 keep_aspect = 0
 projection = 1
+size = 2.0
 near = 0.01
 far = 1000.0
 
@@ -312,7 +313,6 @@ __meta__ = {
 }
 
 [node name="PopupDialog" type="WindowDialog" parent="SceneRoot"]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

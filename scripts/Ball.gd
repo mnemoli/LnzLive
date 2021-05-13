@@ -43,8 +43,8 @@ func set_ball_size(new_value):
 	ball_size = new_value
 	$MeshInstance.material_override.set_shader_param("ball_size", new_value)
 	var a = ball_size * 0.05
-	$Area/CollisionShape.shape.radius = (a * 0.008)
-#	scale = Vector3(a,a,a)
+	$Area/CollisionShape.shape.radius = a * 0.02
+	$Area/CollisionShape.shape.margin = 0.0001
 	
 func set_fuzz_amount(new_value):
 	fuzz_amount = new_value

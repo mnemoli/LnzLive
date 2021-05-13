@@ -27,7 +27,7 @@ void fragment() {
   vec2 c = center_fragcoord;
   vec2 b =  base_center_fragcoord;
   vec2 st = FRAGCOORD.xy;
-  float inverse_camera_scale = (1.0 / ORTHO_SIZE);
+  float inverse_camera_scale = (1.0 / ORTHO_SIZE) * 2.0;
 
   // Artificially scale up the screen depending on camera scale
   // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
@@ -140,7 +140,7 @@ void vertex() {
 	}
 	vert_in_clip_space.z = center_clip_space.z;
 	vert_in_clip_space.z += z_add * 0.001 + 0.001;
-	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / VIEWPORT_SIZE.x;
+	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / (VIEWPORT_SIZE.x / 2.0);
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);
 	
