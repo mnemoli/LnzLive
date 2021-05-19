@@ -276,11 +276,13 @@ func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, intended_part):
 	if species == KeyBallsData.Species.CAT:
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
+		balls_to_exclude.append_array(KeyBallsData.tongue_cat)
 		if intended_part != "NOSE":
 			balls_to_exclude.append_array(KeyBallsData.nose_cat)
 	else:
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
+		balls_to_exclude.append_array(KeyBallsData.tongue_dog)
 		if intended_part != "NOSE":
 			balls_to_exclude.append_array(KeyBallsData.nose_dog)
 		
@@ -680,7 +682,6 @@ func _on_ToolsMenu_copy_l_to_r():
 	var lines_in_projections_section = i
 	
 	# paintballs
-	# deal with moves. only need to care about base balls
 	section_find = search('[Paint Ballz]', 0, 0, 0)
 	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
 	i = 0
@@ -983,3 +984,105 @@ func _on_Node_addball_deleted(ball_no):
 		
 	save_file()
 	
+
+func _on_ToolsMenu_recolor(recolor_info: Dictionary):
+	save_backup()
+	
+	var species = KeyBallsData.species
+	var balls_to_exclude = []
+	if species == KeyBallsData.Species.CAT:
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_cat)
+		balls_to_exclude.append_array(KeyBallsData.tongue_cat)
+	else:
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
+		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
+		balls_to_exclude.append_array(KeyBallsData.nose_dog)
+		balls_to_exclude.append_array(KeyBallsData.tongue_dog)
+		
+	var section_find = search('[Ballz Info]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		if i in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";") or line.empty():
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the first number is color
+		var color_split = line.split(" ", false, 1)
+		var color = color_split[0]
+		if recolor_info.has(color):
+			set_line(start_of_section + i, recolor_info[color] + " " + color_split[1])
+		i += 1
+	
+	section_find = search('[Add Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";") or line.empty():
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the fifth number is color
+		var parsed_line = r.search_all(line)
+		if int(parsed_line[0].get_string()) in balls_to_exclude:
+			i += 1
+			continue
+		var color = parsed_line[4].get_string()
+		if recolor_info.has(color):
+			var n = 0
+			var final_line = ""
+			for r_item in parsed_line:
+				var item = r_item.get_string()
+				if n == 4:
+					final_line += recolor_info[color] + " "
+				else:
+					final_line += item + " "
+				n += 1
+			set_line(start_of_section + i, final_line)
+		i += 1
+		
+	section_find = search('[Paint Ballz]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+			i += 1
+			continue
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";") or line.empty():
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		# here the sixth number is color
+		var parsed_line = r.search_all(line)
+		if int(parsed_line[0].get_string()) in balls_to_exclude:
+			i += 1
+			continue
+		var color = parsed_line[5].get_string()
+		if recolor_info.has(color):
+			var n = 0
+			var final_line = ""
+			for r_item in parsed_line:
+				var item = r_item.get_string()
+				if n == 5:
+					final_line += recolor_info[color] + " "
+				else:
+					final_line += item + " "
+				n += 1
+			set_line(start_of_section + i, final_line)
+		i += 1
+		
+	save_file()

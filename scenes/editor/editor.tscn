@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://new_dynamicfontdata.tres" type="DynamicFontData" id=8]
 [ext_resource path="res://scenes/editor/unhandled_input_handler.gd" type="Script" id=9]
 [ext_resource path="res://scenes/editor/ToolsMenu.gd" type="Script" id=10]
+[ext_resource path="res://data_classes/RecolorLine.tscn" type="PackedScene" id=11]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -448,7 +449,7 @@ margin_left = -373.78
 margin_top = -169.492
 margin_right = -353.78
 margin_bottom = -149.492
-items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", null, 0, false, false, 1, 0, null, "", false, "Tail", null, 0, false, false, 2, 0, null, "", false, "Head", null, 0, false, false, 3, 0, null, "", false, "Snout", null, 0, false, false, 4, 0, null, "", false, "Ears", null, 0, false, false, 5, 0, null, "", false, "Paws", null, 0, false, false, 6, 0, null, "", false, "Nose", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", null, 0, false, false, 1, 0, null, "", false, "Tail", null, 0, false, false, 2, 0, null, "", false, "Head", null, 0, false, false, 3, 0, null, "", false, "Snout", null, 0, false, false, 4, 0, null, "", false, "Ears", null, 0, false, false, 5, 0, null, "", false, "Paws", null, 0, false, false, 6, 0, null, "", false, "Nose", null, 0, false, false, 7, 0, null, "", false, "Color Swap", null, 0, false, false, 8, 0, null, "", false ]
 
 [node name="ColorPopup" type="Popup" parent="SceneRoot"]
 visible = true
@@ -463,6 +464,111 @@ __meta__ = {
 margin_right = 58.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+
+[node name="RecolorPopup" type="ConfirmationDialog" parent="SceneRoot"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -180.0
+margin_top = -160.0
+margin_right = 230.0
+margin_bottom = 213.0
+size_flags_horizontal = 3
+window_title = "Recolor"
+dialog_text = "Note: always excludes eyes, tongue and nose
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/RecolorPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 39.0
+margin_right = -8.0
+margin_bottom = -34.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClearButton" type="Button" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_right = 44.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+text = "Clear"
+
+[node name="RecolorLines" type="VBoxContainer" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_top = 24.0
+margin_right = 394.0
+margin_bottom = 272.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Line1" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_right = 394.0
+
+[node name="Line2" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 28.0
+margin_right = 394.0
+margin_bottom = 52.0
+
+[node name="Line3" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 56.0
+margin_right = 394.0
+margin_bottom = 80.0
+
+[node name="Line4" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 84.0
+margin_right = 394.0
+margin_bottom = 108.0
+
+[node name="Line5" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 112.0
+margin_right = 394.0
+margin_bottom = 136.0
+
+[node name="Line6" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 140.0
+margin_right = 394.0
+margin_bottom = 164.0
+
+[node name="Line7" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 168.0
+margin_right = 394.0
+margin_bottom = 192.0
+
+[node name="Line8" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 196.0
+margin_right = 394.0
+margin_bottom = 220.0
+
+[node name="Line9" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 224.0
+margin_right = 394.0
+margin_bottom = 248.0
+
+[node name="CheckContainer" type="HBoxContainer" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_top = 276.0
+margin_right = 394.0
+margin_bottom = 300.0
+
+[node name="Balls" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_right = 117.0
+margin_bottom = 24.0
+pressed = true
+text = "Balls/addballs"
+
+[node name="Paintballs" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 121.0
+margin_right = 211.0
+margin_bottom = 24.0
+pressed = true
+text = "Paintballs"
 
 [connection signal="addball_deleted" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_addball_deleted"]
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
@@ -500,5 +606,8 @@ size_flags_horizontal = 3
 [connection signal="color_part_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_part_pet"]
 [connection signal="copy_l_to_r" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_copy_l_to_r"]
 [connection signal="index_pressed" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_index_pressed"]
+[connection signal="recolor" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_recolor"]
 [connection signal="id_pressed" from="SceneRoot/ToolsMenu/RecolorMenu" to="SceneRoot/ToolsMenu" method="_on_RecolorMenu_id_pressed"]
 [connection signal="gui_input" from="SceneRoot/ColorPopup/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
+[connection signal="confirmed" from="SceneRoot/RecolorPopup" to="SceneRoot/ToolsMenu" method="_on_RecolorPopup_confirmed"]
+[connection signal="pressed" from="SceneRoot/RecolorPopup/VBoxContainer/ClearButton" to="SceneRoot/ToolsMenu" method="_on_ClearButton_pressed"]

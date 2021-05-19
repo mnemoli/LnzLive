@@ -3,7 +3,9 @@ extends PopupMenu
 signal color_entire_pet(color_index)
 signal color_part_pet(core_ball_nos, color_index)
 signal add_ball(selected_ball)
-signal copy_l_to_r
+signal copy_l_to_r()
+signal recolor(recolor_info)
+
 var current_action
 
 enum RecolorAction { ENTIRE, LEGS, TAIL, HEAD, SNOUT, EARS, PAWS, NOSE }
@@ -75,8 +77,11 @@ func _on_LineEdit_gui_input(event):
 
 func _on_RecolorMenu_id_pressed(id):
 	current_action = id
-	get_parent().get_node("ColorPopup").rect_position = get_global_mouse_position()
-	get_parent().get_node("ColorPopup").popup()
+	if id == 8: # color swap
+		get_parent().get_node("RecolorPopup").popup_centered()
+	else:
+		get_parent().get_node("ColorPopup").rect_position = get_global_mouse_position()
+		get_parent().get_node("ColorPopup").popup()
 
 func _on_ToolsMenu_index_pressed(index):
 	if index == 2: #copy l to r
@@ -89,3 +94,28 @@ func _on_ToolsMenu_index_pressed(index):
 func _on_ToolsMenu_about_to_show():
 	var view_container = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer")
 	set_item_disabled(1, !view_container.last_selected_is_valid())
+
+func _on_RecolorPopup_confirmed():
+	# get all the recolor infos
+	var popup = get_parent().get_node("RecolorPopup/VBoxContainer")
+	var lines = popup.get_node("RecolorLines").get_children()
+	var recolor_info = {}
+	for l in lines:
+		var original_color = l.get_child(0).text as String
+		var new_color = l.get_child(2).text as String
+		if original_color.empty() or new_color.empty():
+			continue
+		recolor_info[original_color] = new_color
+	var balls_on = popup.get_node("CheckContainer/Balls").pressed
+	var paintballs_on = popup.get_node("CheckContainer/Paintballs").pressed
+	emit_signal("recolor", recolor_info)
+		
+
+func _on_ClearButton_pressed():
+	var popup = get_parent().get_node("RecolorPopup/VBoxContainer")
+	var lines = popup.get_node("RecolorLines").get_children()
+	for l in lines:
+		l.get_child(0).text = ""
+		l.get_child(2).text = ""
+	for cb in popup.get_node("CheckContainer").get_children():
+		cb.pressed = true
