@@ -29,6 +29,7 @@ signal bhd_loaded(num_of_animations)
 signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, is_addball)
+signal addball_deleted(ball_no)
 
 func set_animation(anim_index: int):
 	current_animation = anim_index
@@ -239,8 +240,9 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		var q = Quat()
 		for m in moves:
 			var move_base = b
-#			var move_base = base_ball_dict.get(m.relative_to)
 			var rot = move_base.rotation
+			if m.relative_to:
+				rot = base_ball_dict.get(m.relative_to).rotation
 			q.set_euler(Vector3(deg2rad(rot.x), deg2rad(rot.y), deg2rad(rot.z)))
 			b.position = move_base.position + q.xform(m.position)
 		b.texture_id = v.texture_id
@@ -325,7 +327,10 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball = paintball_scene.instance()
 				visual_ball.add_to_group("balls")
 				visual_ball.z_add = 10
-#				visual_ball.connect("ball_mouse_enter", self, "ball_mouse_enter")
+				visual_ball.override_ball_no = ball.ball_no
+				visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
+				visual_ball.connect("ball_mouse_exit", self, "signal_ball_mouse_exit")
+				visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			else:
 				visual_ball = ball_map[key]
 			var base_ball = ball_data[eyes[key]]
@@ -394,6 +399,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.ball_size = ball.size
 			visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
 			visual_ball.connect("ball_selected", self, "signal_ball_selected")
+			visual_ball.connect("ball_deleted", self, "signal_ball_deleted")
 		var total_pos = ball.position
 		total_pos.y *= -1.0
 		visual_ball.transform.origin = total_pos * pixel_world_size
@@ -456,7 +462,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.outline_color = paintball.outline_color
 			visual_ball.outline = paintball.outline
 			visual_ball.fuzz_amount = paintball.fuzz / 2
-			visual_ball.z_add = count * 0.1
+			visual_ball.z_add = count * 0.01
 			visual_ball.base_ball_no = paintball.base
 			count += 1
 			var ar = paintball_map.get(key, [])
@@ -580,10 +586,14 @@ func signal_paintball_mouse_exit():
 func signal_ball_selected(ball_no, section):
 	var ball = ball_map[ball_no]
 	var is_addball = false
-	if ball.base_ball_no != -1:
+	if ball.base_ball_no != -1 and !("override_ball_no" in ball):
 		is_addball = true
 	emit_signal("ball_selected", section, ball_no, is_addball, lnz.balls.keys().max() + 1)
 
+func signal_ball_deleted(ball_no):
+	var ball = ball_map[ball_no]
+	if ball.base_ball_no != -1:
+		emit_signal("addball_deleted", ball_no)
 
 func _on_LnzTextEdit_find_ball(ball_no):
 	if ball_map.has(ball_no):

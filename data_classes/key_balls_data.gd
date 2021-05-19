@@ -34,6 +34,8 @@ var nose_dog = [17, 41, 55]
 var nose_cat = [37]
 var tail_dog = [57, 58, 59, 60, 61, 62 ]
 var tail_cat = [43, 44, 45, 46, 47, 48 ]
+var tongue_dog = [ 77, 63, 64 ]
+var tongue_cat = [55, 56] 
 
 var symmetry_mode_hide_balls_cat = [0, 4, 8, 9, 12, 14, 16, 17, 18, 22, 25, 27, 30, 32, 34, 38, 41, 49, 50, 51, 57, 58, 59, 63]
 var symmetry_mode_hide_balls_dog = []

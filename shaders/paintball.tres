@@ -138,9 +138,9 @@ void vertex() {
 	if (vert_in_clip_space.z - base_center_clip_space.z > 0.0) {
 		vert_in_clip_space.z = base_center_clip_space.z + 0.001;
 	}
-	vert_in_clip_space.z = center_clip_space.z;
-	vert_in_clip_space.z += z_add * 0.001 + 0.001;
-	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / (VIEWPORT_SIZE.x / 2.0);
+//	vert_in_clip_space.z = center_clip_space.z;
+	vert_in_clip_space.z += z_add * 0.001;
+	float b = (float(ball_size) / 2.0 + float(fuzz_amount + 3)) / (VIEWPORT_SIZE.x / 2.0);
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);
 	

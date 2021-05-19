@@ -11,6 +11,7 @@ export var outline_color = Color.black setget set_outline_color
 export var z_add = 0.0 setget set_z_add
 export var base_ball_no = 0
 export var visible_override = true setget set_visible
+export var override_ball_no = -1
 
 var old_outline
 var old_outline_color
@@ -18,6 +19,10 @@ var is_over
 
 signal paintball_mouse_enter(paintball_info)
 signal paintball_mouse_exit()
+# only used if its an iris
+signal ball_mouse_enter(ball_info)
+signal ball_mouse_exit(ball_no)
+signal ball_selected(ball_no, section)
 
 func set_visible(new_value):
 	visible_override = new_value
@@ -61,20 +66,27 @@ func set_outline_color(new_value):
 	$MeshInstance.material_override.set_shader_param("outline_color", new_value)
 
 func selected():
-	pass
+	if override_ball_no != -1:
+		emit_signal("ball_selected", override_ball_no, Section.Section.BALL)
 
 func _on_Area_mouse_entered():
 	old_outline = outline
 	old_outline_color = outline_color
 	set_outline(3)
 	set_outline_color(Color.white)
-	emit_signal("paintball_mouse_enter", {base_ball_no = base_ball_no})
+	if override_ball_no != -1:
+		emit_signal("ball_mouse_enter", {ball_no = override_ball_no})
+	else:
+		emit_signal("paintball_mouse_enter", {base_ball_no = base_ball_no})
 	is_over = true
 
 func _on_Area_mouse_exited():
 	set_outline(old_outline)
 	set_outline_color(old_outline_color)
-	emit_signal("paintball_mouse_exit")
+	if override_ball_no != -1:
+		emit_signal("ball_mouse_exit", override_ball_no)
+	else:
+		emit_signal("paintball_mouse_exit")
 	is_over = false
 	
 func _input(event):

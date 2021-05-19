@@ -502,21 +502,6 @@ func get_addballs(file: File):
 		var color = color_chart.get(line.color)
 		var outline_color = color_chart.get(line.outline_color)
 		var pos = Vector3(line.x, line.y, line.z)
-#		func _init(
-#		 base: int,
-#		 ball_no: int,
-#		 size: int,
-#		 position: Vector3,
-#		 color: Color = Color.white,
-#		 color_index: int = -1,
-#		 outline_color = Color.black,
-#		 outline_color_index: int = 0,
-#		 outline = -1,
-#		 fuzz = 0,
-#		 z_add = 0.0,
-#		 group = -1,
-#		 body_area = 1,
-#		 texture_id = -1):
 		var ball = AddBallData.new(
 			line.base,
 		 max_ball_num, 

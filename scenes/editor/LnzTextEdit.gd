@@ -6,6 +6,7 @@ var r = RegEx.new()
 
 signal file_saved(filepath)
 signal find_ball(ball_no)
+signal file_backed_up()
 
 func _ready():
 	wrap_enabled = false
@@ -43,6 +44,7 @@ func save_backup():
 	else:
 		save_file()
 		save_backup()
+	emit_signal("file_backed_up")
 		
 func save_file():
 	if is_user_file:
@@ -122,7 +124,7 @@ func find_line_in_move_section(ball_no):
 				start_point = start_of_section
 				i = 0
 				continue
-		if line.begins_with(str(ball_no) + ", "):
+		if line.begins_with(str(ball_no) + " "):
 			break
 		i += 1
 	return start_point + i
@@ -210,10 +212,12 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
 		balls_to_exclude.append_array(KeyBallsData.nose_cat)
+		balls_to_exclude.append_array(KeyBallsData.tongue_cat)
 	else:
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
 		balls_to_exclude.append_array(KeyBallsData.nose_dog)
+		balls_to_exclude.append_array(KeyBallsData.tongue_dog)
 		
 	var section_find = search('[Ballz Info]', 0, 0, 0)
 	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
@@ -266,17 +270,19 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 	save_file()
 
 
-func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index):
+func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, intended_part):
 	var species = KeyBallsData.species
 	var balls_to_exclude = []
 	if species == KeyBallsData.Species.CAT:
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_cat.values())
-		balls_to_exclude.append_array(KeyBallsData.nose_cat)
+		if intended_part != "NOSE":
+			balls_to_exclude.append_array(KeyBallsData.nose_cat)
 	else:
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.keys())
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
-		balls_to_exclude.append_array(KeyBallsData.nose_dog)
+		if intended_part != "NOSE":
+			balls_to_exclude.append_array(KeyBallsData.nose_dog)
 		
 	var section_find = search('[Ballz Info]', 0, 0, 0)
 	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
@@ -836,7 +842,7 @@ func _on_ToolsMenu_add_ball(selected_visual_ball):
 		i+=1
 	var lines_in_addball_section = i
 	var new_ball_no = 67 + i
-	var new_ball_cursor_position = start_of_section + lines_in_addball_section + 1
+	var new_ball_cursor_position = start_of_section + lines_in_addball_section
 	cursor_set_line(start_of_section + lines_in_addball_section)
 	cursor_set_column(0)
 	var position: Vector3
@@ -844,7 +850,7 @@ func _on_ToolsMenu_add_ball(selected_visual_ball):
 		position = selected_visual_ball.transform.origin * 1000.0
 	else:
 		position = Vector3.ZERO
-	var new_addball_text = "%s %d %d %d %s %s 0 %s 0 %s 10 0 0 0 0\n" % [real_base_ball, position.x, position.y, position.z, selected_visual_ball.color_index, selected_visual_ball.outline_color_index, selected_visual_ball.fuzz_amount, selected_visual_ball.old_outline]
+	var new_addball_text = "%s %d %d %d %s %s 0 %s 0 %s 30 0 0 0 -1\n" % [real_base_ball, position.x, position.y, position.z, selected_visual_ball.color_index, selected_visual_ball.outline_color_index, selected_visual_ball.fuzz_amount, selected_visual_ball.old_outline]
 	insert_text_at_cursor(new_addball_text)
 	
 #	# add line
@@ -859,7 +865,7 @@ func _on_ToolsMenu_add_ball(selected_visual_ball):
 		i += 1
 	cursor_set_line(start_of_section + i)
 	cursor_set_column(0)
-	var new_line_text = "%s %s 1 -1 -1 -1 95 95 -1 0\n" % [new_ball_no, selected_visual_ball.ball_no]
+	var new_line_text = "%s %s 0 -1 -1 -1 95 95 -1 0\n" % [new_ball_no, selected_visual_ball.ball_no]
 	insert_text_at_cursor(new_line_text)
 	cursor_set_line(new_ball_cursor_position)
 	center_viewport_to_cursor()
@@ -879,3 +885,101 @@ func _on_LnzTextEdit_gui_input(event):
 			emit_signal("find_ball", line_number)
 		else:
 			emit_signal("find_ball", int(get_word_under_cursor()))
+
+func _on_Node_addball_deleted(ball_no):
+	# remove the addball line
+	var line_no = find_line_in_addball_section(ball_no - 67)
+	select(line_no, 0, line_no + 1, 0)
+	cut()
+	
+	# all the addballs after this have now been renumbered
+	# so we need to correct the linez, omissions, projections, paintballz
+	# linez
+	var section_find = search('[Linez]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		var parsed_line = r.search_all(line)
+		var start_ball = int(parsed_line[0].get_string())
+		var end_ball = int(parsed_line[1].get_string())
+		if start_ball == ball_no or end_ball == ball_no:
+			select(start_of_section + i, 0, start_of_section + i + 1, 0)
+			cut()
+			continue
+		if start_ball > ball_no or end_ball > ball_no:
+			var replaced_line = ""
+			if start_ball > ball_no:
+				start_ball -= 1
+			if end_ball > ball_no:
+				end_ball -= 1
+			replaced_line += str(start_ball) + " " + str(end_ball) + " "
+			var start_of_rest = parsed_line[2].get_start()
+			replaced_line += line.substr(start_of_rest)
+			set_line(start_of_section + i, replaced_line)
+		i += 1
+	
+	# omissions
+	section_find = search('[Omissions]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		if int(line) == ball_no:
+			select(start_of_section + i, 0, start_of_section + i + 1, 0)
+			cut()
+			continue
+		elif int(line) > ball_no:
+			var replace_line = str(int(line) - 1)
+			set_line(start_of_section + i, replace_line)
+		i += 1
+	
+	# projections
+	section_find = search('[Project Ball]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		var parsed_line = r.search_all(line)
+		var move_ball_no = int(parsed_line[1].get_string())
+		if move_ball_no == ball_no:
+			select(start_of_section + i, 0, start_of_section + i + 1, 0)
+			cut()
+			continue
+		elif move_ball_no > ball_no:
+			var replace_line = "%s %s %s" % [parsed_line[0].get_string(), str(move_ball_no - 1), line.substr(parsed_line[2].get_start())]
+			set_line(start_of_section + i, replace_line)
+		i += 1
+		
+	# paintballz
+	section_find = search('[Paint Ballz]', 0, 0, 0)
+	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		# ignore comments for now
+		if line.begins_with("[") or line.empty():
+			break
+		
+		var split = line.split(" ", false, 1)
+		var base_ball_no = int(split[0])
+		if base_ball_no == ball_no:
+			select(start_of_section + i, 0, start_of_section + i + 1, 0)
+			cut()
+			continue
+		elif base_ball_no > ball_no:
+			var replace_line = "%s %s" % [str(base_ball_no), split[1]]
+			set_line(start_of_section + i, replace_line)
+		i += 1
+		
+	save_file()
+	

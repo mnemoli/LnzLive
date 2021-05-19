@@ -6,7 +6,7 @@ signal add_ball(selected_ball)
 signal copy_l_to_r
 var current_action
 
-enum RecolorAction { ENTIRE, LEGS, TAIL, HEAD, SNOUT, EARS, PAWS }
+enum RecolorAction { ENTIRE, LEGS, TAIL, HEAD, SNOUT, EARS, PAWS, NOSE }
 
 func _ready():
 	add_submenu_item("Color...", "RecolorMenu")
@@ -65,7 +65,13 @@ func _on_LineEdit_gui_input(event):
 				else:
 					for ar in KeyBallsData.foot_ext_cat:
 						core_ball_nos.append_array(ar)
-			emit_signal("color_part_pet", core_ball_nos, get_parent().get_node("ColorPopup/LineEdit").text)
+			elif current_action == RecolorAction.NOSE:
+				if KeyBallsData.species == KeyBallsData.Species.DOG:
+					core_ball_nos.append_array(KeyBallsData.nose_dog)
+				else:
+					core_ball_nos.append_array(KeyBallsData.nose_cat)
+			var plep = RecolorAction.keys()[RecolorAction.values()[current_action]]
+			emit_signal("color_part_pet", core_ball_nos, get_parent().get_node("ColorPopup/LineEdit").text, plep)
 
 func _on_RecolorMenu_id_pressed(id):
 	current_action = id

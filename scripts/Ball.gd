@@ -25,6 +25,7 @@ var palette = preload("res://resources/textures/petzpalette.png")
 signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, section)
+signal ball_deleted(ball_no)
 
 func _ready():
 	$MeshInstance.material_override.set_shader_param("palette", palette)
@@ -109,18 +110,25 @@ func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx
 		selected()
 
 func _input(event):
+	var handled = false
 	if event is InputEventKey and event.pressed and is_over:
 		if event.scancode == KEY_SPACE and event.control:
 			return
 		if event.scancode == KEY_B or event.scancode == KEY_Z:
+			get_tree().set_input_as_handled()
 			emit_signal("ball_selected", ball_no, Section.Section.BALL)
 		elif event.scancode == KEY_M or event.scancode == KEY_X:
+			get_tree().set_input_as_handled()
 			emit_signal("ball_selected", ball_no, Section.Section.MOVE)
 		elif event.scancode == KEY_P or event.scancode == KEY_C:
+			get_tree().set_input_as_handled()
 			emit_signal("ball_selected", ball_no, Section.Section.PROJECT)
 		elif event.scancode == KEY_L or event.scancode == KEY_V:
+			get_tree().set_input_as_handled()
 			emit_signal("ball_selected", ball_no, Section.Section.LINE)
-		get_tree().set_input_as_handled()
+		elif event.scancode == KEY_DELETE:
+			get_tree().set_input_as_handled()
+			emit_signal("ball_deleted", ball_no)
 
 var timer_count = 0
 

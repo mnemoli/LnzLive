@@ -97,3 +97,13 @@ func _on_RenameDialog_confirmed():
 	dir.rename(filepath, new_filepath)
 	rescan(new_filepath)
 	emit_signal("user_file_selected", new_filepath)
+
+
+func _on_ItemPopupMenu_about_to_show():
+	var clicked_item = get_selected() as TreeItem
+	var textlnz = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit") as TextEdit
+	var clicked_filepath = clicked_item.get_metadata(0) as String
+	$ItemPopupMenu.set_item_disabled(2, !textlnz.filepath == clicked_filepath)
+
+func _on_LnzTextEdit_file_backed_up():
+	rescan(get_selected().get_metadata(0) as String)
