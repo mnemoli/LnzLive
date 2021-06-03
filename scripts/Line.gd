@@ -11,6 +11,7 @@ export var ball_world_pos1 = Vector3.ZERO setget set_ball_world_pos1
 export var ball_world_pos2 = Vector3.ZERO setget set_ball_world_pos2
 export var texture: Texture setget set_texture
 export var transparent_color = 0 setget set_transparent_color
+export var texture_size: int setget set_texture_size
 
 var palette = preload("res://resources/textures/petzpalette.png")
 
@@ -53,6 +54,10 @@ func set_color_index(new_value):
 func set_texture(new_value):
 	texture = new_value
 	$MeshInstance.material_override.set_shader_param("line_texture", new_value)
+
+func set_texture_size(new_value):
+	texture_size = new_value
+	$MeshInstance.material_override.set_shader_param("texture_size", new_value)
 
 func set_transparent_color(new_value):
 	transparent_color = new_value

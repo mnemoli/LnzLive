@@ -38,6 +38,8 @@ font_data = ExtResource( 8 )
 [node name="Root" type="Node"]
 script = ExtResource( 9 )
 
+[node name="ResourcePreloader" type="ResourcePreloader" parent="."]
+
 [node name="PetRoot" type="Spatial" parent="."]
 
 [node name="Node" type="Node" parent="PetRoot"]

@@ -1,4 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://resources/textures/petzpalette.png" type="Texture" id=1]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;
@@ -13,11 +15,13 @@ uniform int color_index = 0;
 uniform vec4 r_color : hint_color = vec4(vec3(0.0), 1.0);
 uniform vec4 l_color : hint_color = vec4(vec3(0.0), 1.0);
 varying flat vec2 center_of_line;
+varying flat vec2 center_of_line_screen_uv;
 varying float right_boundary;
 varying float left_boundary;
 uniform vec3 ball_world_pos1 = vec3(0.0);
 uniform vec3 ball_world_pos2 = vec3(0.0);
 uniform sampler2D line_texture: hint_white;
+uniform int texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
@@ -78,7 +82,7 @@ void fragment() {
 	vec3 texture_color;
   if (transparent_index > 0 && color_index < 150) {
 	  // get the base texture color
-	  texture_color = texture(line_texture, UV).rgb;
+	  texture_color = texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / float(texture_size)) / inverse_camera_scale).rgb;
 	  int palette_index = 0;
 	  // find the palette index of the base texture color
 	  for(int i = 0; i < 256; i++) {
@@ -87,6 +91,11 @@ void fragment() {
 		  palette_index = i;
 		  break;
 		  }
+		if (abs(distance(palette_color, texture_color)) < 0.1 && i >= 10 && i < 150) {
+			texture_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
+			palette_index = i;
+			break;
+			}
 		}
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
@@ -94,6 +103,9 @@ void fragment() {
 		texture_color = get_shifted_color(palette_index);
 	  }
 	}
+  else if (transparent_index == 0) {
+		texture_color = texture(line_texture, UV).rgb;
+	}	
   else {
 	texture_color = color.rgb;  
 }
@@ -172,6 +184,7 @@ void vertex() {
 	vec2 center_ndc = (center_view.xy + 1.0) / 2.0;
 	// Must be an exact pixel coordinate or you get strange pixel effects
 	center_of_line = floor(center_ndc * VIEWPORT_SIZE);
+	center_of_line_screen_uv = center_ndc;
 	
 	PROJECTION_MATRIX = mat4(1.0);
 	
@@ -206,4 +219,6 @@ shader_param/r_color = Color( 0, 0, 0, 1 )
 shader_param/l_color = Color( 0, 0, 0, 1 )
 shader_param/ball_world_pos1 = Vector3( 0, 0, 0 )
 shader_param/ball_world_pos2 = Vector3( 0, 0, 0 )
+shader_param/texture_size = null
 shader_param/transparent_index = 0
+shader_param/palette = ExtResource( 1 )

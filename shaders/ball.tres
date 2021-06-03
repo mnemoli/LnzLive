@@ -15,6 +15,7 @@ uniform int color_index = 0;
 uniform vec4 outline_color : hint_color;
 uniform float z_add = .0;
 uniform sampler2D ball_texture: hint_white;
+uniform int texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
@@ -120,7 +121,7 @@ void fragment() {
   vec3 texture_color;
   if (transparent_index > 0 && color_index < 150) {
 	  // get the base texture color
-	  texture_color = texture(ball_texture, UV).rgb;
+	  texture_color = texture(ball_texture, UV * (float(ball_size) / float(texture_size))).rgb;
 	  int palette_index = 0;
 	  // find the palette index of the base texture color
 	  for(int i = 0; i < 256; i++) {
@@ -129,12 +130,18 @@ void fragment() {
 		  palette_index = i;
 		  break;
 		  }
+		if (abs(distance(palette_color, texture_color)) < 0.1 && i >= 10 && i < 150) {
+			texture_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
+			palette_index = i;
+			break;
+			}
 		}
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
 	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
-		
+
 		texture_color = get_shifted_color(palette_index);
+
 	  }
 	}
   else {
@@ -179,5 +186,6 @@ shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 shader_param/z_add = 0.0
+shader_param/texture_size = null
 shader_param/transparent_index = 0
 shader_param/palette = ExtResource( 1 )

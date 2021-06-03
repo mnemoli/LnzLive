@@ -23,6 +23,7 @@ var lnz: LnzParser
 var current_animation = 0
 var current_frame = 0
 var current_bdt: BdtParser
+onready var preloader = get_tree().root.get_node("Root/ResourcePreloader") as ResourcePreloader
 
 signal animation_loaded(num_of_frames)
 signal bhd_loaded(num_of_animations)
@@ -360,7 +361,14 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 					var tex_info = texture_list[ball.texture_id]
 					var texture_filename = tex_info.filename
 					var transparent_color = tex_info.transparent_color
-					var texture = load("res://resources/textures/"+texture_filename)
+					var resource_path = "res://resources/textures/"+texture_filename
+					var user_resource_path = "user://resources/textures/"+texture_filename
+					var texture = null
+					if ResourceLoader.exists(resource_path):
+						texture = ResourceLoader.load(resource_path)
+					else:
+						texture = preloader.get_resource(texture_filename)
+					visual_ball.texture_size = texture.get_size().x
 					visual_ball.texture = texture
 					visual_ball.transparent_color = transparent_color
 				else:
@@ -417,7 +425,14 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				var tex_info = texture_list[ball.texture_id]
 				var texture_filename = tex_info.filename
 				var transparent_color = tex_info.transparent_color
-				var texture = load("res://resources/textures/"+texture_filename)
+				var texture = null
+				var resource_path = "res://resources/textures/"+texture_filename
+				var user_resource_path = "user://resources/textures/"+texture_filename
+				if ResourceLoader.exists(resource_path):
+					texture = ResourceLoader.load(resource_path)
+				else:
+					texture = preloader.get_resource(texture_filename)
+				visual_ball.texture_size = texture.get_size().x
 				visual_ball.texture = texture
 				visual_ball.transparent_color = transparent_color
 			else:
@@ -515,6 +530,7 @@ func generate_lines(line_data: Array, new_create: bool):
 			visual_line.scale.y = distance
 		if new_create:
 			visual_line.texture = start.texture
+			visual_line.texture_size = start.texture.get_size().x
 			visual_line.transparent_color = start.transparent_color
 			if line.color == null:
 				visual_line.color = start.color

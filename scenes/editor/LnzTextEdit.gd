@@ -882,7 +882,7 @@ func _on_LnzTextEdit_gui_input(event):
 			var line_number = cursor_get_line() - nearest_section_start[SEARCH_RESULT_LINE] - 1
 			emit_signal("find_ball", line_number)
 		elif nearest_section == "[Add Ball]":
-			var line_number = cursor_get_line() - nearest_section_start[SEARCH_RESULT_LINE] - 1 + 66
+			var line_number = cursor_get_line() - nearest_section_start[SEARCH_RESULT_LINE] + 66
 			emit_signal("find_ball", line_number)
 		else:
 			emit_signal("find_ball", int(get_word_under_cursor()))
@@ -1018,7 +1018,7 @@ func _on_ToolsMenu_recolor(recolor_info: Dictionary):
 		var color_split = line.split(" ", false, 1)
 		var color = color_split[0]
 		if recolor_info.has(color):
-			set_line(start_of_section + i, recolor_info[color] + " " + color_split[1])
+			set_line(start_of_section + i, recolor_info[color] + color_split[1])
 		i += 1
 	
 	section_find = search('[Add Ball]', 0, 0, 0)
