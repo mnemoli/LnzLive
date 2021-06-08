@@ -14,8 +14,9 @@ uniform vec4 color : hint_color;
 uniform int color_index = 0;
 uniform vec4 outline_color : hint_color;
 uniform float z_add = .0;
+uniform bool has_texture = false;
 uniform sampler2D ball_texture: hint_white;
-uniform int texture_size;
+uniform vec2 texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
@@ -119,9 +120,11 @@ void fragment() {
  	 pct2 -= pct;
 
   vec3 texture_color;
-  if (transparent_index > 0 && color_index < 150) {
+  vec2 center_uv = (center_fragcoord / VIEWPORT_SIZE) - (1.0 * inverse_camera_scale);
+  if (transparent_index > 0 && color_index < 150 && has_texture) {
+  	float last_distance = -1.0;
 	  // get the base texture color
-	  texture_color = texture(ball_texture, UV * (float(ball_size) / float(texture_size))).rgb;
+	texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size) / inverse_camera_scale).rgb;
 	  int palette_index = 0;
 	  // find the palette index of the base texture color
 	  for(int i = 0; i < 256; i++) {
@@ -130,12 +133,14 @@ void fragment() {
 		  palette_index = i;
 		  break;
 		  }
-		if (abs(distance(palette_color, texture_color)) < 0.1 && i >= 10 && i < 150) {
+		if (transparent_index != 0) {
+		float this_distance = abs(distance(palette_color, texture_color));
+		if (this_distance < 0.1 && i >= 10 && i < 150 && (this_distance < last_distance || last_distance == -1.0)) {
 			texture_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
 			palette_index = i;
-			break;
+			last_distance = this_distance;
 			}
-		}
+		}}
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
 	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
@@ -144,6 +149,9 @@ void fragment() {
 
 	  }
 	}
+	else if (transparent_index == 0 && color_index < 150 && has_texture) {
+			texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size) / inverse_camera_scale).rgb;
+		}
   else {
 	texture_color = color.rgb;  
 }
@@ -186,6 +194,7 @@ shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 shader_param/z_add = 0.0
+shader_param/has_texture = false
 shader_param/texture_size = null
 shader_param/transparent_index = 0
 shader_param/palette = ExtResource( 1 )

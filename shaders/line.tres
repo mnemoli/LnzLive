@@ -21,7 +21,7 @@ varying float left_boundary;
 uniform vec3 ball_world_pos1 = vec3(0.0);
 uniform vec3 ball_world_pos2 = vec3(0.0);
 uniform sampler2D line_texture: hint_white;
-uniform int texture_size;
+uniform vec2 texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
@@ -80,9 +80,10 @@ void fragment() {
 	pct3 -= pct;
 	
 	vec3 texture_color;
+	float last_distance = -1.0;
   if (transparent_index > 0 && color_index < 150) {
 	  // get the base texture color
-	  texture_color = texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / float(texture_size)) / inverse_camera_scale).rgb;
+	  texture_color = texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / texture_size) / inverse_camera_scale).rgb;
 	  int palette_index = 0;
 	  // find the palette index of the base texture color
 	  for(int i = 0; i < 256; i++) {
@@ -91,10 +92,11 @@ void fragment() {
 		  palette_index = i;
 		  break;
 		  }
-		if (abs(distance(palette_color, texture_color)) < 0.1 && i >= 10 && i < 150) {
+		float this_distance = abs(distance(palette_color, texture_color));
+		if (this_distance < 0.1 && i >= 10 && i < 150 && (this_distance < last_distance || last_distance == -1.0)) {
 			texture_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
 			palette_index = i;
-			break;
+			last_distance = this_distance;
 			}
 		}
 	  // if the index of the texture is the same as the transparent color

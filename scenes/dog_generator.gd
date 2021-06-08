@@ -97,7 +97,7 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 		paintballs[k] = ar.duplicate()
 		var i = 0
 		for a in ar:
-			paintballs[k][i] = {base = a.base, size = a.size, normalised_position = a.normalised_position, color = a.color, outline_color = a.outline_color, outline = a.outline, fuzz = a.fuzz, z_add = a.z_add}
+			paintballs[k][i] = {base = a.base, size = a.size, normalised_position = a.normalised_position, color_index = a.color_index, color = a.color, outline_color = a.outline_color, outline = a.outline, fuzz = a.fuzz, z_add = a.z_add, texture_id = a.texture_id, anchored = a.anchored}
 			i+=1
 	collated_data = {balls = collated_data, addballs = addballs, paintballs = paintballs}
 	collated_data = munge_balls(collated_data, lnz_info)
@@ -368,7 +368,6 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 						texture = ResourceLoader.load(resource_path)
 					else:
 						texture = preloader.get_resource(texture_filename)
-					visual_ball.texture_size = texture.get_size().x
 					visual_ball.texture = texture
 					visual_ball.transparent_color = transparent_color
 				else:
@@ -432,7 +431,6 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 					texture = ResourceLoader.load(resource_path)
 				else:
 					texture = preloader.get_resource(texture_filename)
-				visual_ball.texture_size = texture.get_size().x
 				visual_ball.texture = texture
 				visual_ball.transparent_color = transparent_color
 			else:
@@ -469,6 +467,22 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball.add_to_group("paintballs")
 				visual_ball.connect("paintball_mouse_enter", self, "signal_paintball_mouse_enter")
 				visual_ball.connect("paintball_mouse_exit", self, "signal_paintball_mouse_exit")
+				if paintball.texture_id > -1:
+					var tex_info = texture_list[paintball.texture_id]
+					var texture_filename = tex_info.filename
+					var transparent_color = tex_info.transparent_color
+					var texture = null
+					var resource_path = "res://resources/textures/"+texture_filename
+					var user_resource_path = "user://resources/textures/"+texture_filename
+					if ResourceLoader.exists(resource_path):
+						texture = ResourceLoader.load(resource_path)
+					else:
+						texture = preloader.get_resource(texture_filename)
+					visual_ball.texture = texture
+					visual_ball.transparent_color = transparent_color
+				else:
+					visual_ball.transparent_color = paintball.color
+				visual_ball.color_index = paintball.color_index
 			visual_ball.base_ball_position = ball_map[key].global_transform.origin
 			visual_ball.transform.origin = paintball.normalised_position * Vector3(1, -1, 1) * (base_ball.size / 2.0) * pixel_world_size
 			visual_ball.ball_size = final_size
@@ -530,7 +544,6 @@ func generate_lines(line_data: Array, new_create: bool):
 			visual_line.scale.y = distance
 		if new_create:
 			visual_line.texture = start.texture
-			visual_line.texture_size = start.texture.get_size().x
 			visual_line.transparent_color = start.transparent_color
 			if line.color == null:
 				visual_line.color = start.color

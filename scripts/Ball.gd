@@ -12,7 +12,6 @@ export var z_add = 0.0 setget set_z_add
 export var ball_no = 0
 export var base_ball_no = -1
 export var texture: Texture setget set_texture
-export var texture_size: int setget set_texture_size
 export var transparent_color = 0 setget set_transparent_color
 export var visible_override = true setget set_visible
 export var omitted = false
@@ -78,10 +77,11 @@ func set_z_add(new_value):
 func set_texture(new_value):
 	texture = new_value
 	$MeshInstance.material_override.set_shader_param("ball_texture", new_value)
-
-func set_texture_size(new_value):
-	texture_size = new_value
-	$MeshInstance.material_override.set_shader_param("texture_size", new_value)
+	if new_value != null:
+		$MeshInstance.material_override.set_shader_param("texture_size", new_value.get_size())
+		$MeshInstance.material_override.set_shader_param("has_texture", true)
+	else:
+		$MeshInstance.material_override.set_shader_param("has_texture", false)
 
 func set_transparent_color(new_value):
 	transparent_color = new_value

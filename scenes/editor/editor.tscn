@@ -455,16 +455,28 @@ items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", nu
 
 [node name="ColorPopup" type="Popup" parent="SceneRoot"]
 visible = true
-margin_right = 200.0
-margin_bottom = 40.0
+margin_left = 355.842
+margin_top = 104.77
+margin_right = 555.842
+margin_bottom = 144.77
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEdit" type="LineEdit" parent="SceneRoot/ColorPopup"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/ColorPopup"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="LineEdit" type="LineEdit" parent="SceneRoot/ColorPopup/VBoxContainer"]
 margin_right = 58.0
 margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="LineEdit2" type="LineEdit" parent="SceneRoot/ColorPopup/VBoxContainer"]
+margin_top = 28.0
+margin_right = 58.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 
 [node name="RecolorPopup" type="ConfirmationDialog" parent="SceneRoot"]
@@ -565,12 +577,26 @@ margin_bottom = 24.0
 pressed = true
 text = "Balls/addballs"
 
-[node name="Paintballs" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+[node name="Ball outlines" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
 margin_left = 121.0
-margin_right = 211.0
+margin_right = 229.0
+margin_bottom = 24.0
+pressed = true
+text = "Ball outlines"
+
+[node name="Paintballs" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 233.0
+margin_right = 323.0
 margin_bottom = 24.0
 pressed = true
 text = "Paintballs"
+
+[node name="Lines" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 327.0
+margin_right = 389.0
+margin_bottom = 24.0
+pressed = true
+text = "Lines"
 
 [connection signal="addball_deleted" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_addball_deleted"]
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
@@ -610,6 +636,7 @@ text = "Paintballs"
 [connection signal="index_pressed" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_index_pressed"]
 [connection signal="recolor" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_recolor"]
 [connection signal="id_pressed" from="SceneRoot/ToolsMenu/RecolorMenu" to="SceneRoot/ToolsMenu" method="_on_RecolorMenu_id_pressed"]
-[connection signal="gui_input" from="SceneRoot/ColorPopup/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
+[connection signal="gui_input" from="SceneRoot/ColorPopup/VBoxContainer/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
+[connection signal="gui_input" from="SceneRoot/ColorPopup/VBoxContainer/LineEdit2" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
 [connection signal="confirmed" from="SceneRoot/RecolorPopup" to="SceneRoot/ToolsMenu" method="_on_RecolorPopup_confirmed"]
 [connection signal="pressed" from="SceneRoot/RecolorPopup/VBoxContainer/ClearButton" to="SceneRoot/ToolsMenu" method="_on_ClearButton_pressed"]

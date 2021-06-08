@@ -377,9 +377,13 @@ func _init(file_path):
 			outline_color = 0
 		var fuzz = int(split_line[7].get_string())
 		var outline = int(split_line[8].get_string())
+		var texture = int(split_line[10].get_string())
+		var anchored = 0
+		if split_line.size() > 11:
+			anchored = int(split_line[11].get_string())
 		var got_color = color_chart.get(color)
 		var got_outline_color = color_chart.get(outline_color)
-		var paintball = PaintBallData.new(base, diameter_percent, Vector3(x,y,z), got_color, got_outline_color, outline, fuzz)
+		var paintball = PaintBallData.new(base, diameter_percent, Vector3(x,y,z), color, got_color, got_outline_color, outline, fuzz, 0, texture, anchored)
 		var pb_array = self.paintballs.get(base, [])
 		pb_array.append(paintball)
 		self.paintballs[base] = pb_array

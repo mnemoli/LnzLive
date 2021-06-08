@@ -1,7 +1,7 @@
 extends PopupMenu
 
-signal color_entire_pet(color_index)
-signal color_part_pet(core_ball_nos, color_index)
+signal color_entire_pet(color_index, outline_color_index)
+signal color_part_pet(core_ball_nos, color_index, outline_color_index, part)
 signal add_ball(selected_ball)
 signal copy_l_to_r()
 signal recolor(recolor_info)
@@ -17,8 +17,10 @@ func _ready():
 
 func _on_LineEdit_gui_input(event):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ENTER:
+		var base_color = get_parent().get_node("ColorPopup/VBoxContainer/LineEdit").text
+		var outline_color = get_parent().get_node("ColorPopup/VBoxContainer/LineEdit2").text
 		if current_action == RecolorAction.ENTIRE:
-			emit_signal("color_entire_pet", get_parent().get_node("ColorPopup/LineEdit").text)
+			emit_signal("color_entire_pet", base_color, outline_color)
 		else:
 			var core_ball_nos = []
 			if current_action == RecolorAction.LEGS:
@@ -72,8 +74,8 @@ func _on_LineEdit_gui_input(event):
 					core_ball_nos.append_array(KeyBallsData.nose_dog)
 				else:
 					core_ball_nos.append_array(KeyBallsData.nose_cat)
-			var plep = RecolorAction.keys()[RecolorAction.values()[current_action]]
-			emit_signal("color_part_pet", core_ball_nos, get_parent().get_node("ColorPopup/LineEdit").text, plep)
+			var part = RecolorAction.keys()[RecolorAction.values()[current_action]]
+			emit_signal("color_part_pet", core_ball_nos, base_color, outline_color, part)
 
 func _on_RecolorMenu_id_pressed(id):
 	current_action = id
@@ -99,15 +101,21 @@ func _on_RecolorPopup_confirmed():
 	# get all the recolor infos
 	var popup = get_parent().get_node("RecolorPopup/VBoxContainer")
 	var lines = popup.get_node("RecolorLines").get_children()
-	var recolor_info = {}
+	var recolor_info = {recolors = {}}
 	for l in lines:
 		var original_color = l.get_child(0).text as String
 		var new_color = l.get_child(2).text as String
 		if original_color.empty() or new_color.empty():
 			continue
-		recolor_info[original_color] = new_color
+		recolor_info.recolors[original_color] = new_color
 	var balls_on = popup.get_node("CheckContainer/Balls").pressed
+	var ball_outlines_on = popup.get_node("CheckContainer/Ball outlines").pressed
 	var paintballs_on = popup.get_node("CheckContainer/Paintballs").pressed
+	var lines_on = popup.get_node("CheckContainer/Lines").pressed
+	recolor_info.balls_on = balls_on
+	recolor_info.ball_outlines_on = ball_outlines_on
+	recolor_info.paintballs_on = paintballs_on
+	recolor_info.lines_on = lines_on
 	emit_signal("recolor", recolor_info)
 		
 

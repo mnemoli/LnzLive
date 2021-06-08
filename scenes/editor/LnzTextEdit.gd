@@ -205,7 +205,7 @@ func find_line_in_ball_or_addball_section(ball_no, start_point):
 	return start_point + i
 
 
-func _on_ToolsMenu_color_entire_pet(color_index):
+func _on_ToolsMenu_color_entire_pet(color_index, outline_color_index):
 	var species = KeyBallsData.species
 	var balls_to_exclude = []
 	if species == KeyBallsData.Species.CAT:
@@ -233,9 +233,19 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 		elif line.begins_with("["):
 			break
 		# here the first number is color
-		var color_break = line.find(" ")
-		var line_without_color = line.substr(color_break)
-		set_line(start_of_section + i, str(color_index) + " " + line_without_color)
+		var parsed_line = r.search_all(line)
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 0 and !color_index.empty():
+				final_line += str(color_index) + " "
+			elif n == 1 and !outline_color_index.empty():
+				final_line += str(outline_color_index) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(start_of_section + i, final_line)
 		i += 1
 	
 	section_find = search('[Add Ball]', 0, 0, 0)
@@ -260,8 +270,10 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 		var final_line = ""
 		for r_item in parsed_line:
 			var item = r_item.get_string()
-			if n == 4:
+			if n == 4 and !color_index.empty():
 				final_line += str(color_index) + " "
+			elif n == 5 and !outline_color_index.empty():
+				final_line += str(outline_color_index) + " "
 			else:
 				final_line += item + " "
 			n += 1
@@ -270,7 +282,7 @@ func _on_ToolsMenu_color_entire_pet(color_index):
 	save_file()
 
 
-func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, intended_part):
+func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, outline_color_index, intended_part):
 	var species = KeyBallsData.species
 	var balls_to_exclude = []
 	if species == KeyBallsData.Species.CAT:
@@ -303,9 +315,19 @@ func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, intended_part):
 			i += 1
 			continue
 		# here the first number is color
-		var color_break = line.find(" ")
-		var line_without_color = line.substr(color_break)
-		set_line(start_of_section + i, str(color_index) + line_without_color)
+		var parsed_line = r.search_all(line)
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 0 and !color_index.empty():
+				final_line += str(color_index) + " "
+			elif n == 1 and !outline_color_index.empty():
+				final_line += str(outline_color_index) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(start_of_section + i, final_line)
 		i += 1
 	
 	section_find = search('[Add Ball]', 0, 0, 0)
@@ -333,8 +355,10 @@ func _on_ToolsMenu_color_part_pet(core_ball_nos, color_index, intended_part):
 		var final_line = ""
 		for r_item in parsed_line:
 			var item = r_item.get_string()
-			if n == 4:
+			if n == 4 and !color_index.empty():
 				final_line += str(color_index) + " "
+			elif n == 5 and !outline_color_index.empty():
+				final_line += str(outline_color_index) + " "
 			else:
 				final_line += item + " "
 			n += 1
@@ -985,8 +1009,10 @@ func _on_Node_addball_deleted(ball_no):
 	save_file()
 	
 
-func _on_ToolsMenu_recolor(recolor_info: Dictionary):
+func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 	save_backup()
+	
+	var recolor_info = all_recolor_info.recolors
 	
 	var species = KeyBallsData.species
 	var balls_to_exclude = []
@@ -1000,89 +1026,134 @@ func _on_ToolsMenu_recolor(recolor_info: Dictionary):
 		balls_to_exclude.append_array(KeyBallsData.eyes_dog.values())
 		balls_to_exclude.append_array(KeyBallsData.nose_dog)
 		balls_to_exclude.append_array(KeyBallsData.tongue_dog)
-		
-	var section_find = search('[Ballz Info]', 0, 0, 0)
-	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
-	var i = 0
-	while true:
-		if i in balls_to_exclude:
-			i += 1
-			continue
-		var line = get_line(start_of_section + i).lstrip(" ")
-		if line.begins_with(";") or line.empty():
-			i += 1
-			continue
-		elif line.begins_with("["):
-			break
-		# here the first number is color
-		var color_split = line.split(" ", false, 1)
-		var color = color_split[0]
-		if recolor_info.has(color):
-			set_line(start_of_section + i, recolor_info[color] + color_split[1])
-		i += 1
 	
-	section_find = search('[Add Ball]', 0, 0, 0)
-	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
-	i = 0
-	while true:
-		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+	if all_recolor_info.balls_on or all_recolor_info.ball_outlines_on:
+		var section_find = search('[Ballz Info]', 0, 0, 0)
+		var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+		var i = 0
+		while true:
+			if i in balls_to_exclude:
+				i += 1
+				continue
+			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with(";") or line.empty():
+				i += 1
+				continue
+			elif line.begins_with("["):
+				break
+			# here the first number is color and second is outline col
+			var parsed_line = r.search_all(line)
+			var color = parsed_line[0].get_string()
+			var outline_color = parsed_line[1].get_string()
+			if (recolor_info.has(color) and all_recolor_info.balls_on) or (recolor_info.has(outline_color) and all_recolor_info.ball_outlines_on):
+				var n = 0
+				var final_line = ""
+				for r_item in parsed_line:
+					var item = r_item.get_string()
+					if n == 0 and recolor_info.has(item) and all_recolor_info.balls_on:
+						final_line += recolor_info[color] + " "
+					elif n == 1 and recolor_info.has(item) and all_recolor_info.ball_outlines_on:
+						final_line += recolor_info[outline_color] + " "
+					else:
+						final_line += item + " "
+					n += 1
+				set_line(start_of_section + i, final_line)
 			i += 1
-			continue
-		var line = get_line(start_of_section + i).lstrip(" ")
-		if line.begins_with(";") or line.empty():
-			i += 1
-			continue
-		elif line.begins_with("["):
-			break
-		# here the fifth number is color
-		var parsed_line = r.search_all(line)
-		if int(parsed_line[0].get_string()) in balls_to_exclude:
-			i += 1
-			continue
-		var color = parsed_line[4].get_string()
-		if recolor_info.has(color):
-			var n = 0
-			var final_line = ""
-			for r_item in parsed_line:
-				var item = r_item.get_string()
-				if n == 4:
-					final_line += recolor_info[color] + " "
-				else:
-					final_line += item + " "
-				n += 1
-			set_line(start_of_section + i, final_line)
-		i += 1
 		
-	section_find = search('[Paint Ballz]', 0, 0, 0)
-	start_of_section = section_find[SEARCH_RESULT_LINE] + 1
-	i = 0
-	while true:
-		if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+		section_find = search('[Add Ball]', 0, 0, 0)
+		start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+		i = 0
+		while true:
+			if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+				i += 1
+				continue
+			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with(";") or line.empty():
+				i += 1
+				continue
+			elif line.begins_with("["):
+				break
+			# here the fifth number is color
+			var parsed_line = r.search_all(line)
+			if int(parsed_line[0].get_string()) in balls_to_exclude:
+				i += 1
+				continue
+			var color = parsed_line[4].get_string()
+			var outline_color = parsed_line[5].get_string()
+			if (recolor_info.has(color) and all_recolor_info.balls_on) or (recolor_info.has(outline_color) and all_recolor_info.ball_outlines_on):
+				var n = 0
+				var final_line = ""
+				for r_item in parsed_line:
+					var item = r_item.get_string()
+					if n == 4 and recolor_info.has(item) and all_recolor_info.balls_on:
+						final_line += recolor_info[color] + " "
+					elif n == 5 and recolor_info.has(item) and all_recolor_info.ball_outlines_on:
+						final_line += recolor_info[outline_color] + " "
+					else:
+						final_line += item + " "
+					n += 1
+				set_line(start_of_section + i, final_line)
 			i += 1
-			continue
-		var line = get_line(start_of_section + i).lstrip(" ")
-		if line.begins_with(";") or line.empty():
+			
+	if all_recolor_info.paintballs_on:
+		var section_find = search('[Paint Ballz]', 0, 0, 0)
+		var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+		var i = 0
+		while true:
+			if i + KeyBallsData.max_base_ball_num in balls_to_exclude:
+				i += 1
+				continue
+			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with(";") or line.empty():
+				i += 1
+				continue
+			elif line.begins_with("["):
+				break
+			# here the sixth number is color
+			var parsed_line = r.search_all(line)
+			if int(parsed_line[0].get_string()) in balls_to_exclude:
+				i += 1
+				continue
+			var color = parsed_line[5].get_string()
+			if recolor_info.has(color):
+				var n = 0
+				var final_line = ""
+				for r_item in parsed_line:
+					var item = r_item.get_string()
+					if n == 5:
+						final_line += recolor_info[color] + " "
+					else:
+						final_line += item + " "
+					n += 1
+				set_line(start_of_section + i, final_line)
 			i += 1
-			continue
-		elif line.begins_with("["):
-			break
-		# here the sixth number is color
-		var parsed_line = r.search_all(line)
-		if int(parsed_line[0].get_string()) in balls_to_exclude:
-			i += 1
-			continue
-		var color = parsed_line[5].get_string()
-		if recolor_info.has(color):
-			var n = 0
-			var final_line = ""
-			for r_item in parsed_line:
-				var item = r_item.get_string()
-				if n == 5:
-					final_line += recolor_info[color] + " "
-				else:
-					final_line += item + " "
-				n += 1
-			set_line(start_of_section + i, final_line)
-		i += 1
 		
+	if all_recolor_info.lines_on:
+		var section_find = search('[Linez]', 0, 0, 0)
+		var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+		var i = 0
+		while true:
+			var line = get_line(start_of_section + i).lstrip(" ")
+			# ignore comments for now
+			if line.begins_with("[") or line.empty():
+				break
+			var parsed_line = r.search_all(line)
+			var mainColor = parsed_line[3].get_string()
+			var lColor = parsed_line[4].get_string()
+			var rColor = parsed_line[5].get_string()
+			if recolor_info.has(mainColor) or recolor_info.has(lColor) or recolor_info.has(rColor):
+				var n = 0
+				var final_line = ""
+				for item in parsed_line:
+					if n == 3 and recolor_info.has(mainColor):
+						final_line += recolor_info[mainColor] + " "
+					elif n == 4 and recolor_info.has(lColor):
+						final_line += recolor_info[lColor] + " "
+					elif n == 5 and recolor_info.has(rColor):
+						final_line += recolor_info[rColor] + " "
+					else:
+						final_line += item.get_string() + " "
+					n += 1
+				set_line(start_of_section + i, final_line)
+			i += 1
 	save_file()
