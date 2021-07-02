@@ -4,7 +4,7 @@
 [ext_resource path="res://scripts/Line.gd" type="Script" id=2]
 
 [sub_resource type="QuadMesh" id=1]
-size = Vector2( 0.01, 1 )
+size = Vector2( 0.001, 1 )
 
 [node name="Line" type="Spatial"]
 script = ExtResource( 2 )

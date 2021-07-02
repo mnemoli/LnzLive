@@ -40,13 +40,6 @@ vec3 get_shifted_color(int palette_index) {
 void fragment() {
   vec2 c = center_fragcoord;
   vec2 st = FRAGCOORD.xy;
-  float inverse_camera_scale = (1.0 / ORTHO_SIZE) * 2.0;
-
-  // Artificially scale up the screen depending on camera scale
-  // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
-  // pixel perfect scaling
-  c = floor(c / inverse_camera_scale) * (inverse_camera_scale);
-  st = floor(st / inverse_camera_scale) * (inverse_camera_scale);
   
   // FUZZING
   // Find random number based on y-pixel, offset to center of ball
@@ -55,8 +48,6 @@ void fragment() {
   r = (r * 2.0) - 1.0;
   // Increase distortion by fuzz amount
   r *= float(fuzz_amount);
-  // Scale with camera to allow zooming
-  r *= inverse_camera_scale;
   // Offset x line by the final random amount
   st.x += floor(r);
   
@@ -70,43 +61,43 @@ void fragment() {
   }
   else if(outline == 0) {
     // one sided outline
-    st2.x -= 1.0 * inverse_camera_scale;
+    st2.x -= 1.0;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline = 0;
   } else if (outline == -2) {
     // one sided outline
-    st2.x += 1.0 * inverse_camera_scale;
+    st2.x += 1.0;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline = 0;
   } else if (outline == -1) {
     pct2 = 0.0;
     modified_outline = 0;
   } else if (outline > 1) {
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline -= 1;
   } else if (outline == 1) {
     // dotted outline
 	float side = sign(st2.x - c.x);
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
     modified_outline = 0;
-	st.x += 1.0 * inverse_camera_scale * side;
+	st.x += 1.0 * side;
   } else if (outline == -3) {
 	// nose, need to do special here
 	vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline = 3;
   } else if (outline < -1) {
 	// use as debug for now
 	float side = sign(st2.x - c.x);
 	float side2 = sign(st2.y - c.y);
-	st2.x -= 1.0 * inverse_camera_scale * side;
-	st2.y -= 1.0 * inverse_camera_scale * side2;
+	st2.x -= 1.0 * side;
+	st2.y -= 1.0 * side2;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
     modified_outline = 0;
   }
   
@@ -114,17 +105,17 @@ void fragment() {
   vec2 vector_from_center = st - c;
   // Draw a circle.
   // Base ball size gives exact pixel size at camera scale 1.
-  float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)) * inverse_camera_scale);
+  float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)));
 
   if(outline != -1)	
  	 pct2 -= pct;
 
   vec3 texture_color;
-  vec2 center_uv = (center_fragcoord / VIEWPORT_SIZE) - (1.0 * inverse_camera_scale);
+  vec2 center_uv = (center_fragcoord / VIEWPORT_SIZE) - (1.0);
   if (transparent_index > 0 && color_index < 150 && has_texture) {
   	float last_distance = -1.0;
 	  // get the base texture color
-	texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size) / inverse_camera_scale).rgb;
+	texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size)).rgb;
 	  int palette_index = 0;
 	  // find the palette index of the base texture color
 	  for(int i = 0; i < 256; i++) {
@@ -150,7 +141,7 @@ void fragment() {
 	  }
 	}
 	else if (transparent_index == 0 && color_index < 150 && has_texture) {
-			texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size) / inverse_camera_scale).rgb;
+			texture_color = texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size)).rgb;
 		}
   else {
 	texture_color = color.rgb;  

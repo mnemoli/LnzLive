@@ -18,8 +18,8 @@ func _gui_input(event):
 			camera_holder.rotation.y += motion.x * -0.01
 		if Input.is_mouse_button_pressed(BUTTON_RIGHT) or Input.is_mouse_button_pressed(BUTTON_MIDDLE):
 			var motion = event.relative as Vector2
-			camera.transform.origin.x += motion.x * 0.001 * camera.size
-			camera.transform.origin.y += motion.y * 0.001 * camera.size
+			camera.transform.origin.x += motion.x * 0.001 / tex.rect_scale.x
+			camera.transform.origin.y += motion.y * 0.001 / tex.rect_scale.x
 		
 		label.rect_global_position = event.global_position
 		
@@ -29,6 +29,7 @@ func _gui_input(event):
 			var real_center = tex.rect_position + (tex.rect_size / 2.0)
 			var real_mouse_pos = event.position
 			var offset = real_mouse_pos - real_center
+			offset /= tex.rect_scale
 			var final_pos = Vector2(500,500) + offset
 			
 			var from = camera.project_ray_origin(final_pos)
@@ -47,9 +48,11 @@ func _gui_input(event):
 		
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == BUTTON_WHEEL_DOWN:
-			camera.size *= 2.0
+			tex.rect_pivot_offset = tex.rect_size / 2.0
+			tex.rect_scale = tex.rect_scale / 2.0
 		elif event.button_index == BUTTON_WHEEL_UP:
-			camera.size /= 2.0
+			tex.rect_pivot_offset = tex.rect_size / 2.0
+			tex.rect_scale = tex.rect_scale * 2.0
 		elif event.doubleclick and event.button_index == BUTTON_LEFT and last_selected_is_valid():
 			last_selected.selected()
 			
