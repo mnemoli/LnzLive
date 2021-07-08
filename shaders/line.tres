@@ -24,7 +24,8 @@ uniform sampler2D line_texture: hint_white;
 uniform vec2 texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
-varying vec2 test;
+varying vec2 max_x;
+uniform bool has_texture = false;
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
@@ -54,39 +55,25 @@ void fragment() {
     r *= float(fuzz_amount) / 100.0;
 	
 	vec3 texture_color;
-	float last_distance = -1.0;
-  if (transparent_index > 0 && color_index < 150) {
-	  // get the base texture color
-	  texture_color = texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / texture_size)).rgb;
-	  int palette_index = 0;
-	  // find the palette index of the base texture color
-	  for(int i = 0; i < 256; i++) {
-		vec3 palette_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
-		if (palette_color == texture_color) {
-		  palette_index = i;
-		  break;
-		  }
-		float this_distance = abs(distance(palette_color, texture_color));
-		if (this_distance < 0.1 && i >= 10 && i < 150 && (this_distance < last_distance || last_distance == -1.0)) {
-			texture_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
-			palette_index = i;
-			last_distance = this_distance;
-			}
-		}
+	int palette_index = int(texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / texture_size)).r * 255.0);
+  if (transparent_index > 0 && color_index < 150 && has_texture) {
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
 	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
 		texture_color = get_shifted_color(palette_index);
-	  }
+	  } else {
+	  // get the base texture color
+		texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
+		}
 	}
-  else if (transparent_index == 0) {
-		texture_color = texture(line_texture, UV).rgb;
-	}	
+	else if (transparent_index == 0 && color_index < 150 && has_texture) {
+			texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
+		}
   else {
 	texture_color = color.rgb;  
 }
 	// rescale the UV between 0 and 1
-	float scaled_uv_x = UV.x / test.x;
+	float scaled_uv_x = UV.x / max_x.x;
 	vec2 move_vec = uv_to_flat * r;
 	vec2 modified_uv = vec2(scaled_uv_x, UV.y) - move_vec;
 	float one_pixel = 0.5 / (floor(line_width_in_pixels) + 0.5);
@@ -143,8 +130,8 @@ void vertex() {
 	vec3 offset = vec3(n / VIEWPORT_SIZE, 0.0);
 	
 	// Remove the mesh's default x-width from the final output
-//	vec2 existing_width = vert_in_ndc_space - paired_point_ndc_space;
-//	offset.xy -= existing_width;
+	vec2 existing_width = vert_in_ndc_space - paired_point_ndc_space;
+	offset.xy -= existing_width;
 	
 	float z_pos = vert_in_clip_space.z;
 	// Find the minimum z for this line
@@ -162,10 +149,10 @@ void vertex() {
 	center_of_line = floor(center_ndc * VIEWPORT_SIZE) + 0.5;
 	center_of_line_screen_uv = center_ndc;
 	
-	float max_x = line_width_in_pixels / float(max(line_width_in_pixels_end, line_width_in_pixels_start));
+	float max_x_f = line_width_in_pixels / max(float(line_width_in_pixels_end), float(line_width_in_pixels_start));
 	if(UV.x > 0.0)
-		UV.x = max_x;
-	test = vec2(max_x, 0.0);
+		UV.x = max_x_f;
+	max_x = vec2(max_x_f, 0.0);
 	
 	PROJECTION_MATRIX = mat4(1.0);
 }"
@@ -184,4 +171,5 @@ shader_param/ball_world_pos1 = Vector3( 0, 0, 0 )
 shader_param/ball_world_pos2 = Vector3( 0, 0, 0 )
 shader_param/texture_size = null
 shader_param/transparent_index = 0
+shader_param/has_texture = false
 shader_param/palette = ExtResource( 1 )

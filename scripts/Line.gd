@@ -53,8 +53,11 @@ func set_color_index(new_value):
 func set_texture(new_value):
 	texture = new_value
 	$MeshInstance.material_override.set_shader_param("line_texture", new_value)
+	$MeshInstance.material_override.set_shader_param("has_texture", true)
 	if new_value != null:
 		$MeshInstance.material_override.set_shader_param("texture_size", new_value.get_size())
+	else:
+		$MeshInstance.material_override.set_shader_param("has_texture", false)
 
 func set_transparent_color(new_value):
 	transparent_color = new_value

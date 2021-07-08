@@ -88,7 +88,7 @@ func scan_local_textures():
 			new_item.set_text(0, filename)
 			new_item.set_metadata(0, user_file_location + filename)
 			var img = Image.new()
-			img.load(user_file_location + "/textures/" + filename)
+			img.load(user_file_location + "/textures/" + filename, true, true)
 			var tex = ImageTexture.new()
 			tex.create_from_image(img, ImageTexture.FLAG_REPEAT)
 			preloader.add_resource(filename, tex)
