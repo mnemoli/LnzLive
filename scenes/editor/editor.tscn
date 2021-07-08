@@ -88,9 +88,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CanvasLayer" type="CanvasLayer" parent="SceneRoot/HSplitContainer/VBoxContainer"]
-
-[node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer"]
+[node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer"]
 margin_right = 285.0
 margin_bottom = 768.0
 size_flags_horizontal = 3
@@ -102,10 +100,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ItemPopupMenu" type="PopupMenu" parent="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree"]
+[node name="ItemPopupMenu" type="PopupMenu" parent="SceneRoot/HSplitContainer/VBoxContainer/Tree"]
 margin_right = 20.0
 margin_bottom = 20.0
 items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Back up", null, 0, false, true, 2, 0, null, "", false ]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SceneRoot/HSplitContainer/VBoxContainer"]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
 margin_left = 297.0
@@ -600,15 +600,15 @@ text = "Lines"
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
-[connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="PetRoot/Node" method="generate_pet"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
-[connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_Tree_item_activated"]
-[connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="PetRoot/Node" method="generate_pet"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
-[connection signal="about_to_show" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_ItemPopupMenu_about_to_show"]
-[connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_ItemPopupMenu_id_pressed"]
+[connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
+[connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
+[connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
+[connection signal="about_to_show" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_about_to_show"]
+[connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
 [connection signal="text_entered" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/AnimPicker" to="PetRoot/Node" method="_on_AnimPicker_text_entered"]
 [connection signal="value_changed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" to="PetRoot/Node" method="set_frame"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/Button" method="_on_Button_toggled"]
@@ -618,13 +618,13 @@ text = "Lines"
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/PaintballCheckBox" to="PetRoot/Node" method="_on_PaintballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
-[connection signal="file_backed_up" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_LnzTextEdit_file_backed_up"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="rescan"]
+[connection signal="file_backed_up" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_LnzTextEdit_file_backed_up"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
 [connection signal="find_ball" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="_on_LnzTextEdit_find_ball"]
 [connection signal="gui_input" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_LnzTextEdit_gui_input"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
-[connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/CanvasLayer/Tree" method="_on_RenameDialog_confirmed"]
+[connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
 [connection signal="about_to_show" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_about_to_show"]
 [connection signal="add_ball" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_add_ball"]
 [connection signal="color_entire_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_entire_pet"]

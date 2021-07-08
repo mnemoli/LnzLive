@@ -4,9 +4,7 @@ extends Spatial
 export var ball_size = 10 setget set_ball_size
 export var fuzz_amount = 0 setget set_fuzz_amount
 export var outline = -1 setget set_outline
-export var color = Color.white setget set_color
 export var color_index = 0 setget set_color_index
-export var outline_color = Color.black setget set_outline_color
 export var outline_color_index = 0 setget set_outline_color_index
 export var z_add = 0.0 setget set_z_add
 export var ball_no = 0
@@ -55,19 +53,12 @@ func set_outline(new_value):
 	outline = new_value
 	$MeshInstance.material_override.set_shader_param("outline", new_value)
 
-func set_color(new_value):
-	color = new_value
-	$MeshInstance.material_override.set_shader_param("color", new_value)
-
 func set_color_index(new_value):
 	color_index = new_value
 	$MeshInstance.material_override.set_shader_param("color_index", new_value)
 	
-func set_outline_color(new_value):
-	outline_color = new_value
-	$MeshInstance.material_override.set_shader_param("outline_color", new_value)
-	
 func set_outline_color_index(new_value):
+	$MeshInstance.material_override.set_shader_param("outline_color_index", new_value)
 	outline_color_index = new_value
 	
 func set_z_add(new_value):
@@ -94,13 +85,13 @@ func _on_Area_mouse_entered():
 	
 func turn_on_highlight():
 	old_outline = outline
-	old_outline_color = outline_color
+	old_outline_color = outline_color_index
 	set_outline(3)
-	set_outline_color(Color.white)
+	set_outline_color_index(0)
 	
 func turn_off_highlight():
 	set_outline(old_outline)
-	set_outline_color(old_outline_color)
+	set_outline_color_index(old_outline_color)
 	
 func _on_Area_mouse_exited():
 	is_over = false

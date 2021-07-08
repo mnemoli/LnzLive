@@ -4,9 +4,7 @@ class_name AddBallData
 export var base = 0
 export var size = 1
 export var position = Vector3(0,0,0)
-export var color = Color.white
 export var color_index = -1
-export var outline_color = Color.black
 export var outline = -1
 export var z_add = 0.0
 export var fuzz = 0
@@ -21,9 +19,7 @@ func _init(
  ball_no: int,
  size: int,
  position: Vector3,
- color: Color = Color.white,
  color_index: int = -1,
- outline_color = Color.black,
  outline_color_index: int = 0,
  outline = -1,
  fuzz = 0,
@@ -33,9 +29,7 @@ func _init(
  texture_id = -1):
 	self.size = size
 	self.position = position
-	self.color = color
 	self.color_index = color_index
-	self.outline_color = outline_color
 	self.outline = outline
 	self.base = base
 	self.z_add = z_add

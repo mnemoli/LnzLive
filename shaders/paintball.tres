@@ -12,10 +12,9 @@ uniform int fuzz_amount = 0;
 uniform int base_ball_size = 1;
 uniform int ball_size = 1;
 uniform int outline = -1;
-uniform vec4 color : hint_color;
 uniform int color_index = 0;
+uniform int outline_color_index = 0;
 uniform int transparent_index = 0;
-uniform vec4 outline_color : hint_color;
 uniform float z_add = 0.0;
 uniform sampler2D palette: hint_white;
 uniform vec2 texture_size;
@@ -131,8 +130,9 @@ void fragment() {
 			texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
 		}
   else {
-	texture_color = color.rgb;  
+	texture_color = texture(palette, vec2(float(color_index) / 255.0, 0.0)).rgb;
 }
+	vec3 outline_color = texture(palette, vec2(float(outline_color_index) / 255.0, 0.0)).rgb;
   ALBEDO = vec3(pct * texture_color.rgb + pct2 * outline_color.rgb);
   ALPHA = pct + pct2;
 
@@ -180,10 +180,9 @@ shader_param/fuzz_amount = 0
 shader_param/base_ball_size = 10
 shader_param/ball_size = 10
 shader_param/outline = -1
-shader_param/color = Color( 1, 1, 1, 1 )
-shader_param/color_index = 0
+shader_param/color_index = -1
+shader_param/outline_color_index = 0
 shader_param/transparent_index = 0
-shader_param/outline_color = Color( 0, 0, 0, 1 )
 shader_param/z_add = 0.0
 shader_param/texture_size = null
 shader_param/has_texture = false

@@ -10,9 +10,8 @@ render_mode unshaded, skip_vertex_transform;
 uniform int fuzz_amount = 0;
 uniform int ball_size = 1;
 uniform int outline = -1;
-uniform vec4 color : hint_color;
 uniform int color_index = 0;
-uniform vec4 outline_color : hint_color;
+uniform int outline_color_index = 0;
 uniform float z_add = .0;
 uniform bool has_texture = false;
 uniform sampler2D ball_texture: hint_white;
@@ -89,7 +88,7 @@ void fragment() {
 	// nose, need to do special here
 	vec2 vec = st2 - c;
     pct2 = step(length(vec), float(ball_size) / 2.0);
-	modified_outline = 3;
+	modified_outline = 4;
   } else if (outline < -1) {
 	// use as debug for now
 	float side = sign(st2.x - c.x);
@@ -113,7 +112,10 @@ void fragment() {
   vec3 texture_color;
   vec2 center_uv = (center_fragcoord / VIEWPORT_SIZE) - (1.0);
   int palette_index = int(texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size)).r * 255.0);
-  if (transparent_index > 0 && color_index < 150 && has_texture) {
+	if (outline == -3) 
+		ALBEDO = vec3(pct * vec3(1.0) + pct2 * vec3(0.0));
+	else {
+	if (transparent_index > 0 && color_index < 150 && has_texture) {
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
 	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
@@ -127,11 +129,11 @@ void fragment() {
 			texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
 		}
   else {
-	texture_color = color.rgb;  
+	texture_color = texture(palette, vec2(float(color_index) / 255.0, 0.0)).rgb;
 }
+	vec3 outline_color = texture(palette, vec2(float(outline_color_index) / 255.0, 0.0)).rgb;
   ALBEDO = vec3(pct * texture_color.rgb + pct2 * outline_color.rgb);
-
-//	ALBEDO = vec3(float(palette_index) / 255.0);
+}
   ALPHA = pct + pct2;
   
   ALPHA_SCISSOR = 1.0;
@@ -166,9 +168,8 @@ shader = SubResource( 1 )
 shader_param/fuzz_amount = 0
 shader_param/ball_size = 10
 shader_param/outline = -1
-shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
-shader_param/outline_color = Color( 0, 0, 0, 1 )
+shader_param/outline_color_index = 0
 shader_param/z_add = 0.0
 shader_param/has_texture = false
 shader_param/texture_size = null
