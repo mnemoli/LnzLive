@@ -10,11 +10,12 @@ render_mode unshaded, skip_vertex_transform;
 uniform int fuzz_amount = 0;
 uniform int ball_size = 1;
 uniform int outline = -1;
-uniform vec4 color : hint_color;
 uniform int color_index = 0;
-uniform vec4 outline_color : hint_color;
+uniform int outline_color_index = 0;
 uniform float z_add = .0;
+uniform bool has_texture = false;
 uniform sampler2D ball_texture: hint_white;
+uniform vec2 texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
 
@@ -31,21 +32,13 @@ vec3 get_shifted_color(int palette_index) {
 	int modded_color = color_index - int(mod(float(color_index), 10.0));
 	int amount_to_shift_index = int(mod(float(palette_index), 10.0));
 	int new_palette_index = modded_color + amount_to_shift_index;
-	vec3 new_color = texture(palette, vec2(float(new_palette_index)/256.0, 0.0)).rgb;
+	vec3 new_color = texture(palette, vec2(float(new_palette_index)/255.0, 0.0)).rgb;
 	return new_color;
 }
 
 void fragment() {
   vec2 c = center_fragcoord;
   vec2 st = FRAGCOORD.xy;
-  float inverse_camera_scale = (1.0 / ORTHO_SIZE);
-  float offset_dist = 0.25;
-
-  // Artificially scale up the screen depending on camera scale
-  // As long as the camera scale is exact (0.5, 0.125, 2.0 etc) then this will give
-  // pixel perfect scaling
-  c = floor(c / inverse_camera_scale) * inverse_camera_scale;
-  st = floor(st / inverse_camera_scale) * inverse_camera_scale;
   
   // FUZZING
   // Find random number based on y-pixel, offset to center of ball
@@ -54,8 +47,6 @@ void fragment() {
   r = (r * 2.0) - 1.0;
   // Increase distortion by fuzz amount
   r *= float(fuzz_amount);
-  // Scale with camera to allow zooming
-  r *= inverse_camera_scale;
   // Offset x line by the final random amount
   st.x += floor(r);
   
@@ -69,43 +60,43 @@ void fragment() {
   }
   else if(outline == 0) {
     // one sided outline
-    st2.x -= 1.0 * inverse_camera_scale;
+    st2.x -= 1.0;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline = 0;
   } else if (outline == -2) {
     // one sided outline
-    st2.x += 1.0 * inverse_camera_scale;
+    st2.x += 1.0;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline = 0;
   } else if (outline == -1) {
     pct2 = 0.0;
     modified_outline = 0;
   } else if (outline > 1) {
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
 	modified_outline -= 1;
   } else if (outline == 1) {
     // dotted outline
 	float side = sign(st2.x - c.x);
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
     modified_outline = 0;
-	st.x += 1.0 * inverse_camera_scale * side;
+	st.x += 1.0 * side;
   } else if (outline == -3) {
 	// nose, need to do special here
 	vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
-	modified_outline = 3;
+    pct2 = step(length(vec), float(ball_size) / 2.0);
+	modified_outline = 4;
   } else if (outline < -1) {
 	// use as debug for now
 	float side = sign(st2.x - c.x);
 	float side2 = sign(st2.y - c.y);
-	st2.x -= 1.0 * inverse_camera_scale * side;
-	st2.y -= 1.0 * inverse_camera_scale * side2;
+	st2.x -= 1.0 * side;
+	st2.y -= 1.0 * side2;
     vec2 vec = st2 - c;
-    pct2 = step(length(vec), float(ball_size) / 2.0 * inverse_camera_scale);
+    pct2 = step(length(vec), float(ball_size) / 2.0);
     modified_outline = 0;
   }
   
@@ -113,35 +104,36 @@ void fragment() {
   vec2 vector_from_center = st - c;
   // Draw a circle.
   // Base ball size gives exact pixel size at camera scale 1.
-  float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)) * inverse_camera_scale);
+  float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)));
 
   if(outline != -1)	
  	 pct2 -= pct;
 
   vec3 texture_color;
-  if (transparent_index > 0 && color_index < 150) {
-	  // get the base texture color
-	  texture_color = texture(ball_texture, UV).rgb;
-	  int palette_index = 0;
-	  // find the palette index of the base texture color
-	  for(int i = 0; i < 256; i++) {
-		vec3 palette_color = texture(palette, vec2(float(i)/256.0, 0.0)).rgb;
-		if (palette_color == texture_color) {
-		  palette_index = i;
-		  break;
-		  }
-		}
+  vec2 center_uv = (center_fragcoord / VIEWPORT_SIZE) - (1.0);
+  int palette_index = int(texture(ball_texture, (SCREEN_UV - center_uv) * (1000.0 / texture_size)).r * 255.0);
+	if (outline == -3) 
+		ALBEDO = vec3(pct * vec3(1.0) + pct2 * vec3(0.0));
+	else {
+	if (transparent_index > 0 && color_index < 150 && has_texture) {
 	  // if the index of the texture is the same as the transparent color
 	  // then palette shift	
 	  if(transparent_index == 1 || (palette_index >= transparent_index && palette_index < transparent_index + 10)) {
-		
 		texture_color = get_shifted_color(palette_index);
-	  }
+	  } else {
+	  // get the base texture color
+		texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
+		}
 	}
+	else if (transparent_index == 0 && color_index < 150 && has_texture) {
+			texture_color = texture(palette, vec2(float(palette_index) / 255.0, 0.0)).rgb;
+		}
   else {
-	texture_color = color.rgb;  
+	texture_color = texture(palette, vec2(float(color_index) / 255.0, 0.0)).rgb;
 }
+	vec3 outline_color = texture(palette, vec2(float(outline_color_index) / 255.0, 0.0)).rgb;
   ALBEDO = vec3(pct * texture_color.rgb + pct2 * outline_color.rgb);
+}
   ALPHA = pct + pct2;
   
   ALPHA_SCISSOR = 1.0;
@@ -163,7 +155,7 @@ void vertex() {
 	
 	vert_in_clip_space.z = center_clip_space.z;
 	vert_in_clip_space.z += z_add * 0.001;
-	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / VIEWPORT_SIZE.x;
+	float b = (float(ball_size) / 2.0 + 0.5 + float(fuzz_amount + 3)) / (VIEWPORT_SIZE.x / 2.0);
 	vert_in_clip_space.x = center_clip_space.x + b * sign(vert_in_clip_space.x);
 	vert_in_clip_space.y = center_clip_space.y + b * sign(vert_in_clip_space.y);
 	
@@ -174,11 +166,12 @@ void vertex() {
 resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/fuzz_amount = 0
-shader_param/ball_size = 11
+shader_param/ball_size = 10
 shader_param/outline = -1
-shader_param/color = Color( 1, 1, 1, 1 )
 shader_param/color_index = 0
-shader_param/outline_color = Color( 0, 1, 0.552941, 1 )
+shader_param/outline_color_index = 0
 shader_param/z_add = 0.0
+shader_param/has_texture = false
+shader_param/texture_size = null
 shader_param/transparent_index = 0
 shader_param/palette = ExtResource( 1 )

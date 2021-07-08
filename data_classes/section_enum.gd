@@ -4,5 +4,6 @@ extends Node
 enum Section {
 	BALL,
 	MOVE,
-	PROJECT
+	PROJECT,
+	LINE
 }

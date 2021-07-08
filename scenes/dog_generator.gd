@@ -1,6 +1,6 @@
 extends Node
 
-export var pixel_world_size = 0.001;
+export var pixel_world_size = 0.002;
 
 var balls = []
 
@@ -9,37 +9,6 @@ var lines = []
 var ball_map = {}
 var paintball_map = {}
 var lines_map = {}
-
-var legs_dog = [
-	[0, 12, 16, 20, 21, 22, 24, 36, 44, 45, 46], # back legs
-	[7, 9, 10, 11, 13, 31, 33, 34, 35, 37] # front legs 
-]
-var legs_cat = [ 
-	[0, 1, 32, 33, 41, 42, 49, 50, 51, 52, 53, 54], # back
-	[12, 13, 16, 17, 18, 22, 23, 34, 35, 63, 64] # front
-]
-var body_ext_dog = [ 49, 0, 12, 16, 20, 21, 22, 24, 36, 44, 45, 46, 43, 19, 40, 57, 58, 59, 60, 61, 62 ]
-var body_ext_cat = [ 2, 3, 0, 1, 32, 33, 41, 42, 49, 50, 51, 52, 53, 54, 25, 26, 43, 44, 45, 46, 47, 48 ]
-var face_ext_dog = [ 51, 53, 55, 56, 63, 64, 17, 41, 15, 39 ]
-var face_ext_cat = [ 7, 30, 31, 37, 40, 57, 58, 59, 60, 61, 62, 29 ]
-var head_ext_dog = [ 52, 1, 2, 3, 4, 5, 6, 8, 14, 15, 17, 25, 26, 27, 28, 29, 30, 32, 38, 39, 41, 51, 53, 55, 56, 63, 64 ]
-var head_ext_cat = [ 24, 4, 5, 7, 8, 9, 10, 11, 14, 15, 29, 30, 31, 37, 40, 57, 58, 59, 60, 61, 62 ]
-var foot_ext_dog = [ 
-	[ 12, 20, 21, 22 ],
-	[ 13, 9, 10, 11 ],
-	[ 36, 44, 45, 46 ],
-	[ 37, 33, 34, 35 ]
-]
-var foot_ext_cat = [
-	[ 22, 16, 17, 18 ],
-	[ 23, 19, 20, 21 ],
-	[ 41, 49, 50, 51 ],
-	[ 42, 52, 53, 54 ]
-]
-var ear_ext_dog = { 4: [5, 6], 28: [29, 30] }
-var ear_ext_cat = { 8: [9], 10: [11]  }
-var eyes_dog = {14: 8, 38: 32} # iris = eye
-var eyes_cat = { 27: 14, 28: 15}
 
 export var draw_balls = true
 export var draw_addballs = true
@@ -54,18 +23,20 @@ var lnz: LnzParser
 var current_animation = 0
 var current_frame = 0
 var current_bdt: BdtParser
+onready var preloader = get_tree().root.get_node("Root/ResourcePreloader") as ResourcePreloader
 
 signal animation_loaded(num_of_frames)
 signal bhd_loaded(num_of_animations)
 signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, is_addball)
+signal addball_deleted(ball_no)
 
 func set_animation(anim_index: int):
 	current_animation = anim_index
 	bhd.get_frame_offsets_for(anim_index)
 	var species = "CAT"
-	if lnz.species == 2:
+	if lnz.species == KeyBallsData.Species.DOG:
 		species = "DOG"
 	var anim_frames = bhd.get_frame_offsets_for(anim_index)
 	current_bdt = BdtParser.new(species + str(anim_index) + ".bdt", anim_frames, bhd.num_balls)
@@ -81,7 +52,7 @@ func set_frame(frame: int):
 	init_visual_balls(lnz, false)
 
 func init_ball_data(species):
-	if species == 2:
+	if species == KeyBallsData.Species.DOG:
 		bhd = BhdParser.new("res://resources/animations/DOG.bhd")
 		emit_signal("bhd_loaded", bhd.animation_ranges.size())
 		var first_anim_frames = bhd.get_frame_offsets_for(current_animation)
@@ -102,19 +73,22 @@ func init_ball_data(species):
 		for n in bhd.num_balls:
 			balls.append(BallData.new(bhd.ball_sizes[n], bdt.frames[current_frame][n].position, n, bdt.frames[current_frame][n].rotation))
 
+	KeyBallsData.max_base_ball_num = bhd.num_balls
+
 func generate_pet(file_path):
 	var lnz_info = LnzParser.new(file_path)
 	lnz = lnz_info
+	KeyBallsData.species = lnz_info.species
 	init_ball_data(lnz_info.species)
 	init_visual_balls(lnz_info, true)
-	
+
 func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var collated_data = collate_base_ball_data()
 	# dumb code - duplicate the lnz info to prevent movements being applied multiple times
 	var addballs = {}
 	for k in lnz_info.addballs:
 		var a = lnz_info.addballs[k]
-		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color, a.color_index, a.outline_color, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
+		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color_index, a.outline_color_index, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
 	
 	var paintballs = {}
 	
@@ -123,7 +97,7 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 		paintballs[k] = ar.duplicate()
 		var i = 0
 		for a in ar:
-			paintballs[k][i] = {base = a.base, size = a.size, normalised_position = a.normalised_position, color = a.color, outline_color = a.outline_color, outline = a.outline, fuzz = a.fuzz, z_add = a.z_add}
+			paintballs[k][i] = {base = a.base, size = a.size, normalised_position = a.normalised_position, color_index = a.color_index, outline = a.outline, outline_color_index = a.outline_color_index, fuzz = a.fuzz, z_add = a.z_add, texture_id = a.texture_id, anchored = a.anchored}
 			i+=1
 	collated_data = {balls = collated_data, addballs = addballs, paintballs = paintballs}
 	collated_data = munge_balls(collated_data, lnz_info)
@@ -156,20 +130,20 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 	var foot_ext
 	var ear_ext
 	var ear_bases
-	if lnz.species == 2:
-		legs = self.legs_dog
-		body_ext = self.body_ext_dog
-		face_ext = self.face_ext_dog
-		head_ext = self.head_ext_dog
-		foot_ext = self.foot_ext_dog
-		ear_ext = self.ear_ext_dog
+	if lnz.species == KeyBallsData.Species.DOG:
+		legs = KeyBallsData.legs_dog
+		body_ext = KeyBallsData.body_ext_dog
+		face_ext = KeyBallsData.face_ext_dog
+		head_ext = KeyBallsData.head_ext_dog
+		foot_ext = KeyBallsData.foot_ext_dog
+		ear_ext = KeyBallsData.ear_ext_dog
 	else:
-		legs = self.legs_cat
-		body_ext = self.body_ext_cat
-		face_ext = self.face_ext_cat
-		head_ext = self.head_ext_cat
-		foot_ext = self.foot_ext_cat
-		ear_ext = self.ear_ext_cat
+		legs = KeyBallsData.legs_cat
+		body_ext = KeyBallsData.body_ext_cat
+		face_ext = KeyBallsData.face_ext_cat
+		head_ext = KeyBallsData.head_ext_cat
+		foot_ext = KeyBallsData.foot_ext_cat
+		ear_ext = KeyBallsData.ear_ext_cat
 		
 	# legs
 	for ball_no in legs[0]:
@@ -258,16 +232,16 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 		if b == null or v == null:
 			continue
 		b.size += v.size
-		b.color = v.color
-		b.outline_color = v.outline_color
+		b.outline_color_index = v.outline_color_index
 		b.outline = v.outline
 		b.fuzz = v.fuzz
 		var moves = lnz.moves.get(k, [])
 		var q = Quat()
 		for m in moves:
 			var move_base = b
-#			var move_base = base_ball_dict.get(m.relative_to)
 			var rot = move_base.rotation
+			if m.relative_to:
+				rot = base_ball_dict.get(m.relative_to).rotation
 			q.set_euler(Vector3(deg2rad(rot.x), deg2rad(rot.y), deg2rad(rot.z)))
 			b.position = move_base.position + q.xform(m.position)
 		b.texture_id = v.texture_id
@@ -340,10 +314,10 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		paintball_map = {}
 	
 	var eyes: Dictionary
-	if species == 2:
-		eyes = eyes_dog
+	if species == KeyBallsData.Species.DOG:
+		eyes = KeyBallsData.eyes_dog
 	else:
-		eyes = eyes_cat
+		eyes = KeyBallsData.eyes_cat
 	for key in ball_data:
 		var ball = ball_data[key]
 		var visual_ball
@@ -352,7 +326,11 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball = paintball_scene.instance()
 				visual_ball.add_to_group("balls")
 				visual_ball.z_add = 10
-#				visual_ball.connect("ball_mouse_enter", self, "ball_mouse_enter")
+				visual_ball.override_ball_no = ball.ball_no
+				visual_ball.color_index = ball.color_index
+				visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
+				visual_ball.connect("ball_mouse_exit", self, "signal_ball_mouse_exit")
+				visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			else:
 				visual_ball = ball_map[key]
 			var base_ball = ball_data[eyes[key]]
@@ -381,18 +359,22 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				if ball.texture_id > -1:
 					var tex_info = texture_list[ball.texture_id]
 					var texture_filename = tex_info.filename
-					var transparent_color = tex_info.transparent_color
-					var texture = load("res://resources/textures/"+texture_filename)
+					visual_ball.transparent_color = tex_info.transparent_color
+					var resource_path = "res://resources/textures/"+texture_filename
+					var user_resource_path = "user://resources/textures/"+texture_filename
+					var texture = null
+					if ResourceLoader.exists(resource_path):
+						texture = ResourceLoader.load(resource_path)
+					else:
+						texture = preloader.get_resource(texture_filename)
 					visual_ball.texture = texture
-					visual_ball.transparent_color = transparent_color
-				else:
-					visual_ball.transparent_color = ball.color
 				visual_ball.color_index = ball.color_index
+				visual_ball.outline_color_index = ball.outline_color_index
+				
 		if new_create:
 			visual_ball.ball_size = get_real_ball_size(ball.size)
-			visual_ball.color = ball.color
 			visual_ball.outline = ball.outline
-			visual_ball.outline_color = ball.outline_color
+			visual_ball.outline_color_index = ball.outline_color_index
 			visual_ball.fuzz_amount = ball.fuzz / 2
 		visual_ball.rotation_degrees = ball.rotation
 		if new_create:
@@ -420,27 +402,30 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.ball_size = ball.size
 			visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
 			visual_ball.connect("ball_selected", self, "signal_ball_selected")
+			visual_ball.connect("ball_deleted", self, "signal_ball_deleted")
 		var total_pos = ball.position
 		total_pos.y *= -1.0
 		visual_ball.transform.origin = total_pos * pixel_world_size
 		if new_create:
-			visual_ball.color = ball.color
 			visual_ball.outline = ball.outline
-			visual_ball.outline_color = ball.outline_color
 			visual_ball.fuzz_amount = ball.fuzz / 2
 			visual_ball.ball_no = ball.ball_no
 			visual_ball.base_ball_no = ball.base
+			visual_ball.outline_color_index = ball.outline_color_index
 		visual_ball.scale = Vector3(1,1,1)
 		if new_create:
 			if ball.texture_id > -1:
 				var tex_info = texture_list[ball.texture_id]
 				var texture_filename = tex_info.filename
-				var transparent_color = tex_info.transparent_color
-				var texture = load("res://resources/textures/"+texture_filename)
+				visual_ball.transparent_color = tex_info.transparent_color
+				var texture = null
+				var resource_path = "res://resources/textures/"+texture_filename
+				var user_resource_path = "user://resources/textures/"+texture_filename
+				if ResourceLoader.exists(resource_path):
+					texture = ResourceLoader.load(resource_path)
+				else:
+					texture = preloader.get_resource(texture_filename)
 				visual_ball.texture = texture
-				visual_ball.transparent_color = transparent_color
-			else:
-				visual_ball.transparent_color = ball.color
 			visual_ball.color_index = ball.color_index
 		ball_map[ball.ball_no] = visual_ball
 		if !draw_addballs:
@@ -473,15 +458,29 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball.add_to_group("paintballs")
 				visual_ball.connect("paintball_mouse_enter", self, "signal_paintball_mouse_enter")
 				visual_ball.connect("paintball_mouse_exit", self, "signal_paintball_mouse_exit")
+				if paintball.texture_id > -1:
+					var tex_info = texture_list[paintball.texture_id]
+					var texture_filename = tex_info.filename
+					visual_ball.transparent_color = tex_info.transparent_color
+					var texture = null
+					var resource_path = "res://resources/textures/"+texture_filename
+					var user_resource_path = "user://resources/textures/"+texture_filename
+					if ResourceLoader.exists(resource_path):
+						texture = ResourceLoader.load(resource_path)
+					else:
+						texture = preloader.get_resource(texture_filename)
+					visual_ball.texture = texture
+				else:
+					visual_ball.transparent_color = paintball.color_index
+				visual_ball.color_index = paintball.color_index
 			visual_ball.base_ball_position = ball_map[key].global_transform.origin
 			visual_ball.transform.origin = paintball.normalised_position * Vector3(1, -1, 1) * (base_ball.size / 2.0) * pixel_world_size
 			visual_ball.ball_size = final_size
 			visual_ball.base_ball_size = base_ball.size
-			visual_ball.color = paintball.color
-			visual_ball.outline_color = paintball.outline_color
+			visual_ball.outline_color_index = paintball.outline_color_index
 			visual_ball.outline = paintball.outline
 			visual_ball.fuzz_amount = paintball.fuzz / 2
-			visual_ball.z_add = count * 0.1
+			visual_ball.z_add = count * 1.0
 			visual_ball.base_ball_no = paintball.base
 			count += 1
 			var ar = paintball_map.get(key, [])
@@ -535,20 +534,18 @@ func generate_lines(line_data: Array, new_create: bool):
 		if new_create:
 			visual_line.texture = start.texture
 			visual_line.transparent_color = start.transparent_color
-			if line.color == null:
-				visual_line.color = start.color
+			if line.color_index == -1:
 				visual_line.color_index = start.color_index
 			else:
-				visual_line.color = line.color
 				visual_line.color_index = line.color_index
-			if line.r_color == null:
-				visual_line.r_color = start.color
+			if line.r_color_index == -1:
+				visual_line.r_color_index = start.color_index
 			else:
-				visual_line.r_color = line.r_color
-			if line.l_color == null:
-				visual_line.l_color = start.color
+				visual_line.r_color_index = line.r_color_index
+			if line.l_color_index == -1:
+				visual_line.l_color_index = start.color_index
 			else:
-				visual_line.l_color = line.l_color
+				visual_line.l_color_index = line.r_color_index
 		visual_line.ball_world_pos1 = start_pos
 		visual_line.ball_world_pos2 = target_pos
 		visual_line.fuzz_amount = line.fuzz
@@ -605,6 +602,15 @@ func signal_paintball_mouse_exit():
 func signal_ball_selected(ball_no, section):
 	var ball = ball_map[ball_no]
 	var is_addball = false
-	if ball.base_ball_no != -1:
+	if ball.base_ball_no != -1 and !("override_ball_no" in ball):
 		is_addball = true
 	emit_signal("ball_selected", section, ball_no, is_addball, lnz.balls.keys().max() + 1)
+
+func signal_ball_deleted(ball_no):
+	var ball = ball_map[ball_no]
+	if ball.base_ball_no != -1:
+		emit_signal("addball_deleted", ball_no)
+
+func _on_LnzTextEdit_find_ball(ball_no):
+	if ball_map.has(ball_no):
+		ball_map[ball_no].flash()

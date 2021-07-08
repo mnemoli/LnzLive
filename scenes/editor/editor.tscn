@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://scenes/editor/PlayButton.gd" type="Script" id=6]
 [ext_resource path="res://scenes/editor/FPSLabel.gd" type="Script" id=7]
 [ext_resource path="res://new_dynamicfontdata.tres" type="DynamicFontData" id=8]
+[ext_resource path="res://scenes/editor/unhandled_input_handler.gd" type="Script" id=9]
+[ext_resource path="res://scenes/editor/ToolsMenu.gd" type="Script" id=10]
+[ext_resource path="res://data_classes/RecolorLine.tscn" type="PackedScene" id=11]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -33,6 +36,9 @@ font_data = ExtResource( 8 )
 font_data = ExtResource( 8 )
 
 [node name="Root" type="Node"]
+script = ExtResource( 9 )
+
+[node name="ResourcePreloader" type="ResourcePreloader" parent="."]
 
 [node name="PetRoot" type="Spatial" parent="."]
 
@@ -50,7 +56,7 @@ script = ExtResource( 3 )
 [node name="lines" type="Spatial" parent="PetRoot/petholder"]
 
 [node name="MeshInstance" type="MeshInstance" parent="PetRoot"]
-transform = Transform( 0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0 )
+transform = Transform( 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0 )
 visible = false
 mesh = SubResource( 1 )
 material/0 = null
@@ -75,8 +81,12 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer"]
 margin_right = 285.0
 margin_bottom = 768.0
+mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer"]
 margin_right = 285.0
@@ -93,13 +103,15 @@ __meta__ = {
 [node name="ItemPopupMenu" type="PopupMenu" parent="SceneRoot/HSplitContainer/VBoxContainer/Tree"]
 margin_right = 20.0
 margin_bottom = 20.0
-items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false ]
+items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Back up", null, 0, false, true, 2, 0, null, "", false ]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SceneRoot/HSplitContainer/VBoxContainer"]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
-show_behind_parent = true
 margin_left = 297.0
 margin_right = 1024.0
 margin_bottom = 768.0
+rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
@@ -140,6 +152,7 @@ physics_object_picking = true
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
 keep_aspect = 0
 projection = 1
+size = 2.0
 near = 0.01
 far = 1000.0
 
@@ -244,14 +257,6 @@ margin_bottom = 768.0
 mouse_filter = 2
 alignment = 2
 
-[node name="HelpButton" type="Button" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer2"]
-margin_left = 473.0
-margin_top = 748.0
-margin_right = 515.0
-margin_bottom = 768.0
-size_flags_horizontal = 8
-text = "Help"
-
 [node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
 margin_left = 527.0
 margin_right = 727.0
@@ -309,7 +314,6 @@ __meta__ = {
 }
 
 [node name="PopupDialog" type="WindowDialog" parent="SceneRoot"]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -358,7 +362,27 @@ While a ball or addball is selected:
 
 - Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
 
-- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball.
+
+- Press V or L to go to the ball in the Linez section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Linez for that ball.
+
+[b]Tools Menu[/b]
+
+Press Ctrl+Space in the pet view to open the tools menu.
+
+You can color the entire pet or parts of the pet.
+
+While Select is on and you have a ball selected, you can add a new addball and line from the selected ball. If you have an addball selected, your new addball will be parented to the base ball, but connected via a line to the selected addball. The text editor will focus on your newly created addball.
+
+You can copy ball info, addballs, lines, and paintballs from the left side of the pet to the right. The left side of the pet is defined as the one which has ankle ball 0, i.e. the left side when looking at the pet face-on, NOT the pet's left side.
+
+This is a destructive operation - it will completely reorder your addballs, lines and paintballs, and will lose any non-symmetrical data from the right side of the pet.
+
+Because it's destructive, a backup will be created before running the operation.
+
+Note that this operation will mirror partial outlines, but does not know about mirrored textures (e.g. stripe16 vs stripe17).
+
+This operation will not work if you have comments or blank lines in your lnz file."
 text = "Basic Controls
 
 Load a sample pet by double-clicking it in the left-hand menu.
@@ -384,20 +408,206 @@ While a ball or addball is selected:
 
 - Press X or M to go to the ball in the Move section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Moves for that ball.
 
-- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball."
+- Press C or P to go to the ball in the Project section.  If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Projections for that ball.
+
+- Press V or L to go to the ball in the Linez section. If the ball doesn't exist there, you'll be taken to the start of the section. Press again to cycle through Linez for that ball.
+
+Tools Menu
+
+Press Ctrl+Space in the pet view to open the tools menu.
+
+You can color the entire pet or parts of the pet.
+
+While Select is on and you have a ball selected, you can add a new addball and line from the selected ball. If you have an addball selected, your new addball will be parented to the base ball, but connected via a line to the selected addball. The text editor will focus on your newly created addball.
+
+You can copy ball info, addballs, lines, and paintballs from the left side of the pet to the right. The left side of the pet is defined as the one which has ankle ball 0, i.e. the left side when looking at the pet face-on, NOT the pet's left side.
+
+This is a destructive operation - it will completely reorder your addballs, lines and paintballs, and will lose any non-symmetrical data from the right side of the pet.
+
+Because it's destructive, a backup will be created before running the operation.
+
+Note that this operation will mirror partial outlines, but does not know about mirrored textures (e.g. stripe16 vs stripe17).
+
+This operation will not work if you have comments or blank lines in your lnz file."
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="ToolsMenu" type="PopupMenu" parent="SceneRoot"]
+margin_left = 373.78
+margin_top = 169.492
+margin_right = 493.78
+margin_bottom = 203.492
+allow_search = true
+script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="RecolorMenu" type="PopupMenu" parent="SceneRoot/ToolsMenu"]
+margin_left = -373.78
+margin_top = -169.492
+margin_right = -353.78
+margin_bottom = -149.492
+items = [ "Entire pet", null, 0, false, false, 0, 0, null, "", false, "Legs", null, 0, false, false, 1, 0, null, "", false, "Tail", null, 0, false, false, 2, 0, null, "", false, "Head", null, 0, false, false, 3, 0, null, "", false, "Snout", null, 0, false, false, 4, 0, null, "", false, "Ears", null, 0, false, false, 5, 0, null, "", false, "Paws", null, 0, false, false, 6, 0, null, "", false, "Nose", null, 0, false, false, 7, 0, null, "", false, "Color Swap", null, 0, false, false, 8, 0, null, "", false ]
+
+[node name="ColorPopup" type="Popup" parent="SceneRoot"]
+visible = true
+margin_left = 355.842
+margin_top = 104.77
+margin_right = 555.842
+margin_bottom = 144.77
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/ColorPopup"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="LineEdit" type="LineEdit" parent="SceneRoot/ColorPopup/VBoxContainer"]
+margin_right = 58.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="LineEdit2" type="LineEdit" parent="SceneRoot/ColorPopup/VBoxContainer"]
+margin_top = 28.0
+margin_right = 58.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+
+[node name="RecolorPopup" type="ConfirmationDialog" parent="SceneRoot"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -180.0
+margin_top = -160.0
+margin_right = 230.0
+margin_bottom = 213.0
+size_flags_horizontal = 3
+window_title = "Recolor"
+dialog_text = "Note: always excludes eyes, tongue and nose
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/RecolorPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 39.0
+margin_right = -8.0
+margin_bottom = -34.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClearButton" type="Button" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_right = 44.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+text = "Clear"
+
+[node name="RecolorLines" type="VBoxContainer" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_top = 24.0
+margin_right = 394.0
+margin_bottom = 272.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Line1" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_right = 394.0
+
+[node name="Line2" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 28.0
+margin_right = 394.0
+margin_bottom = 52.0
+
+[node name="Line3" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 56.0
+margin_right = 394.0
+margin_bottom = 80.0
+
+[node name="Line4" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 84.0
+margin_right = 394.0
+margin_bottom = 108.0
+
+[node name="Line5" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 112.0
+margin_right = 394.0
+margin_bottom = 136.0
+
+[node name="Line6" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 140.0
+margin_right = 394.0
+margin_bottom = 164.0
+
+[node name="Line7" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 168.0
+margin_right = 394.0
+margin_bottom = 192.0
+
+[node name="Line8" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 196.0
+margin_right = 394.0
+margin_bottom = 220.0
+
+[node name="Line9" parent="SceneRoot/RecolorPopup/VBoxContainer/RecolorLines" instance=ExtResource( 11 )]
+margin_top = 224.0
+margin_right = 394.0
+margin_bottom = 248.0
+
+[node name="CheckContainer" type="HBoxContainer" parent="SceneRoot/RecolorPopup/VBoxContainer"]
+margin_top = 276.0
+margin_right = 394.0
+margin_bottom = 300.0
+
+[node name="Balls" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_right = 117.0
+margin_bottom = 24.0
+pressed = true
+text = "Balls/addballs"
+
+[node name="Ball outlines" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 121.0
+margin_right = 229.0
+margin_bottom = 24.0
+pressed = true
+text = "Ball outlines"
+
+[node name="Paintballs" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 233.0
+margin_right = 323.0
+margin_bottom = 24.0
+pressed = true
+text = "Paintballs"
+
+[node name="Lines" type="CheckBox" parent="SceneRoot/RecolorPopup/VBoxContainer/CheckContainer"]
+margin_left = 327.0
+margin_right = 389.0
+margin_bottom = 24.0
+pressed = true
+text = "Lines"
+
+[connection signal="addball_deleted" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_addball_deleted"]
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
+[connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
 [connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
+[connection signal="about_to_show" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_about_to_show"]
 [connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
 [connection signal="text_entered" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/AnimPicker" to="PetRoot/Node" method="_on_AnimPicker_text_entered"]
 [connection signal="value_changed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" to="PetRoot/Node" method="set_frame"]
@@ -408,8 +618,22 @@ __meta__ = {
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/PaintballCheckBox" to="PetRoot/Node" method="_on_PaintballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
-[connection signal="pressed" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer2/HelpButton" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_HelpButton_pressed"]
+[connection signal="file_backed_up" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_LnzTextEdit_file_backed_up"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
+[connection signal="find_ball" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="_on_LnzTextEdit_find_ball"]
+[connection signal="gui_input" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_LnzTextEdit_gui_input"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]
 [connection signal="confirmed" from="SceneRoot/RenameDialog" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_RenameDialog_confirmed"]
+[connection signal="about_to_show" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_about_to_show"]
+[connection signal="add_ball" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_add_ball"]
+[connection signal="color_entire_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_entire_pet"]
+[connection signal="color_part_pet" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_color_part_pet"]
+[connection signal="copy_l_to_r" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_copy_l_to_r"]
+[connection signal="index_pressed" from="SceneRoot/ToolsMenu" to="SceneRoot/ToolsMenu" method="_on_ToolsMenu_index_pressed"]
+[connection signal="recolor" from="SceneRoot/ToolsMenu" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_ToolsMenu_recolor"]
+[connection signal="id_pressed" from="SceneRoot/ToolsMenu/RecolorMenu" to="SceneRoot/ToolsMenu" method="_on_RecolorMenu_id_pressed"]
+[connection signal="gui_input" from="SceneRoot/ColorPopup/VBoxContainer/LineEdit" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
+[connection signal="gui_input" from="SceneRoot/ColorPopup/VBoxContainer/LineEdit2" to="SceneRoot/ToolsMenu" method="_on_LineEdit_gui_input"]
+[connection signal="confirmed" from="SceneRoot/RecolorPopup" to="SceneRoot/ToolsMenu" method="_on_RecolorPopup_confirmed"]
+[connection signal="pressed" from="SceneRoot/RecolorPopup/VBoxContainer/ClearButton" to="SceneRoot/ToolsMenu" method="_on_ClearButton_pressed"]

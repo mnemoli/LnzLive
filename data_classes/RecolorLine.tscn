@@ -1,0 +1,26 @@
+[gd_scene format=2]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+margin_right = 361.0
+margin_bottom = 24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_right = 170.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+margin_left = 174.0
+margin_top = 5.0
+margin_right = 187.0
+margin_bottom = 19.0
+text = "->"
+
+[node name="LineEdit2" type="LineEdit" parent="."]
+margin_left = 191.0
+margin_right = 361.0
+margin_bottom = 24.0
+size_flags_horizontal = 3

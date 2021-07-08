@@ -7,8 +7,8 @@
 
 [sub_resource type="SphereShape" id=2]
 resource_local_to_scene = true
-margin = 0.001
-radius = 0.004
+margin = 0.0001
+radius = 0.01
 
 [node name="Ball" type="Spatial"]
 script = ExtResource( 2 )
@@ -26,6 +26,10 @@ monitorable = false
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
 shape = SubResource( 2 )
 
+[node name="FlashTimer" type="Timer" parent="."]
+wait_time = 0.2
+
 [connection signal="input_event" from="Area" to="." method="_on_Area_input_event"]
 [connection signal="mouse_entered" from="Area" to="." method="_on_Area_mouse_entered"]
 [connection signal="mouse_exited" from="Area" to="." method="_on_Area_mouse_exited"]
+[connection signal="timeout" from="FlashTimer" to="." method="_on_FlashTimer_timeout"]
