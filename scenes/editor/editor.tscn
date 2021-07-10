@@ -14,10 +14,10 @@
 
 [sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="ViewportTexture" id=11]
+[sub_resource type="ViewportTexture" id=2]
 viewport_path = NodePath("SceneRoot/Viewport")
 
-[sub_resource type="StyleBoxEmpty" id=10]
+[sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="DynamicFontData" id=4]
 font_path = "res://resources/DroidSans.ttf"
@@ -72,7 +72,6 @@ __meta__ = {
 size = Vector2( 1000, 1000 )
 transparent_bg = true
 handle_input_locally = false
-render_target_update_mode = 3
 physics_object_picking = true
 
 [node name="CameraHolder" type="Spatial" parent="SceneRoot/Viewport"]
@@ -99,7 +98,7 @@ anchor_bottom = 1.0
 mouse_default_cursor_shape = 3
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = SubResource( 11 )
+texture = SubResource( 2 )
 expand = true
 stretch_mode = 4
 flip_v = true
@@ -158,7 +157,7 @@ margin_bottom = 768.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 10 )
+custom_styles/panel = SubResource( 3 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -623,8 +622,8 @@ text = "Lines"
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
 [connection signal="file_backed_up" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_LnzTextEdit_file_backed_up"]
-[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
+[connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]
 [connection signal="find_ball" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="_on_LnzTextEdit_find_ball"]
 [connection signal="gui_input" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_LnzTextEdit_gui_input"]
 [connection signal="mouse_entered" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_LnzTextEdit_mouse_entered"]

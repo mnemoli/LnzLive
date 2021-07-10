@@ -26,7 +26,7 @@ func _gui_input(event):
 		# try and do a raycast
 		# the center of the actual texture == (500,500)
 		if selecting_on:
-			var real_center = tex.rect_position + (tex.rect_size / 2.0)
+			var real_center = rect_position + rect_size / 2.0
 			var real_mouse_pos = event.position
 			var offset = real_mouse_pos - real_center
 			offset /= tex.rect_scale
