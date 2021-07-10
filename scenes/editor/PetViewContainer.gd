@@ -1,10 +1,10 @@
 extends Control
 
-onready var camera_holder = get_tree().root.get_node("Root/SceneRoot/Viewport/CameraHolder") as Spatial
+onready var camera_holder = get_tree().root.get_node("Root/SceneRoot/ViewportContainer/Viewport/CameraHolder") as Spatial
 onready var camera = camera_holder.get_node("Camera") as Camera
 onready var label = get_tree().root.get_node("Root/SceneRoot/Label")
 onready var cube = get_tree().root.get_node("Root/PetRoot/MeshInstance") as Spatial
-onready var tex = get_tree().root.get_node("Root/SceneRoot/TextureRect") as TextureRect
+onready var tex = get_tree().root.get_node("Root/SceneRoot/ViewportContainer") as ViewportContainer
 onready var popup = get_tree().root.get_node("Root/SceneRoot/PopupDialog") as WindowDialog
 
 var last_selected
@@ -20,9 +20,9 @@ func _gui_input(event):
 			var motion = event.relative as Vector2
 			camera.transform.origin.x += motion.x * 0.001 / tex.rect_scale.x
 			camera.transform.origin.y += motion.y * 0.001 / tex.rect_scale.x
-		
+
 		label.rect_global_position = event.global_position
-		
+
 		# try and do a raycast
 		# the center of the actual texture == (500,500)
 		if selecting_on:
@@ -31,7 +31,7 @@ func _gui_input(event):
 			var offset = real_mouse_pos - real_center
 			offset /= tex.rect_scale
 			var final_pos = Vector2(500,500) + offset
-			
+
 			var from = camera.project_ray_origin(final_pos)
 			var to = from + camera.project_ray_normal(final_pos) * 950
 			var space_state = camera.get_world().direct_space_state
@@ -45,7 +45,7 @@ func _gui_input(event):
 				deal_with_last_selected()
 				last_selected = null
 				label.hide()
-		
+
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == BUTTON_WHEEL_DOWN:
 			tex.rect_pivot_offset = tex.rect_size / 2.0
@@ -55,6 +55,7 @@ func _gui_input(event):
 			tex.rect_scale = tex.rect_scale * 2.0
 		elif event.doubleclick and event.button_index == BUTTON_LEFT and last_selected_is_valid():
 			last_selected.selected()
+	pass
 			
 func _unhandled_key_input(event):
 	if event.pressed and last_selected_is_valid():
@@ -88,9 +89,8 @@ func _on_LnzTextEdit_mouse_entered():
 	label.hide()
 
 func _on_PetViewContainer_resized():
-	tex.rect_global_position = self.rect_global_position
-	tex.rect_size = self.rect_size
-
+	var size_diff = tex.rect_size / 2.0 - self.rect_size / 2.0
+	tex.rect_global_position = self.rect_global_position - size_diff
 
 func _on_PetViewContainer_sort_children():
 	_on_PetViewContainer_resized()
