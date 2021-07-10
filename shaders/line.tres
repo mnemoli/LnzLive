@@ -23,6 +23,7 @@ uniform sampler2D line_texture: hint_white;
 uniform vec2 texture_size;
 uniform int transparent_index = 0;
 uniform sampler2D palette: hint_white;
+varying vec2 uv_mod;
 varying vec2 max_x;
 uniform bool has_texture = false;
 
@@ -56,7 +57,7 @@ void fragment() {
 	vec3 texture_color;
 	
 	// rescale the UV between 0 and 1
-	float scaled_uv_x = UV.x / max_x.x;
+	float scaled_uv_x = uv_mod.x / max_x.x;
 	vec2 move_vec = uv_to_flat * r;
 	vec2 modified_uv = vec2(scaled_uv_x, UV.y) - move_vec;
 	float one_pixel = 0.5 / (floor(line_width_in_pixels) + 0.5);
@@ -85,9 +86,10 @@ void fragment() {
 }
 	}
 	ALBEDO = texture_color;
+	
 	if(modified_uv.x < 0.25 || modified_uv.x > 0.75)
 		ALPHA = 0.0;
-		
+
 	ALPHA_SCISSOR = 1.0;
 }
 
@@ -154,8 +156,9 @@ void vertex() {
 	center_of_line_screen_uv = center_ndc;
 	
 	float max_x_f = line_width_in_pixels / max(float(line_width_in_pixels_end), float(line_width_in_pixels_start));
+	uv_mod = UV;
 	if(UV.x > 0.0)
-		UV.x = max_x_f;
+		uv_mod.x = max_x_f;
 	max_x = vec2(max_x_f, 0.0);
 	
 	PROJECTION_MATRIX = mat4(1.0);

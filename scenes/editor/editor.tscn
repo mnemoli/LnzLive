@@ -14,9 +14,12 @@
 
 [sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="ViewportTexture" id=2]
+viewport_path = NodePath("SceneRoot/Viewport")
 
-[sub_resource type="DynamicFontData" id=3]
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="DynamicFontData" id=4]
 font_path = "res://resources/DroidSans.ttf"
 
 [sub_resource type="DynamicFont" id=4]
@@ -65,6 +68,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Viewport" type="Viewport" parent="SceneRoot"]
+size = Vector2( 1000, 1000 )
+transparent_bg = true
+handle_input_locally = false
+physics_object_picking = true
+
+[node name="CameraHolder" type="Spatial" parent="SceneRoot/Viewport"]
+
+[node name="Camera" type="Camera" parent="SceneRoot/Viewport/CameraHolder"]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0, -1 )
+keep_aspect = 0
+projection = 1
+size = 2.0
+near = 0.01
+far = 1000.0
+
 [node name="ColorRect" type="ColorRect" parent="SceneRoot"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -79,6 +98,10 @@ margin_right = 1012.0
 margin_bottom = 1000.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+texture = SubResource( 2 )
+expand = true
+stretch_mode = 4
+flip_v = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -151,7 +174,7 @@ margin_bottom = 768.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
