@@ -39,7 +39,7 @@ vec3 get_shifted_color(int palette_index) {
 void fragment() {
   vec2 c = center_fragcoord;
   vec2 st = FRAGCOORD.xy;
-  
+
   // FUZZING
   // Find random number based on y-pixel, offset to center of ball
   float r = random(st.y - c.y);
@@ -49,9 +49,9 @@ void fragment() {
   r *= float(fuzz_amount);
   // Offset x line by the final random amount
   st.x += floor(r);
-  
+
   //OUTLINING
-  float pct2;
+  float pct2 = 0.0;
   vec2 st2 = st;
   int modified_outline = outline;
   if(outline == -1) {
@@ -102,8 +102,8 @@ void fragment() {
   
   //DRAWING
   vec2 vector_from_center = st - c;
-  // Draw a circle.
-  // Base ball size gives exact pixel size at camera scale 1.
+//  // Draw a circle.
+//  // Base ball size gives exact pixel size at camera scale 1.
   float pct = step(length(vector_from_center), (float(ball_size) / 2.0 - float(modified_outline)));
 
   if(outline != -1)	
@@ -132,15 +132,14 @@ void fragment() {
 	texture_color = texture(palette, vec2(float(color_index) / 255.0, 0.0)).rgb;
 }
 	vec3 outline_color = texture(palette, vec2(float(outline_color_index) / 255.0, 0.0)).rgb;
-  ALBEDO = vec3(pct * texture_color.rgb + pct2 * outline_color.rgb);
+ 	 ALBEDO = vec3(pct * texture_color.rgb + pct2 * outline_color.rgb);
 }
-  ALPHA = pct + pct2;
-  
-  ALPHA_SCISSOR = 1.0;
+	ALPHA = 1.0 - step(pct + pct2, 0.0);
+	ALPHA_SCISSOR = 1.0;
 }
 
 void vertex() {
-	// Billboard and retain scaling
+	// Billboard
 	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
 	
 	// Find the original position of the vertex
