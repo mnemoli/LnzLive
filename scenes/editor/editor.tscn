@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/editor/LnzTextEdit.gd" type="Script" id=1]
 [ext_resource path="res://scenes/editor/FileTree.gd" type="Script" id=2]
@@ -14,24 +14,12 @@
 
 [sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="ViewportTexture" id=2]
-viewport_path = NodePath("SceneRoot/Viewport")
+[sub_resource type="StyleBoxEmpty" id=2]
 
-[sub_resource type="StyleBoxEmpty" id=3]
-
-[sub_resource type="DynamicFontData" id=4]
-font_path = "res://resources/DroidSans.ttf"
-
-[sub_resource type="DynamicFont" id=4]
-size = 32
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = SubResource( 3 )
-
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 8 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 8 )
 
 [node name="Root" type="Node"]
@@ -98,10 +86,6 @@ margin_right = 1012.0
 margin_bottom = 1000.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = SubResource( 2 )
-expand = true
-stretch_mode = 4
-flip_v = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -174,7 +158,7 @@ margin_bottom = 768.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 2 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -303,7 +287,6 @@ margin_top = 481.0
 margin_right = 558.0
 margin_bottom = 519.0
 size_flags_horizontal = 4
-custom_fonts/font = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -352,8 +335,8 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-custom_fonts/bold_font = SubResource( 5 )
-custom_fonts/normal_font = SubResource( 6 )
+custom_fonts/bold_font = SubResource( 3 )
+custom_fonts/normal_font = SubResource( 4 )
 bbcode_enabled = true
 bbcode_text = "[b]Basic Controls[/b]
 
