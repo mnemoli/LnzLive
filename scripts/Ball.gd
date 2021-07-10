@@ -1,4 +1,3 @@
-tool
 extends Spatial
 
 export var ball_size = 10 setget set_ball_size

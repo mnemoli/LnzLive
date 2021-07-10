@@ -1,10 +1,10 @@
 extends Control
 
-onready var camera_holder: Spatial = $Viewport/CameraHolder as Spatial
-onready var camera = $Viewport/CameraHolder/Camera as Camera
+onready var camera_holder = get_tree().root.get_node("Root/SceneRoot/Viewport/CameraHolder") as Spatial
+onready var camera = camera_holder.get_node("Camera") as Camera
 onready var label = get_tree().root.get_node("Root/SceneRoot/Label")
 onready var cube = get_tree().root.get_node("Root/PetRoot/MeshInstance") as Spatial
-onready var tex = $TextureRect
+onready var tex = get_tree().root.get_node("Root/SceneRoot/TextureRect") as TextureRect
 onready var popup = get_tree().root.get_node("Root/SceneRoot/PopupDialog") as WindowDialog
 
 var last_selected
@@ -86,3 +86,11 @@ func _on_LnzTextEdit_mouse_entered():
 		last_selected._on_Area_mouse_exited()
 	last_selected = null
 	label.hide()
+
+func _on_PetViewContainer_resized():
+	tex.rect_global_position = self.rect_global_position
+	tex.rect_size = self.rect_size
+
+
+func _on_PetViewContainer_sort_children():
+	_on_PetViewContainer_resized()

@@ -1,4 +1,3 @@
-tool
 extends Spatial
 
 export var base_ball_position = Vector3.ZERO setget set_base_ball_position

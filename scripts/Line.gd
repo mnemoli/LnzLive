@@ -1,4 +1,3 @@
-tool
 extends Spatial
 
 export var line_widths = Vector2(10, 10) setget set_line_width
