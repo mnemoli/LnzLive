@@ -8,7 +8,7 @@
 
 ## Instructions
 
-See the [usage guide](GUIDE.MD).
+See the [usage guide](GUIDE.md).
 
 ## Limitations
 
