@@ -26,6 +26,9 @@ uniform sampler2D palette: hint_white;
 varying vec2 uv_mod;
 varying vec2 max_x;
 uniform bool has_texture = false;
+varying flat float z_center_line;
+varying flat float z_center_pet;
+uniform vec3 z_center = vec3(0.0);
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
@@ -36,6 +39,12 @@ float random (float x) {
 vec3 get_shifted_color(int palette_index) {
 	int modded_color = color_index - int(mod(float(color_index), 10.0));
 	int amount_to_shift_index = int(mod(float(palette_index), 10.0));
+	if(z_center_line < z_center_pet) {
+		amount_to_shift_index = int(min(float(amount_to_shift_index + 2), 9.0));
+	}
+	else if (z_center_line > z_center_pet) {
+		amount_to_shift_index = int(max(float(amount_to_shift_index - 1), 0.0));
+	}
 	int new_palette_index = modded_color + amount_to_shift_index;
 	vec3 new_color = texture(palette, vec2(float(new_palette_index)/256.0, 0.0)).rgb;
 	return new_color;
@@ -61,10 +70,10 @@ void fragment() {
 	vec2 move_vec = uv_to_flat * r;
 	vec2 modified_uv = vec2(scaled_uv_x, UV.y) - move_vec;
 	float one_pixel = 0.5 / (floor(line_width_in_pixels) + 0.5);
-	if(modified_uv.x < 0.25 + one_pixel && l_color_index != -1)
-		texture_color = texture(palette, vec2(float(l_color_index) / 255.0, 0.0)).rgb;
-	else if (modified_uv.x > 0.75 - one_pixel && r_color_index != -1)
+	if(modified_uv.x < 0.25 + one_pixel && r_color_index != -1)
 		texture_color = texture(palette, vec2(float(r_color_index) / 255.0, 0.0)).rgb;
+	else if (modified_uv.x > 0.75 - one_pixel && l_color_index != -1)
+		texture_color = texture(palette, vec2(float(l_color_index) / 255.0, 0.0)).rgb;
 		
 	else {
 		int palette_index = int(texture(line_texture, (SCREEN_UV - center_of_line_screen_uv) * (1000.0 / texture_size)).r * 255.0);
@@ -161,6 +170,9 @@ void vertex() {
 		uv_mod.x = max_x_f;
 	max_x = vec2(max_x_f, 0.0);
 	
+	z_center_line = (MODELVIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).z;
+	z_center_pet = (INV_CAMERA_MATRIX * vec4(z_center, 1.0)).z;
+	
 	PROJECTION_MATRIX = mat4(1.0);
 }"
 
@@ -178,4 +190,5 @@ shader_param/ball_world_pos2 = Vector3( 0, 0, 0 )
 shader_param/texture_size = null
 shader_param/transparent_index = 0
 shader_param/has_texture = false
+shader_param/z_center = Vector3( 0, 0, 0 )
 shader_param/palette = ExtResource( 1 )

@@ -20,9 +20,12 @@ uniform sampler2D palette: hint_white;
 uniform vec2 texture_size;
 uniform bool has_texture = false;
 uniform sampler2D ball_texture: hint_white;
+uniform vec3 z_center_pet_world = vec3(0.0);
 
 varying flat vec2 center_fragcoord;
 varying flat vec2 base_center_fragcoord;
+varying flat float z_center_ball;
+varying flat float z_center_pet;
 
 float random (float x) {
     return fract(sin(dot(vec2(x),
@@ -33,6 +36,13 @@ float random (float x) {
 vec3 get_shifted_color(int palette_index) {
 	int modded_color = color_index - int(mod(float(color_index), 10.0));
 	int amount_to_shift_index = int(mod(float(palette_index), 10.0));
+	// shift according to z
+	if(z_center_ball < z_center_pet) {
+		amount_to_shift_index = int(min(float(amount_to_shift_index + 2), 9.0));
+	}
+	else if (z_center_ball > z_center_pet) {
+		amount_to_shift_index = int(max(float(amount_to_shift_index - 1), 0.0));
+	}
 	int new_palette_index = modded_color + amount_to_shift_index;
 	vec3 new_color = texture(palette, vec2(float(new_palette_index)/256.0, 0.0)).rgb;
 	return new_color;
@@ -143,6 +153,9 @@ void vertex() {
 	// Billboard and retain scaling
 	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
 	
+	z_center_ball = (MODELVIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).z;
+	z_center_pet = (INV_CAMERA_MATRIX * vec4(z_center_pet_world, 1.0)).z;
+	
 	// Find the original position of the vertex
 	vec3 vert_in_clip_space = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	
@@ -186,4 +199,5 @@ shader_param/transparent_index = 0
 shader_param/z_add = 0.0
 shader_param/texture_size = null
 shader_param/has_texture = false
+shader_param/z_center_pet_world = Vector3( 0, 0, 0 )
 shader_param/palette = ExtResource( 1 )

@@ -31,6 +31,8 @@ signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, is_addball)
 signal addball_deleted(ball_no)
+signal ball_translation_changed(ball_no, new_position)
+signal ball_translations_done
 
 func set_animation(anim_index: int):
 	current_animation = anim_index
@@ -141,23 +143,26 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 		legs = KeyBallsData.legs_cat
 		body_ext = KeyBallsData.body_ext_cat
 		face_ext = KeyBallsData.face_ext_cat
-		head_ext = KeyBallsData.head_ext_cat
+		head_ext = KeyBallsData.head_ext_cat.duplicate()
 		foot_ext = KeyBallsData.foot_ext_cat
 		ear_ext = KeyBallsData.ear_ext_cat
+		
+		for b in KeyBallsData.eyes_cat:
+			head_ext.erase(b)
 		
 	# legs
 	for ball_no in legs[0]:
 		var ball = base_ball_dict[ball_no]
-		var addballs = addballs_by_base.get(ball_no, [])
-		ball.position.y += lnz.leg_extensions.x
-		for n in addballs:
-			n.position.y += lnz.leg_extensions.x
+		if ball_no in [legs[0][0], legs[0][1]]:
+			ball.position.y += abs(ball.position.y * (lnz.leg_extensions.x / 100.0))
+		else:
+			ball.position.y += lnz.leg_extensions.x
 	for ball_no in legs[1]:
 		var ball = base_ball_dict[ball_no]
-		var addballs = addballs_by_base.get(ball_no, [])
-		ball.position.y += lnz.leg_extensions.y
-		for n in addballs:
-			n.position.y += lnz.leg_extensions.y
+		if ball_no in [legs[1][0], legs[1][1]]:
+			ball.position.y += abs(ball.position.y * abs(lnz.leg_extensions.y / 100.0))
+		else:
+			ball.position.y += lnz.leg_extensions.y
 		
 	# body
 	var special_ball = body_ext[0]
@@ -169,12 +174,13 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 	base_ball_dict[special_ball].position.z += lnz.body_extension
 	
 	# face
+	var head_ball_key = head_ext[0]
+	var head_rot = base_ball_dict[head_ball_key].rotation
 	for ball_no in face_ext:
 		var ball = base_ball_dict[ball_no]
 		ball.position.z -= lnz.face_extension
 	
 	# head enlargement
-	var head_ball_key = head_ext[0]
 	var head_pos = base_ball_dict[head_ball_key].position
 	for ball_no in head_ext:
 		var ball = base_ball_dict[ball_no]
@@ -184,17 +190,8 @@ func apply_extensions(all_ball_dict: Dictionary, lnz: LnzParser):
 			mod_v = mod_v * (lnz.head_enlargement.x / 100.0)
 			mod_v += head_pos
 			ball.position = Vector3(floor(mod_v.x), floor(mod_v.y), floor(mod_v.z))
-#			for n in addballs:
-#				mod_v = n.position
-#				mod_v = mod_v * (lnz.head_enlargement.x / 100.0)
-#				n.position = Vector3(floor(mod_v.x), floor(mod_v.y), floor(mod_v.z))
-#				addball_dict[n.ball_no] = n
 		ball.size = floor(ball.size * (lnz.head_enlargement.x / 100.0))
 		ball.size += lnz.head_enlargement.y
-#		for n in addballs:
-#			n.size = floor(n.size * (lnz.head_enlargement.x / 100.0))
-#			n.size += lnz.head_enlargement.y
-#			addball_dict[n.ball_no] = n
 		
 		
 	# feet
@@ -243,12 +240,17 @@ func munge_balls(all_ball_dict: Dictionary, lnz: LnzParser):
 			if m.relative_to:
 				rot = base_ball_dict.get(m.relative_to).rotation
 			q.set_euler(Vector3(deg2rad(rot.x), deg2rad(rot.y), deg2rad(rot.z)))
-			b.position = move_base.position + q.xform(m.position)
+			b.position = move_base.position + apply_movement_with_rotation(m.position, rot)
 		b.texture_id = v.texture_id
 		b.color_index = v.color_index
 		base_ball_dict[k] = b
 	
 	return {balls = base_ball_dict, addballs = all_ball_dict.addballs, paintballs = all_ball_dict.paintballs}
+
+func apply_movement_with_rotation(vec: Vector3, rot_euler: Vector3):
+	var q = Quat()
+	q.set_euler(Vector3(deg2rad(rot_euler.x), deg2rad(rot_euler.y), deg2rad(rot_euler.z)))
+	return q.xform(vec)
 
 func apply_projections():
 	# have to apply projections now
@@ -313,6 +315,13 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		ball_map = {}
 		paintball_map = {}
 	
+	var belly_position
+	if species == KeyBallsData.Species.DOG:
+		belly_position = ball_data[KeyBallsData.belly_dog].position
+	else:
+		belly_position = ball_data[KeyBallsData.belly_cat].position
+	belly_position.y *= -1
+	belly_position *= pixel_world_size
 	var eyes: Dictionary
 	if species == KeyBallsData.Species.DOG:
 		eyes = KeyBallsData.eyes_dog
@@ -351,6 +360,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			else:
 				visual_ball = ball_map[key]
+			visual_ball.pet_center = belly_position
 			var rotated_pos = ball.position
 			rotated_pos.y *= -1.0
 			visual_ball.transform.origin = rotated_pos * pixel_world_size
@@ -375,7 +385,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.ball_size = get_real_ball_size(ball.size)
 			visual_ball.outline = ball.outline
 			visual_ball.outline_color_index = ball.outline_color_index
-			visual_ball.fuzz_amount = ball.fuzz / 2
+			visual_ball.fuzz_amount = clamp(ball.fuzz / 2, 0, 5)
 		visual_ball.rotation_degrees = ball.rotation
 		if new_create:
 			parent.add_child(visual_ball)
@@ -408,7 +418,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 		visual_ball.transform.origin = total_pos * pixel_world_size
 		if new_create:
 			visual_ball.outline = ball.outline
-			visual_ball.fuzz_amount = ball.fuzz / 2
+			visual_ball.fuzz_amount = clamp(ball.fuzz / 2, 0, 5)
 			visual_ball.ball_no = ball.ball_no
 			visual_ball.base_ball_no = ball.base
 			visual_ball.outline_color_index = ball.outline_color_index
@@ -435,6 +445,8 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.omitted = true
 			
 	for key in paintball_data:
+		if ball_map[key].omitted:
+			continue
 		var merged_dict = {}
 		for v in ball_data:
 			merged_dict[v] = ball_data[v]
@@ -479,7 +491,7 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.base_ball_size = base_ball.size
 			visual_ball.outline_color_index = paintball.outline_color_index
 			visual_ball.outline = paintball.outline
-			visual_ball.fuzz_amount = paintball.fuzz / 2
+			visual_ball.fuzz_amount = clamp(paintball.fuzz / 2, 0, 5)
 			visual_ball.z_add = count * 1.0
 			visual_ball.base_ball_no = paintball.base
 			count += 1
@@ -511,7 +523,7 @@ func generate_lines(line_data: Array, new_create: bool):
 			continue
 		var omissions = lnz.omissions as Dictionary
 		if omissions.has(line.start) or omissions.has(line.end):
-			print("Skipping line between " + str(line.start) + " and " + str(line.end))
+#			print("Skipping line between " + str(line.start) + " and " + str(line.end))
 			continue
 		var visual_line
 		if new_create:
@@ -545,10 +557,10 @@ func generate_lines(line_data: Array, new_create: bool):
 			if line.l_color_index == -1:
 				visual_line.l_color_index = start.color_index
 			else:
-				visual_line.l_color_index = line.r_color_index
+				visual_line.l_color_index = line.l_color_index
 		visual_line.ball_world_pos1 = start_pos
 		visual_line.ball_world_pos2 = target_pos
-		visual_line.fuzz_amount = line.fuzz
+		visual_line.fuzz_amount = clamp(line.fuzz / 2, 0, 5)
 		var final_line_width = Vector2(start.ball_size, end.ball_size)
 		final_line_width = final_line_width * (Vector2(line.s_thick, line.e_thick) / 100)
 		visual_line.line_widths = final_line_width
@@ -614,3 +626,20 @@ func signal_ball_deleted(ball_no):
 func _on_LnzTextEdit_find_ball(ball_no):
 	if ball_map.has(ball_no):
 		ball_map[ball_no].flash()
+	
+func _on_ToolsMenu_print_ball_colors():
+	var ball_map_string = ""
+	for b in ball_map:
+		var ball = ball_map[b]
+		var d
+		if b < 67:
+			d = lnz.balls[b]
+		else:
+			d = lnz.addballs[b]
+		if "ball_no" in ball:
+			var this_ball_string = str(ball.ball_no) + ",\t\t" + str(ball.color_index) + ",\t\t" + str(d.group) + ",\t\t" + str(d.texture_id).replace('0', '3')
+			if ball_map_string != "":
+				ball_map_string += "\n"
+			ball_map_string += this_ball_string
+			print(this_ball_string)
+	OS.set_clipboard(ball_map_string)

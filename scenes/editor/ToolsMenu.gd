@@ -5,6 +5,8 @@ signal color_part_pet(core_ball_nos, color_index, outline_color_index, part)
 signal add_ball(selected_ball)
 signal copy_l_to_r()
 signal recolor(recolor_info)
+signal move_head(x,y,z)
+signal print_ball_colors()
 
 var current_action
 
@@ -14,6 +16,8 @@ func _ready():
 	add_submenu_item("Color...", "RecolorMenu")
 	add_item("Add ball")
 	add_item("Copy L to R")
+	add_item("Move head")
+	add_item("Copy ball colors to clipboard")
 
 func _on_LineEdit_gui_input(event):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ENTER:
@@ -92,6 +96,11 @@ func _on_ToolsMenu_index_pressed(index):
 		var view_container = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer")
 		if view_container.last_selected_is_valid():
 			emit_signal("add_ball", view_container.last_selected)
+	elif index == 3: # move head
+		var options = get_parent().get_node("HeadMovePopup")
+		options.popup_centered()
+	elif index == 4: # print colors
+		emit_signal("print_ball_colors")
 
 func _on_ToolsMenu_about_to_show():
 	var view_container = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer")
@@ -127,3 +136,11 @@ func _on_ClearButton_pressed():
 		l.get_child(2).text = ""
 	for cb in popup.get_node("CheckContainer").get_children():
 		cb.pressed = true
+
+func _on_HeadMoveLineEdit_gui_input(event):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ENTER:
+		var popup = get_parent().get_node("HeadMovePopup/VBoxContainer")
+		var x = popup.get_node("HeadMoveLineEditX").text.to_int()
+		var y = popup.get_node("HeadMoveLineEditY").text.to_int()
+		var z = popup.get_node("HeadMoveLineEditZ").text.to_int()
+		emit_signal("move_head", x, y, z)

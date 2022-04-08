@@ -29,7 +29,7 @@ func set_r_color_index(new_value):
 	$MeshInstance.material_override.set_shader_param("r_color_index", new_value);
 
 func set_l_color_index(new_value):
-	r_color_index = new_value
+	l_color_index = new_value
 	$MeshInstance.material_override.set_shader_param("l_color_index", new_value);
 
 func set_ball_world_pos1(new_value):

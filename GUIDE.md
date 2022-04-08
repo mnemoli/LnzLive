@@ -59,13 +59,31 @@ Warning: make sure you do not have empty lines or comments in your LNZ before us
 
 Press Ctrl+Space in the pet view to open the tools menu.
 
+### Add ball
+
 While a ball/addball is selected, use "Add ball" to create a new addball and line. If an addball is selected, the new addball will be parented to the same ball as the selected addball. The line will connect the selected addball and the new addball.
+
+### Color
 
 The Color menu can be used to recolor the pet. When you select a part to recolor, two text entry boxes will appear at your cursor. The first is for the ball colour, the second is for outline color. Type a color number (e.g. 25) and hit Enter to apply. Leave a box blank if you don't want to affect the color/outline.
 
+### Color swap
+
 The Color Swap tool under the Color menu can be used to quickly create a recolor. Enter the color mappings you want to apply (e.g. 35 -> 15). Use the checkboxes to select what to apply the color swap to.
 
+### Copy L to R
+
 The Copy L to R tool will apply all changes on the left side of the pet (i.e. the side with ball number 0 - in LnzLive this is currently the left side when looking at the pet head-on, NOT the pet's left side) to the right side. This includes balls, addballs, paintballs, lines, etc.
+
+### Move head
+
+LNZ has no such thing as a 'neck extension', so this is a small util to move all head balls at once. The three text boxes are for x, y, z coordinates to move by. Hit Enter to apply. You can keep hitting Enter to continue moving.
+
+### Copy ball colors to clipboard
+
+Useful for making Color Info Override sections in breeds. Not supported in all browsers.
+
+## Backups
 
 Color Swap and Copy L to R can be destructive! LnzLive takes a backup of your file before applying them, and saves it as "yourfilename_backup.lnz". The backup will overwrite any existing backup file.
 

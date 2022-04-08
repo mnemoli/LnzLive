@@ -12,6 +12,7 @@ export var texture: Texture setget set_texture
 export var transparent_color = 0 setget set_transparent_color
 export var visible_override = true setget set_visible
 export var omitted = false
+export var pet_center = Vector3(0, 0, 0) setget set_pet_center
 
 var old_outline
 var old_outline_color
@@ -76,6 +77,10 @@ func set_texture(new_value):
 func set_transparent_color(new_value):
 	transparent_color = new_value
 	$MeshInstance.material_override.set_shader_param("transparent_index", new_value)
+
+func set_pet_center(new_value):
+	pet_center = new_value
+	$MeshInstance.material_override.set_shader_param("z_center_pet_world", new_value)
 
 func _on_Area_mouse_entered():
 	is_over = true

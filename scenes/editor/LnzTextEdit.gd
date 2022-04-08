@@ -1036,11 +1036,11 @@ func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 				i += 1
 				continue
 			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with("[") or i > get_line_count():
+				break
 			if line.begins_with(";") or line.empty():
 				i += 1
 				continue
-			elif line.begins_with("["):
-				break
 			# here the first number is color and second is outline col
 			var parsed_line = r.search_all(line)
 			var color = parsed_line[0].get_string()
@@ -1068,11 +1068,11 @@ func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 				i += 1
 				continue
 			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with("[") or i > get_line_count():
+				break
 			if line.begins_with(";") or line.empty():
 				i += 1
 				continue
-			elif line.begins_with("["):
-				break
 			# here the fifth number is color
 			var parsed_line = r.search_all(line)
 			if int(parsed_line[0].get_string()) in balls_to_exclude:
@@ -1104,11 +1104,11 @@ func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 				i += 1
 				continue
 			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with("[") or i > get_line_count():
+				break
 			if line.begins_with(";") or line.empty():
 				i += 1
 				continue
-			elif line.begins_with("["):
-				break
 			# here the sixth number is color
 			var parsed_line = r.search_all(line)
 			if int(parsed_line[0].get_string()) in balls_to_exclude:
@@ -1135,7 +1135,7 @@ func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 		while true:
 			var line = get_line(start_of_section + i).lstrip(" ")
 			# ignore comments for now
-			if line.begins_with("[") or line.empty():
+			if line.begins_with("[") or line.empty() or i > get_line_count():
 				break
 			var parsed_line = r.search_all(line)
 			var mainColor = parsed_line[3].get_string()
@@ -1156,4 +1156,112 @@ func _on_ToolsMenu_recolor(all_recolor_info: Dictionary):
 					n += 1
 				set_line(start_of_section + i, final_line)
 			i += 1
+	save_file()
+
+
+func _on_ToolsMenu_move_head(x, y, z):
+	var head_balls: Array
+	if KeyBallsData.species == KeyBallsData.Species.CAT:
+		head_balls = KeyBallsData.head_ext_cat.duplicate()
+	else:
+		head_balls = KeyBallsData.head_ext_dog.duplicate()
+	var section_find = search('[Move]', 0, 0, 0)
+	var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+	var i = 0
+	while true:
+		var line = get_line(start_of_section + i).lstrip(" ")
+		if line.begins_with(";") or line.empty():
+			i += 1
+			continue
+		elif line.begins_with("["):
+			break
+		var parsed_line = r.search_all(line)
+		if !(parsed_line[0].get_string().to_int() in head_balls):
+			i += 1
+			continue
+		head_balls.erase(parsed_line[0].get_string().to_int())
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 1:
+				final_line += str(item.to_int() + x) + " "
+			elif n == 2:
+				final_line += str(item.to_int() + y) + " "
+			elif n == 3:
+				final_line += str(item.to_int() + z) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(start_of_section + i, final_line)
+		i += 1
+	
+	# now insert any we missed
+	for b in head_balls:
+		cursor_set_line(start_of_section + i)
+		cursor_set_column(0)
+		insert_text_at_cursor(str(b) + " " + str(x) + " " + str(y) + " " + str(z) + "\n")
+	
+	save_file()
+
+func _on_Node_ball_translation_changed(ball_no, new_position):
+	var line_no
+	if ball_no < 67:
+		var done = false
+		var section_find = search('[Move]', 0, 0, 0)
+		var start_of_section = section_find[SEARCH_RESULT_LINE] + 1
+		var i = 0
+		while true:
+			var line = get_line(start_of_section + i).lstrip(" ")
+			if line.begins_with(";") or line.empty():
+				i += 1
+				continue
+			elif line.begins_with("["):
+				if !done:
+					print("WARN - did not find move for head rotation for ball " + str(ball_no))
+					cursor_set_line(start_of_section + i)
+					cursor_set_column(0)
+					insert_text_at_cursor(str(ball_no) + " " + str(int(new_position.x)) + " " + str(int(-new_position.y)) + " " + str(int(new_position.z)) + "\n")
+				break
+			# here the first number is color and second is outline col
+			var parsed_line = r.search_all(line)
+			if !(parsed_line[0].get_string().to_int() == ball_no):
+				i += 1
+				continue
+			done = true
+			var n = 0
+			var final_line = ""
+			for r_item in parsed_line:
+				var item = r_item.get_string()
+				if n == 1:
+					final_line += str(int(new_position.x)) + " "
+				elif n == 2:
+					final_line += str(int(-new_position.y)) + " "
+				elif n == 3:
+					final_line += str(int(new_position.z)) + " "
+				else:
+					final_line += item + " "
+				n += 1
+			set_line(start_of_section + i, final_line)
+			i += 1
+	else:
+		line_no = find_line_in_addball_section(ball_no - 67)
+		var line = get_line(line_no)
+		var parsed_line = r.search_all(line)
+		var n = 0
+		var final_line = ""
+		for r_item in parsed_line:
+			var item = r_item.get_string()
+			if n == 1:
+				final_line += str(int(new_position.x)) + " "
+			elif n == 2:
+				final_line += str(int(-new_position.y)) + " "
+			elif n == 3:
+				final_line += str(int(new_position.z)) + " "
+			else:
+				final_line += item + " "
+			n += 1
+		set_line(line_no, final_line)
+	
+func _on_Node_ball_translations_done():
 	save_file()
