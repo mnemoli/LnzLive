@@ -6,17 +6,26 @@ onready var label = get_tree().root.get_node("Root/SceneRoot/Label")
 onready var cube = get_tree().root.get_node("Root/PetRoot/MeshInstance") as Spatial
 onready var tex = get_tree().root.get_node("Root/SceneRoot/ViewportContainer") as ViewportContainer
 onready var popup = get_tree().root.get_node("Root/SceneRoot/PopupDialog") as WindowDialog
+onready var mode_option = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer3/ModeOption") as OptionButton
+onready var text_panel = get_tree().root.get_node("Root/SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer") as PanelContainer
 
 var last_selected
-var selecting_on = false
+var selected_ball_for_move
+var selected_gizmo
+var mode = SELECT
+var mode_on = false
+enum { SELECT, MOVE }
 
 func _gui_input(event):
 	if event is InputEventMouseMotion:
+		if selected_gizmo_is_valid() and Input.is_mouse_button_pressed(BUTTON_LEFT):
+			selected_gizmo._on_Area_input_event(event)
+			return
 		if Input.is_mouse_button_pressed(BUTTON_LEFT):
 			var motion = event.relative as Vector2
 			camera_holder.rotation.x += motion.y * 0.01
 			camera_holder.rotation.y += motion.x * -0.01
-		if Input.is_mouse_button_pressed(BUTTON_RIGHT) or Input.is_mouse_button_pressed(BUTTON_MIDDLE):
+		elif Input.is_mouse_button_pressed(BUTTON_RIGHT) or Input.is_mouse_button_pressed(BUTTON_MIDDLE):
 			var motion = event.relative as Vector2
 			camera.transform.origin.x += motion.x * 0.001 / tex.rect_scale.x
 			camera.transform.origin.y += motion.y * 0.001 / tex.rect_scale.x
@@ -25,7 +34,7 @@ func _gui_input(event):
 
 		# try and do a raycast
 		# the center of the actual texture == (500,500)
-		if selecting_on:
+		if (mode == SELECT or mode == MOVE) and mode_on:
 			var real_center = rect_position + rect_size / 2.0
 			var real_mouse_pos = event.position
 			var offset = real_mouse_pos - real_center
@@ -35,11 +44,26 @@ func _gui_input(event):
 			var from = camera.project_ray_origin(final_pos)
 			var to = from + camera.project_ray_normal(final_pos) * 950
 			var space_state = camera.get_world().direct_space_state
-			var result = space_state.intersect_ray(from, to, [], 0x7FFFFFFF, false, true)
+			
+			if mode == MOVE and selected_ball_for_move != null:
+				# see if we're near a gizmo
+				var result = space_state.intersect_ray(from, to, [], 0x2, false, true)
+				if !result.empty():
+					result.collider.get_parent().focus()
+					selected_gizmo = result.collider.get_parent()
+					return
+				else:
+					if !Input.is_mouse_button_pressed(BUTTON_LEFT):
+						if selected_gizmo_is_valid():
+							selected_gizmo.dropped()
+						selected_gizmo = null
+					
+			var result = space_state.intersect_ray(from, to, [], 0x7FFFFFFD, false, true)
 			if !result.empty():
-				label.show()
+				if mode == SELECT:
+					label.show()
 				deal_with_last_selected()
-				result.collider.get_parent()._on_Area_mouse_entered()
+				result.collider.get_parent()._on_Area_mouse_entered(mode)
 				last_selected = result.collider.get_parent()
 			else:
 				deal_with_last_selected()
@@ -53,9 +77,10 @@ func _gui_input(event):
 		elif event.button_index == BUTTON_WHEEL_UP:
 			tex.rect_pivot_offset = tex.rect_size / 2.0
 			tex.rect_scale = tex.rect_scale * 2.0
-		elif event.doubleclick and event.button_index == BUTTON_LEFT and last_selected_is_valid():
-			last_selected.selected()
-	pass
+		elif selected_gizmo_is_valid():
+			selected_gizmo._on_Area_input_event(event)
+		elif last_selected_is_valid():
+			last_selected._on_Area_input_event(event, mode)
 			
 func _unhandled_key_input(event):
 	if event.pressed and last_selected_is_valid():
@@ -63,28 +88,41 @@ func _unhandled_key_input(event):
 		
 func last_selected_is_valid():
 	return last_selected != null and is_instance_valid(last_selected)
+	
+func selected_gizmo_is_valid():
+	return selected_gizmo != null and is_instance_valid(selected_gizmo)
 
 func deal_with_last_selected():
 	if last_selected != null and is_instance_valid(last_selected):
-		last_selected._on_Area_mouse_exited()
+		last_selected._on_Area_mouse_exited(mode)
 				
 func _on_Node_ball_mouse_enter(ball_info):
 	label.text = str(ball_info.ball_no)
 
-func _on_SelectCheckBox_toggled(button_pressed):
-	selecting_on = button_pressed
-	if !selecting_on:
+func _on_Mode_toggled(button_pressed):
+	mode_on = button_pressed
+	if mode == SELECT:
+		toggle_selecting(button_pressed)
+	elif mode == MOVE:
+		toggle_moving(button_pressed)
+
+func toggle_selecting(new_value):
+	if !new_value:
 		if last_selected_is_valid():
-			last_selected._on_Area_mouse_exited()
+			last_selected._on_Area_mouse_exited(mode)
 		last_selected = null
 		label.hide()
+
+func toggle_moving(new_value):
+	#text_panel.get_node("LnzTextEdit").readonly = new_value
+	pass
 
 func _on_HelpButton_pressed():
 	popup.popup_centered()
 
 func _on_LnzTextEdit_mouse_entered():
 	if last_selected_is_valid():
-		last_selected._on_Area_mouse_exited()
+		last_selected._on_Area_mouse_exited(mode)
 	last_selected = null
 	label.hide()
 
@@ -94,3 +132,17 @@ func _on_PetViewContainer_resized():
 
 func _on_PetViewContainer_sort_children():
 	_on_PetViewContainer_resized()
+
+func _on_ModeOption_item_selected(index):
+	var old_mode = mode
+	mode = index
+	if old_mode == SELECT:
+		toggle_selecting(false)
+	elif old_mode == MOVE:
+		toggle_moving(false)
+	if mode_on:
+		_on_Mode_toggled(true)
+
+
+func _on_ball_selected_for_move(ball_no):
+	selected_ball_for_move = ball_no

@@ -88,24 +88,26 @@ func selected():
 	if override_ball_no != -1:
 		emit_signal("ball_selected", override_ball_no, Section.Section.BALL)
 
-func _on_Area_mouse_entered():
-	old_outline = outline
-	old_outline_color = outline_color_index
-	set_outline(3)
-	set_outline_color_index(0)
-	if override_ball_no != -1:
-		emit_signal("ball_mouse_enter", {ball_no = override_ball_no})
-	else:
-		emit_signal("paintball_mouse_enter", {base_ball_no = base_ball_no})
+func _on_Area_mouse_entered(mode):
+	if mode == 0:
+		old_outline = outline
+		old_outline_color = outline_color_index
+		set_outline(3)
+		set_outline_color_index(0)
+		if override_ball_no != -1:
+			emit_signal("ball_mouse_enter", {ball_no = override_ball_no})
+		else:
+			emit_signal("paintball_mouse_enter", {base_ball_no = base_ball_no})
 	is_over = true
 
-func _on_Area_mouse_exited():
-	set_outline(old_outline)
-	set_outline_color_index(old_outline_color)
-	if override_ball_no != -1:
-		emit_signal("ball_mouse_exit", override_ball_no)
-	else:
-		emit_signal("paintball_mouse_exit")
+func _on_Area_mouse_exited(mode):
+	if mode == 0:
+		set_outline(old_outline)
+		set_outline_color_index(old_outline_color)
+		if override_ball_no != -1:
+			emit_signal("ball_mouse_exit", override_ball_no)
+		else:
+			emit_signal("paintball_mouse_exit")
 	is_over = false
 	
 func _input(event):

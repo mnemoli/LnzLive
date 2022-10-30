@@ -12,7 +12,7 @@ See the [usage guide](GUIDE.md).
 
 ## Limitations
 
-Some browsers have security restrictions that won't let you paste into the LNZ text box. Chrome-based browsers are more likely to work. Download the EXE instead if you're having trouble.
+Some browsers have security restrictions that won't let you paste into the LNZ text box. Chrome-based browsers are more likely to work. [Download the EXE](https://github.com/mnemoli/LnzLive/releases) instead if you're having trouble.
 
 This app is in development. Expect crashes and visual bugs.
 

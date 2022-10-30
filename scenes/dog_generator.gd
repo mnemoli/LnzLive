@@ -30,9 +30,9 @@ signal bhd_loaded(num_of_animations)
 signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, is_addball)
+signal ball_selected_for_move(ball_no)
 signal addball_deleted(ball_no)
 signal ball_translation_changed(ball_no, new_position)
-signal ball_translations_done
 
 func set_animation(anim_index: int):
 	current_animation = anim_index
@@ -113,6 +113,7 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 func collate_base_ball_data():
 	var ball_data_map = {}
 	for ball in balls:
+		# dumb code
 		ball_data_map[ball.ball_no] = ball
 	return ball_data_map
 	
@@ -257,14 +258,20 @@ func apply_projections():
 	# can't do it earlier because it's hard to calculate
 	# the global_position yourself
 	# important to process these in order too
-	var outputs = {}
-	
 	for project_ball_data in lnz.project_ball:
-		var visual_ball = ball_map[project_ball_data.ball] as Spatial
-		var static_ball = ball_map[project_ball_data.base] as Spatial
-		var vec = visual_ball.global_transform.origin - static_ball.global_transform.origin
-		var base_pos = static_ball.global_transform.origin
-		visual_ball.global_transform.origin = base_pos + (vec * project_ball_data.amount / 100.0)
+		var visual_ball = ball_map[project_ball_data.ball]
+		var static_ball = ball_map[project_ball_data.base]
+		project_ball_data.unprojected_position = visual_ball.global_transform.origin
+		apply_projection_one_ball(visual_ball, static_ball, project_ball_data.amount)
+		
+func apply_projection_one_ball(visual_ball, static_ball, amount, override_pos = null):
+	var base_pos = static_ball.global_transform.origin
+	var vec
+	if override_pos != null:
+		vec = override_pos - base_pos
+	else:
+		vec = visual_ball.global_transform.origin - base_pos
+	visual_ball.global_transform.origin = base_pos + (vec * (amount / 100.0))
 		
 func apply_sizes(all_ball_dict: Dictionary, lnz: LnzParser):
 	for k in all_ball_dict.balls:
@@ -300,17 +307,9 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 	var omissions = all_ball_data.omissions
 	var root = get_root()
 	var parent = root.get_node("petholder/balls")
-	var pb_parent = root.get_node("petholder/paintballs")
-	var ab_parent = root.get_node("petholder/addballs")
 	if new_create:
 		for c in parent.get_children():
 			parent.remove_child(c)
-			c.queue_free()
-		for c in pb_parent.get_children():
-			pb_parent.remove_child(c)
-			c.queue_free()
-		for c in ab_parent.get_children():
-			ab_parent.remove_child(c)
 			c.queue_free()
 		ball_map = {}
 		paintball_map = {}
@@ -358,6 +357,8 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 				visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
 				visual_ball.connect("ball_mouse_exit", self, "signal_ball_mouse_exit")
 				visual_ball.connect("ball_selected", self, "signal_ball_selected")
+				visual_ball.connect("ball_selected_for_move", self, "signal_ball_selected_for_move")
+
 			else:
 				visual_ball = ball_map[key]
 			visual_ball.pet_center = belly_position
@@ -413,6 +414,8 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.connect("ball_mouse_enter", self, "signal_ball_mouse_enter")
 			visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			visual_ball.connect("ball_deleted", self, "signal_ball_deleted")
+			visual_ball.connect("ball_selected_for_move", self, "signal_ball_selected_for_move")
+
 		var total_pos = ball.position
 		total_pos.y *= -1.0
 		visual_ball.transform.origin = total_pos * pixel_world_size
@@ -523,7 +526,6 @@ func generate_lines(line_data: Array, new_create: bool):
 			continue
 		var omissions = lnz.omissions as Dictionary
 		if omissions.has(line.start) or omissions.has(line.end):
-#			print("Skipping line between " + str(line.start) + " and " + str(line.end))
 			continue
 		var visual_line
 		if new_create:
@@ -571,6 +573,24 @@ func generate_lines(line_data: Array, new_create: bool):
 			parent.add_child(visual_line)
 			visual_line.set_owner(root)
 		i+=1
+		
+func set_up_line_pos(visual_line, start_ball_no, end_ball_no):
+	var start = ball_map.get(start_ball_no)
+	var end = ball_map.get(end_ball_no)
+	var start_pos = start.global_transform.origin
+	var target_pos = end.global_transform.origin
+	var distance = (target_pos - start_pos).length()
+	var middle_point = lerp(start.global_transform.origin, end.global_transform.origin, 0.5)
+	if target_pos == middle_point:
+		visual_line.global_transform.origin = middle_point
+		visual_line.rotation_degrees.x += 90
+		visual_line.scale.y = distance
+	else:
+		visual_line.look_at_from_position(middle_point, target_pos, Vector3.UP)
+		visual_line.rotation_degrees.x += 90
+		visual_line.scale.y = distance
+	visual_line.ball_world_pos1 = start_pos
+	visual_line.ball_world_pos2 = target_pos
 
 func _on_OptionButton_file_selected(file_name):
 	generate_pet(file_name)
@@ -618,6 +638,12 @@ func signal_ball_selected(ball_no, section):
 		is_addball = true
 	emit_signal("ball_selected", section, ball_no, is_addball, lnz.balls.keys().max() + 1)
 
+func signal_ball_selected_for_move(ball_no):
+	for b in ball_map.keys():
+		if b != ball_no and ball_map[b].has_method("unselect_for_move"):
+			ball_map[b].unselect_for_move()
+	emit_signal("ball_selected_for_move", ball_no)
+
 func signal_ball_deleted(ball_no):
 	var ball = ball_map[ball_no]
 	if ball.base_ball_no != -1:
@@ -643,3 +669,54 @@ func _on_ToolsMenu_print_ball_colors():
 			ball_map_string += this_ball_string
 			print(this_ball_string)
 	OS.set_clipboard(ball_map_string)
+	
+var projections_affecting_this_ball = []
+var projections_affected_by_this_ball = []
+var connected_lines = {}
+var ball_orig_pos
+	
+func ball_move_start(ball):
+	projections_affected_by_this_ball = []
+	projections_affecting_this_ball = []
+	connected_lines = {}
+	var ball_no = ball.ball_no
+	ball_orig_pos = ball_map[ball_no].global_transform.origin
+	print("0 " + str(ball_orig_pos))
+	for i in range(lnz.project_ball.size() - 1, 0, -1):
+		var p = lnz.project_ball[i]
+		if p.ball == ball_no:
+			projections_affecting_this_ball.append(lnz.project_ball[i])
+	for i in range(lnz.project_ball.size() - 1, 0, -1):
+		var p = lnz.project_ball[i]
+		if p.base == ball_no:
+			var d = lnz.project_ball[i]
+			d.original_position = d.unprojected_position
+			projections_affected_by_this_ball.append(d)
+			for j in range(0, lnz.lines.size()):
+				var l = lnz.lines[j]
+				if l.start == p.ball or l.end == p.ball:
+					connected_lines[j] = l
+	for i in range(0, lnz.lines.size()):
+		var l = lnz.lines[i]
+		if l.start == ball_no or l.end == ball_no:
+			connected_lines[i] = l
+	
+func ball_move_end(ball):
+	# need to undo the projection of the ball
+	# and convert global origin into lnz points
+	var new_pos = ball.global_transform.origin
+	var ball_no = ball.ball_no
+	new_pos -= ball_orig_pos
+	new_pos /= pixel_world_size
+	new_pos = new_pos.snapped(Vector3.ONE)
+	new_pos /= (lnz.scales[0] / 255.0)
+	emit_signal("ball_translation_changed", ball_no, new_pos)
+			
+	
+func ball_moving(ball):
+	for p in projections_affected_by_this_ball:
+		ball_map[p.ball].global_transform.origin = p.original_position
+		apply_projection_one_ball(ball_map[p.ball], ball_map[p.base], p.amount, p.original_position)
+	for i in connected_lines:
+		var visual_line = lines_map[i]
+		set_up_line_pos(visual_line, connected_lines[i].start, connected_lines[i].end)

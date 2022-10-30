@@ -1218,10 +1218,12 @@ func _on_Node_ball_translation_changed(ball_no, new_position):
 				continue
 			elif line.begins_with("["):
 				if !done:
-					print("WARN - did not find move for head rotation for ball " + str(ball_no))
+					print("WARN - did not find move for ball " + str(ball_no))
 					cursor_set_line(start_of_section + i)
 					cursor_set_column(0)
-					insert_text_at_cursor(str(ball_no) + " " + str(int(new_position.x)) + " " + str(int(-new_position.y)) + " " + str(int(new_position.z)) + "\n")
+					var final_line = str(ball_no) + " " + str(int(new_position.x)) + " " + str(int(-new_position.y)) + " " + str(int(new_position.z)) + "\n"
+					insert_text_at_cursor(final_line)
+					print("5 " + final_line)
 				break
 			# here the first number is color and second is outline col
 			var parsed_line = r.search_all(line)
@@ -1234,14 +1236,15 @@ func _on_Node_ball_translation_changed(ball_no, new_position):
 			for r_item in parsed_line:
 				var item = r_item.get_string()
 				if n == 1:
-					final_line += str(int(new_position.x)) + " "
+					final_line += str(int(new_position.x) + int(item)) + " "
 				elif n == 2:
-					final_line += str(int(-new_position.y)) + " "
+					final_line += str(int(-new_position.y) + int(item)) + " "
 				elif n == 3:
-					final_line += str(int(new_position.z)) + " "
+					final_line += str(int(new_position.z) + int(item)) + " "
 				else:
 					final_line += item + " "
 				n += 1
+			print("5 " + final_line)
 			set_line(start_of_section + i, final_line)
 			i += 1
 	else:

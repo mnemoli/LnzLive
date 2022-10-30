@@ -42,10 +42,6 @@ script = ExtResource( 3 )
 
 [node name="balls" type="Spatial" parent="PetRoot/petholder"]
 
-[node name="addballs" type="Spatial" parent="PetRoot/petholder"]
-
-[node name="paintballs" type="Spatial" parent="PetRoot/petholder"]
-
 [node name="lines" type="Spatial" parent="PetRoot/petholder"]
 
 [node name="MeshInstance" type="MeshInstance" parent="PetRoot"]
@@ -123,7 +119,7 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer"]
-margin_right = 285.0
+margin_right = 335.0
 margin_bottom = 768.0
 mouse_filter = 0
 size_flags_horizontal = 3
@@ -133,7 +129,7 @@ __meta__ = {
 }
 
 [node name="Tree" type="Tree" parent="SceneRoot/HSplitContainer/VBoxContainer"]
-margin_right = 285.0
+margin_right = 335.0
 margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -150,7 +146,7 @@ margin_bottom = 20.0
 items = [ "Delete", null, 0, false, false, 0, 0, null, "", false, "Rename", null, 0, false, false, 1, 0, null, "", false, "Back up", null, 0, false, true, 2, 0, null, "", false ]
 
 [node name="HSplitContainer" type="HSplitContainer" parent="SceneRoot/HSplitContainer"]
-margin_left = 297.0
+margin_left = 347.0
 margin_right = 1024.0
 margin_bottom = 768.0
 rect_clip_content = true
@@ -159,7 +155,7 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="PetViewContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_right = 515.0
+margin_right = 465.0
 margin_bottom = 768.0
 rect_clip_content = true
 mouse_default_cursor_shape = 3
@@ -172,12 +168,12 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer"]
-margin_right = 515.0
+margin_right = 465.0
 margin_bottom = 768.0
 mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
-margin_right = 515.0
+margin_right = 465.0
 margin_bottom = 24.0
 mouse_filter = 0
 
@@ -191,7 +187,7 @@ __meta__ = {
 
 [node name="FrameSlider" type="HSlider" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
 margin_left = 62.0
-margin_right = 443.0
+margin_right = 396.0
 margin_bottom = 16.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -201,8 +197,8 @@ rounded = true
 script = ExtResource( 5 )
 
 [node name="Button" type="Button" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
-margin_left = 447.0
-margin_right = 485.0
+margin_left = 400.0
+margin_right = 438.0
 margin_bottom = 20.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -215,9 +211,9 @@ script = ExtResource( 6 )
 wait_time = 0.06
 
 [node name="FPSLabel" type="Label" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer"]
-margin_left = 489.0
+margin_left = 442.0
 margin_top = 5.0
-margin_right = 515.0
+margin_right = 465.0
 margin_bottom = 19.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -225,7 +221,7 @@ script = ExtResource( 7 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
 margin_top = 28.0
-margin_right = 515.0
+margin_right = 465.0
 margin_bottom = 52.0
 mouse_filter = 0
 
@@ -260,15 +256,26 @@ mouse_filter = 1
 pressed = true
 text = "Draw lines"
 
-[node name="SelectCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 448.0
-margin_right = 515.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer"]
+margin_top = 56.0
+margin_right = 465.0
+margin_bottom = 80.0
+
+[node name="ModeOnCheckBox" type="CheckBox" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer3"]
+margin_right = 24.0
+margin_bottom = 24.0
+
+[node name="ModeOption" type="OptionButton" parent="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 28.0
+margin_right = 96.0
 margin_bottom = 24.0
 text = "Select"
+items = [ "Select", null, false, 0, false, "Move", null, false, 0, false ]
+selected = 0
 
 [node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]
-margin_left = 527.0
-margin_right = 727.0
+margin_left = 477.0
+margin_right = 677.0
 margin_bottom = 768.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 13
@@ -649,15 +656,15 @@ __meta__ = {
 [connection signal="animation_loaded" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer/FrameSlider" method="_on_animation_loaded"]
 [connection signal="ball_mouse_enter" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Node_ball_mouse_enter"]
 [connection signal="ball_selected" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_selected"]
+[connection signal="ball_selected_for_move" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_ball_selected_for_move"]
 [connection signal="ball_translation_changed" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_translation_changed"]
-[connection signal="ball_translations_done" from="PetRoot/Node" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Node_ball_translations_done"]
 [connection signal="backup_file" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_Tree_backup_file"]
-[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="example_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_example_file_selected"]
 [connection signal="item_activated" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_activated"]
 [connection signal="item_rmb_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_Tree_item_rmb_selected"]
-[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="PetRoot/Node" method="generate_pet"]
+[connection signal="user_file_selected" from="SceneRoot/HSplitContainer/VBoxContainer/Tree" to="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" method="_on_user_file_selected"]
 [connection signal="about_to_show" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_about_to_show"]
 [connection signal="id_pressed" from="SceneRoot/HSplitContainer/VBoxContainer/Tree/ItemPopupMenu" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_ItemPopupMenu_id_pressed"]
 [connection signal="resized" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_PetViewContainer_resized"]
@@ -670,7 +677,8 @@ __meta__ = {
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/AddballCheckBox" to="PetRoot/Node" method="_on_AddballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/PaintballCheckBox" to="PetRoot/Node" method="_on_PaintballCheckBox_toggled"]
 [connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/LineCheckBox" to="PetRoot/Node" method="_on_LineCheckBox_toggled"]
-[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer2/SelectCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_SelectCheckBox_toggled"]
+[connection signal="toggled" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer3/ModeOnCheckBox" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_Mode_toggled"]
+[connection signal="item_selected" from="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer/VBoxContainer/HBoxContainer3/ModeOption" to="SceneRoot/HSplitContainer/HSplitContainer/PetViewContainer" method="_on_ModeOption_item_selected"]
 [connection signal="file_backed_up" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="_on_LnzTextEdit_file_backed_up"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="PetRoot/Node" method="generate_pet"]
 [connection signal="file_saved" from="SceneRoot/HSplitContainer/HSplitContainer/TextPanelContainer/LnzTextEdit" to="SceneRoot/HSplitContainer/VBoxContainer/Tree" method="rescan"]

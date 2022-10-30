@@ -24,6 +24,8 @@ signal ball_mouse_enter(ball_info)
 signal ball_mouse_exit(ball_no)
 signal ball_selected(ball_no, section)
 signal ball_deleted(ball_no)
+signal ball_selected_for_move(ball_no)
+signal ball_moved(ball_no, new_global_origin)
 
 func _ready():
 	$MeshInstance.material_override.set_shader_param("palette", palette)
@@ -82,10 +84,14 @@ func set_pet_center(new_value):
 	pet_center = new_value
 	$MeshInstance.material_override.set_shader_param("z_center_pet_world", new_value)
 
-func _on_Area_mouse_entered():
+func _on_Area_mouse_entered(mode):
 	is_over = true
-	turn_on_highlight()
+	if mode == 0:
+		turn_on_highlight()
 	emit_signal("ball_mouse_enter", {ball_no = ball_no})
+	
+func show_gizmo():
+	$GizmoHolder.show_gizmo()
 	
 func turn_on_highlight():
 	old_outline = outline
@@ -96,21 +102,36 @@ func turn_on_highlight():
 func turn_off_highlight():
 	set_outline(old_outline)
 	set_outline_color_index(old_outline_color)
+
+func hide_gizmo():
+	$GizmoHolder.destroy_gizmo()
 	
-func _on_Area_mouse_exited():
+func _on_Area_mouse_exited(mode):
 	is_over = false
-	turn_off_highlight()
+	if mode == 0:
+		turn_off_highlight()
 	emit_signal("ball_mouse_exit", ball_no)
 	
 func selected():
-		emit_signal("ball_selected", ball_no, Section.Section.BALL)
+	emit_signal("ball_selected", ball_no, Section.Section.BALL)
+	
+func selected_for_move():
+	show_gizmo()
+	turn_on_highlight()
+	emit_signal("ball_selected_for_move", ball_no)
+	
+func unselect_for_move():
+	hide_gizmo()
+	turn_off_highlight()
 
-func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.doubleclick:
-		selected()
+func _on_Area_input_event(event, mode):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if event.doubleclick:
+			selected()
+		elif mode == 1:
+			selected_for_move()
 
 func _input(event):
-	var handled = false
 	if event is InputEventKey and event.pressed and is_over:
 		if event.scancode == KEY_SPACE and event.control:
 			return
@@ -147,3 +168,6 @@ func _on_FlashTimer_timeout():
 			turn_on_highlight()
 		if timer_count > 4:
 			$FlashTimer.stop()
+			
+func ball_moved():
+	emit_signal("ball_moved", ball_no, global_transform.origin)

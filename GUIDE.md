@@ -53,6 +53,22 @@ While hovering over a ball/addball, you can use the following keys:
 - C or P: cycle through Project Ball lines that affect this ball. If none are found, goes to the Project Ball header.
 - V or L: cycle through Linez that include this ball. If none are found, goes to the Linez header.
 
+## Drag and drop
+
+Change the "Select" dropdown to "Move" and ensure the tickbox is ticked.
+
+Click a ball to select it and show a 3D gizmo.
+
+Use the gizmo arrows to drag in a given axis.
+
+Projected balls will automatically update if the base ball is dragged.
+
+Change the dropdown to "Project" to update projections.
+
+Click to select the ball to project. Click another ball to select it as the base ball. The projected ball will show a gizmo to move forward or backward along the projection line.
+
+Save to update the actual lnz file. Move/project changes will not be automatically saved.
+
 ## Tools menu
 
 Warning: make sure you do not have empty lines or comments in your LNZ before using any Tools.

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/Gizmo.gd" type="Script" id=1]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+flags_unshaded = true
+flags_no_depth_test = true
+albedo_color = Color( 1, 1, 1, 0.458824 )
+
+[node name="GizmoHolder" type="Spatial"]
+visible = false
+script = ExtResource( 1 )
+material_template = SubResource( 1 )
