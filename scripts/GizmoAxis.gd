@@ -34,7 +34,6 @@ func _on_Area_input_event(event):
 		emit_signal("ball_moving", the_ball)
 		
 func dropped():
-	print("gabagool")
 	if start_pos != null and start_pos.distance_to(the_ball.global_transform.origin) > 0.01:
 		emit_signal("ball_move_end", the_ball)
 	start_pos = null

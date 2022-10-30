@@ -270,7 +270,7 @@ margin_left = 28.0
 margin_right = 96.0
 margin_bottom = 24.0
 text = "Select"
-items = [ "Select", null, false, 0, false, "Move", null, false, 0, false ]
+items = [ "Select", null, false, 0, false, "Move", null, false, 1, false, "Project", null, false, 2, null ]
 selected = 0
 
 [node name="TextPanelContainer" type="PanelContainer" parent="SceneRoot/HSplitContainer/HSplitContainer"]

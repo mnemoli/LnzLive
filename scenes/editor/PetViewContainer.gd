@@ -14,7 +14,7 @@ var selected_ball_for_move
 var selected_gizmo
 var mode = SELECT
 var mode_on = false
-enum { SELECT, MOVE }
+enum { SELECT, MOVE, PROJECT }
 
 func _gui_input(event):
 	if event is InputEventMouseMotion:

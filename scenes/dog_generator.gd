@@ -748,11 +748,9 @@ func ball_move_start(ball):
 func ball_move_end(ball):
 	# need to undo the projection of the ball
 	# and convert global origin into lnz points
-	print("dropped")
 	var new_pos = ball.global_transform.origin
 	var ball_no = ball.ball_no
 	for p in projections_affecting_this_ball:
-		print("fixing projections")
 		# for each projection, get p% of the final vector
 		var current_vec = new_pos - ball_map[p.base].global_transform.origin
 		var new_vec = (current_vec / (p.amount / 100.0))
