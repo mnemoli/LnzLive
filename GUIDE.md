@@ -59,7 +59,7 @@ Change the "Select" dropdown to "Move" and ensure the tickbox is ticked.
 
 Click a ball to select it and show a 3D gizmo.
 
-Use the gizmo arrows to drag in a given axis.
+Use the gizmo arrows to drag in a given axis. Move the mouse left and right regardless of what axis is selected. (Will be improved at some point...)
 
 Projected balls will automatically update if the base ball is dragged.
 

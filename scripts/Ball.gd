@@ -17,6 +17,7 @@ export var pet_center = Vector3(0, 0, 0) setget set_pet_center
 var old_outline
 var old_outline_color
 var is_over = false
+var highlighted = false
 
 var palette = preload("res://resources/textures/petzpalette.png")
 
@@ -94,14 +95,17 @@ func show_gizmo():
 	$GizmoHolder.show_gizmo()
 	
 func turn_on_highlight():
+	highlighted = true
 	old_outline = outline
 	old_outline_color = outline_color_index
 	set_outline(3)
 	set_outline_color_index(0)
 	
 func turn_off_highlight():
-	set_outline(old_outline)
-	set_outline_color_index(old_outline_color)
+	if highlighted:
+		highlighted = false
+		set_outline(old_outline)
+		set_outline_color_index(old_outline_color)
 
 func hide_gizmo():
 	$GizmoHolder.destroy_gizmo()

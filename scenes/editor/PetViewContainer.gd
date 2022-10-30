@@ -52,13 +52,15 @@ func _gui_input(event):
 					result.collider.get_parent().focus()
 					selected_gizmo = result.collider.get_parent()
 					return
-				else:
-					if !Input.is_mouse_button_pressed(BUTTON_LEFT):
-						if selected_gizmo_is_valid():
-							selected_gizmo.dropped()
-						selected_gizmo = null
 					
-			var result = space_state.intersect_ray(from, to, [], 0x7FFFFFFD, false, true)
+			var mask
+			if mode == SELECT:
+				# include paintballs
+				mask = 0x7FFFFFFD
+			elif mode == MOVE:
+				# exclude paintballs
+				mask = 0x7FFFFFF9
+			var result = space_state.intersect_ray(from, to, [], mask, false, true)
 			if !result.empty():
 				if mode == SELECT:
 					label.show()
@@ -81,6 +83,11 @@ func _gui_input(event):
 			selected_gizmo._on_Area_input_event(event)
 		elif last_selected_is_valid():
 			last_selected._on_Area_input_event(event, mode)
+			
+	elif event is InputEventMouseButton and !event.pressed and event.button_index == BUTTON_LEFT:
+		if selected_gizmo_is_valid():
+			selected_gizmo.dropped()
+		selected_gizmo = null
 			
 func _unhandled_key_input(event):
 	if event.pressed and last_selected_is_valid():
@@ -114,7 +121,7 @@ func toggle_selecting(new_value):
 		label.hide()
 
 func toggle_moving(new_value):
-	#text_panel.get_node("LnzTextEdit").readonly = new_value
+	text_panel.get_node("LnzTextEdit").readonly = new_value
 	pass
 
 func _on_HelpButton_pressed():

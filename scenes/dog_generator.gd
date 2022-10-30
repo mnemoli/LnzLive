@@ -10,6 +10,8 @@ var ball_map = {}
 var paintball_map = {}
 var lines_map = {}
 var addball_links = {}
+var paintball_links = {}
+var project_ball_mappings = {}
 
 export var draw_balls = true
 export var draw_addballs = true
@@ -87,8 +89,7 @@ func generate_pet(file_path):
 
 func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var collated_data = collate_base_ball_data()
-	for k in lnz_info.balls:
-		addball_links[k] = []
+	
 	# dumb code - duplicate the lnz info to prevent movements being applied multiple times
 	var addballs = {}
 	for k in lnz_info.addballs:
@@ -96,6 +97,17 @@ func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 		addballs[k] = AddBallData.new(a.base, a.ball_no, a.size, a.position, a.color_index, a.outline_color_index, a.outline, a.fuzz, a.z_add, a.group, a.body_area, a.texture_id)
 	
 	var paintballs = {}
+	
+	if new_create:
+		paintball_links = {}
+		project_ball_mappings = {}
+		for k in lnz_info.balls:
+			addball_links[k] = []
+		for i in lnz_info.project_ball:
+			var l = project_ball_mappings.get(i.base, [])
+			l.append(i)
+			project_ball_mappings[i.base] = l
+				
 	
 	for k in lnz_info.paintballs:
 		var ar = lnz_info.paintballs[k]
@@ -475,6 +487,9 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			if new_create:
 				ball_map[key].add_child(visual_ball)
 				visual_ball.set_owner(root)
+				var l = paintball_links.get(key, [])
+				l.append(visual_ball)
+				paintball_links[key] = l
 				visual_ball.add_to_group("paintballs")
 				visual_ball.connect("paintball_mouse_enter", self, "signal_paintball_mouse_enter")
 				visual_ball.connect("paintball_mouse_exit", self, "signal_paintball_mouse_exit")
@@ -678,28 +693,45 @@ func _on_ToolsMenu_print_ball_colors():
 var projections_affecting_this_ball = []
 var projections_affected_by_this_ball = []
 var connected_lines = {}
+var paintballs_to_update = []
 var ball_orig_pos
+
+func get_projections_for_ball(ball_no):
+	var result_list = []
+	for i in range(0, lnz.project_ball.size()):
+		var p = lnz.project_ball[i]
+		if p.base == ball_no:
+			var d = lnz.project_ball[i]
+			d.original_position = d.unprojected_position
+			result_list.append(d)
+	return result_list
 	
 func ball_move_start(ball):
 	projections_affected_by_this_ball = []
 	projections_affecting_this_ball = []
 	connected_lines = {}
+	paintballs_to_update = []
 	var ball_no = ball.ball_no
 	ball_orig_pos = ball_map[ball_no].global_transform.origin
 	for i in range(lnz.project_ball.size() - 1, 0, -1):
 		var p = lnz.project_ball[i]
 		if p.ball == ball_no:
 			projections_affecting_this_ball.append(lnz.project_ball[i])
-	for i in range(0, lnz.project_ball.size()):
-		var p = lnz.project_ball[i]
-		if p.base == ball_no:
-			var d = lnz.project_ball[i]
-			d.original_position = d.unprojected_position
-			projections_affected_by_this_ball.append(d)
-			for j in range(0, lnz.lines.size()):
-				var l = lnz.lines[j]
-				if l.start == p.ball or l.end == p.ball:
-					connected_lines[j] = l
+	
+	projections_affected_by_this_ball = project_ball_mappings.get(ball_no, [])
+	var last_set_of_projections = projections_affected_by_this_ball
+	while(last_set_of_projections != []):
+		var new_set = []
+		for i in last_set_of_projections:
+			new_set.append_array(project_ball_mappings.get(i.ball, []))
+		last_set_of_projections = new_set
+		projections_affected_by_this_ball.append_array(new_set)
+	for j in range(0, lnz.lines.size()):
+		for p in projections_affected_by_this_ball:
+			var l = lnz.lines[j]
+			if l.start == p.ball or l.end == p.ball:
+				connected_lines[j] = l
+	
 	for i in range(0, lnz.lines.size()):
 		var l = lnz.lines[i]
 		if l.start == ball_no or l.end == ball_no:
@@ -710,10 +742,13 @@ func ball_move_start(ball):
 				var l = lnz.lines[j]
 				if l.start == i.ball_no or l.end == i.ball_no:
 					connected_lines[j] = l
+			paintballs_to_update.append_array(paintball_links.get(i.ball_no, []))
+	paintballs_to_update.append_array(paintball_links.get(ball_no, []))
 	
 func ball_move_end(ball):
 	# need to undo the projection of the ball
 	# and convert global origin into lnz points
+	print("dropped")
 	var new_pos = ball.global_transform.origin
 	var ball_no = ball.ball_no
 	for p in projections_affecting_this_ball:
@@ -739,8 +774,10 @@ func ball_move_end(ball):
 	
 func ball_moving(ball):
 	for p in projections_affected_by_this_ball:
-		ball_map[p.ball].global_transform.origin = p.original_position
-		apply_projection_one_ball(ball_map[p.ball], ball_map[p.base], p.amount, p.original_position)
+		#ball_map[p.ball].global_transform.origin = p.original_position
+		apply_projection_one_ball(ball_map[p.ball], ball_map[p.base], p.amount, p.unprojected_position)
 	for i in connected_lines:
 		var visual_line = lines_map[i]
 		set_up_line_pos(visual_line, connected_lines[i].start, connected_lines[i].end)
+	for i in paintballs_to_update:
+		i.set_base_ball_position(ball_map[i.base_ball_no].global_transform.origin)
