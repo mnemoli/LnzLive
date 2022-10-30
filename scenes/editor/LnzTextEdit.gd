@@ -1244,7 +1244,6 @@ func _on_Node_ball_translation_changed(ball_no, new_position):
 				else:
 					final_line += item + " "
 				n += 1
-			print("5 " + final_line)
 			set_line(start_of_section + i, final_line)
 			i += 1
 	else:

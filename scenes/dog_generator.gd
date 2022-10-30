@@ -9,6 +9,7 @@ var lines = []
 var ball_map = {}
 var paintball_map = {}
 var lines_map = {}
+var addball_links = {}
 
 export var draw_balls = true
 export var draw_addballs = true
@@ -86,6 +87,8 @@ func generate_pet(file_path):
 
 func init_visual_balls(lnz_info: LnzParser, new_create: bool = false):
 	var collated_data = collate_base_ball_data()
+	for k in lnz_info.balls:
+		addball_links[k] = []
 	# dumb code - duplicate the lnz info to prevent movements being applied multiple times
 	var addballs = {}
 	for k in lnz_info.addballs:
@@ -415,6 +418,8 @@ func generate_balls(all_ball_data: Dictionary, species: int, texture_list: Array
 			visual_ball.connect("ball_selected", self, "signal_ball_selected")
 			visual_ball.connect("ball_deleted", self, "signal_ball_deleted")
 			visual_ball.connect("ball_selected_for_move", self, "signal_ball_selected_for_move")
+			var l = addball_links[ball.base]
+			l.append(visual_ball)
 
 		var total_pos = ball.position
 		total_pos.y *= -1.0
@@ -681,12 +686,11 @@ func ball_move_start(ball):
 	connected_lines = {}
 	var ball_no = ball.ball_no
 	ball_orig_pos = ball_map[ball_no].global_transform.origin
-	print("0 " + str(ball_orig_pos))
 	for i in range(lnz.project_ball.size() - 1, 0, -1):
 		var p = lnz.project_ball[i]
 		if p.ball == ball_no:
 			projections_affecting_this_ball.append(lnz.project_ball[i])
-	for i in range(lnz.project_ball.size() - 1, 0, -1):
+	for i in range(0, lnz.project_ball.size()):
 		var p = lnz.project_ball[i]
 		if p.base == ball_no:
 			var d = lnz.project_ball[i]
@@ -700,16 +704,36 @@ func ball_move_start(ball):
 		var l = lnz.lines[i]
 		if l.start == ball_no or l.end == ball_no:
 			connected_lines[i] = l
+	if ball_no < 67:
+		for i in addball_links[ball_no]:
+			for j in range(0, lnz.lines.size()):
+				var l = lnz.lines[j]
+				if l.start == i.ball_no or l.end == i.ball_no:
+					connected_lines[j] = l
 	
 func ball_move_end(ball):
 	# need to undo the projection of the ball
 	# and convert global origin into lnz points
 	var new_pos = ball.global_transform.origin
 	var ball_no = ball.ball_no
-	new_pos -= ball_orig_pos
+	for p in projections_affecting_this_ball:
+		print("fixing projections")
+		# for each projection, get p% of the final vector
+		var current_vec = new_pos - ball_map[p.base].global_transform.origin
+		var new_vec = (current_vec / (p.amount / 100.0))
+		new_pos = ball_map[p.base].global_transform.origin + new_vec
+		
+	if ball_no > 66:
+		print("it's addball " + str(ball_no))
+		var base_pos = ball_map[ball.base_ball_no].global_transform.origin
+		new_pos -= base_pos
+	else:
+		new_pos -= ball_orig_pos
+	
+	new_pos /= (lnz.scales[0] / 255.0)
 	new_pos /= pixel_world_size
 	new_pos = new_pos.snapped(Vector3.ONE)
-	new_pos /= (lnz.scales[0] / 255.0)
+		
 	emit_signal("ball_translation_changed", ball_no, new_pos)
 			
 	
